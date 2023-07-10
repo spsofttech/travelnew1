@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBZasRJ5KrstjzUEMx1DX3bTnLr2oQ-Tqw',
-    appId: '1:1012994118945:android:f80c1d9fbac45368f49a60',
+    appId: '1:1012994118945:android:83b6f0deb391bcf9f49a60',
     messagingSenderId: '1012994118945',
     projectId: 'travel-new-7e9ab',
     storageBucket: 'travel-new-7e9ab.appspot.com',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAoVCuuBCWG1UmyNsPwVyQzYV7yxpC9hoQ',
-    appId: '1:1012994118945:ios:9cef07c0dfb7faacf49a60',
+    appId: '1:1012994118945:ios:cecc892f685c08d9f49a60',
     messagingSenderId: '1012994118945',
     projectId: 'travel-new-7e9ab',
     storageBucket: 'travel-new-7e9ab.appspot.com',
-    iosClientId: '1012994118945-9sm3hkdr5a9gomlsbg7nume9efchhtgn.apps.googleusercontent.com',
-    iosBundleId: 'com.example.travelApp',
+    iosClientId: '1012994118945-d5jghekscp0kh1hnek0098veeg9ol1jf.apps.googleusercontent.com',
+    iosBundleId: 'com.example.travelnewApp',
   );
 }
