@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:travel_app/views/start/signup_with_social_media_screen.dart';
-import 'package:travel_app/widget/my_bottom_navbar.dart';
+import 'package:travelnew_app/views/start/signup_with_social_media_screen.dart';
+import 'package:travelnew_app/widget/my_bottom_navbar.dart';
 
 import '../../utils/constant.dart';
 import 'sign_in_screen.dart';
@@ -102,11 +102,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 children: [
                   TextButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) =>
-                                    SignupWithSocialMediaScreen())));
+                        Navigator.push(context, MaterialPageRoute(builder: ((context) => SignupWithSocialMediaScreen())));
                       },
                       child: Text(
                         'Skip',
@@ -117,9 +113,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     onTap: () {
                       setState(() {});
 
-                      pageController.nextPage(
-                          duration: Duration(milliseconds: 200),
-                          curve: Curves.easeInOut);
+                      pageController.nextPage(duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
                     },
                     child: CircleAvatar(
                       backgroundColor: primary,

@@ -6,21 +6,21 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share/share.dart';
 import 'package:social_share_plugin/social_share_plugin.dart';
-import 'package:travel_app/providers/location_provider.dart';
+import 'package:travelnew_app/providers/location_provider.dart';
 
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/aspired_trip/aspired_trip2_screen.dart';
-import 'package:travel_app/views/home/festival_and_celebrations_screen.dart';
-import 'package:travel_app/views/home/quick_escape_screen.dart';
-import 'package:travel_app/views/humburger_flow/my_account/my_account.dart';
-import 'package:travel_app/views/humburger_flow/my_account/my_trip_friends.dart';
-import 'package:travel_app/views/humburger_flow/my_saved_pins.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/create_prima_profile.dart';
-import 'package:travel_app/views/humburger_flow/trip_library_screen.dart';
-import 'package:travel_app/views/humburger_flow/upcoming_trips.dart';
-import 'package:travel_app/views/publish%20your%20trip/publish_your_trip.dart';
-import 'package:travel_app/views/start/on_boarding_screen.dart';
-import 'package:travel_app/views/start/signup_with_social_media_screen.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/aspired_trip/aspired_trip2_screen.dart';
+import 'package:travelnew_app/views/home/festival_and_celebrations_screen.dart';
+import 'package:travelnew_app/views/home/quick_escape_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/my_account/my_account.dart';
+import 'package:travelnew_app/views/humburger_flow/my_account/my_trip_friends.dart';
+import 'package:travelnew_app/views/humburger_flow/my_saved_pins.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/create_prima_profile.dart';
+import 'package:travelnew_app/views/humburger_flow/trip_library_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/upcoming_trips.dart';
+import 'package:travelnew_app/views/publish%20your%20trip/publish_your_trip.dart';
+import 'package:travelnew_app/views/start/on_boarding_screen.dart';
+import 'package:travelnew_app/views/start/signup_with_social_media_screen.dart';
 
 import '../views/edit_prima_screen/prima_trip_1to4_screen.dart';
 

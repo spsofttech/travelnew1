@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/edit_prima_screen/entertainment_of_trip.dart';
-import 'package:travel_app/views/edit_prima_screen/entertainment_screen.dart';
-import 'package:travel_app/views/humburger_flow/my_account/report_incorrect_trip_screen.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/edit_prima_screen/entertainment_of_trip.dart';
+import 'package:travelnew_app/views/edit_prima_screen/entertainment_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/my_account/report_incorrect_trip_screen.dart';
 
 import '../../widget/custom_button.dart';
 import '../humburger_flow/my_account/my_trip_friends.dart';

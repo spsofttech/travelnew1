@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travel_app/views/aspired_trip/save_trip_and_get_qoute.dart';
+import 'package:travelnew_app/views/aspired_trip/save_trip_and_get_qoute.dart';
 import '../../model/home_model.dart';
 import '../../services/db/firebaseDB.dart';
 import '../../utils/constant.dart';
@@ -16,7 +14,7 @@ import '../home/festival_and_celebrations_screen.dart';
 import '../humburger_flow/trip_library_screen.dart';
 
 class AspiredTripDetailsScreen extends StatefulWidget {
-  final Map<String,dynamic> MP;
+  final Map<String, dynamic> MP;
   const AspiredTripDetailsScreen({super.key, required this.MP});
 
   @override
@@ -24,8 +22,6 @@ class AspiredTripDetailsScreen extends StatefulWidget {
 }
 
 class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
-
-
   // String _festival = "Rakhi";
   // String _locationn = "Jodhpur";
   // String _image = "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80";
@@ -83,14 +79,10 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
   // }
   String _mobileNum = "";
   String _email = "";
-  void getpermission() async{
+  void getpermission() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var per = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('primaAccount')
-          .doc('profile')
-          .get();
+      var per =
+          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       _mobileNum = per.data()?['mobileNumber'];
       _email = per.data()?['emailId'];
     }
@@ -98,39 +90,32 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
     print('$_mobileNum');
     print('$_email');
   }
+
   String _id = "";
   String _location = "";
   String _subtitle = "";
   String _title = "";
   String _imagee = "";
   bool isBookmarked = false;
-  List Bookmarklist =[];
+  List Bookmarklist = [];
 
   void bookmark() async {
-    SharedPreferences _prefs =
-    await SharedPreferences.getInstance();
-    if (!isBookmarked)  {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    if (!isBookmarked) {
       // var docID = SharedPreferences.getInstance().getString('postID');
       // FirebaseDB().removeBookmark(docID);
-    } else
-    {
+    } else {
       Bookmarklist.add(context);
-      DocumentReference users = FirebaseFirestore.instance
-          .collection('users')
-
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("bookmarks")
-          .doc();
+      DocumentReference users = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("bookmarks").doc();
       users.set({
         'id': _id,
         "postID": users.id,
         'image': _imagee,
-        'location':_location,
-        'subtitle':_subtitle,
-        'title':_title,
+        'location': _location,
+        'subtitle': _subtitle,
+        'title': _title,
       });
-      setState(() {
-      });
+      setState(() {});
     }
   }
 
@@ -141,17 +126,18 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection("upcomingtrip")
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .update({
-      });
+          .update({});
       setState(() {});
     }
   }
+
   @override
   void initState() {
     // getDetails();
     getpermission();
-        super.initState();
+    super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,9 +149,7 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
                 Stack(
                   children: [
                     ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            topRight: Radius.circular(15)),
+                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
                         child: Image.network(widget.MP['imageUrl'])),
                     SafeArea(
                       child: Row(
@@ -175,63 +159,62 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+                              icon: Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.white,
+                              )),
                           Spacer(),
-                           Positioned(
-                                top: -5,
-                                right: -5,
-                                child: IconButton(
-                                    onPressed: () async {
-                                      SharedPreferences _prefs =
-                                      await SharedPreferences.getInstance();
-                                      if (!isBookmarked) {
-
-                                          Bookmarklist.add(context);
-                                          DocumentReference users = FirebaseFirestore.instance
-                                              .collection('users')
-                                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                                              .collection("bookmarks")
-                                              .doc();
-                                          users.set({
-                                            'id': _id,
-                                            "postID": users.id,
-                                            'image': _imagee,
-                                            'location':_location,
-                                            'subtitle':_subtitle,
-                                            'title':_title,
-                                          });
-                                      }
-                                       else {
-                                        var trip = await FirebaseFirestore.instance
-                                              .collection('users')
+                          Positioned(
+                            top: -5,
+                            right: -5,
+                            child: IconButton(
+                                onPressed: () async {
+                                  SharedPreferences _prefs = await SharedPreferences.getInstance();
+                                  if (!isBookmarked) {
+                                    Bookmarklist.add(context);
+                                    DocumentReference users = FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                                        .collection("bookmarks")
+                                        .doc();
+                                    users.set({
+                                      'id': _id,
+                                      "postID": users.id,
+                                      'image': _imagee,
+                                      'location': _location,
+                                      'subtitle': _subtitle,
+                                      'title': _title,
+                                    });
+                                  } else {
+                                    var trip = await FirebaseFirestore.instance
+                                        .collection('users')
                                         .doc(FirebaseAuth.instance.currentUser!.uid)
                                         .collection('bookmarks')
-                                            .doc()
-                                            .get();
-                                        var docID = trip.data()?['docID'];
-                                        FirebaseDB().removeBookmark(docID);
-                                      }
-                                      setState(() {
-                                        isBookmarked = !isBookmarked;
-                                      });
-                                      // DocumentReference users = FirebaseFirestore.instance
-                                      //     .collection('users')
-                                      //
-                                      //     .doc(FirebaseAuth.instance.currentUser!.uid)
-                                      //     .collection("bookmarks")
-                                      // .doc();
-                                      //     users.set({
-                                      //       "postID": users.id,
-                                      // });
-                                    },
-                                    icon: !isBookmarked
-                                        ? Icon(
-                                      Icons.bookmark_border,
-                                      color: white,
-                                    )
-                                        : const Icon(Icons.bookmark)),
-                              ),
-
+                                        .doc()
+                                        .get();
+                                    var docID = trip.data()?['docID'];
+                                    FirebaseDB().removeBookmark(docID);
+                                  }
+                                  setState(() {
+                                    isBookmarked = !isBookmarked;
+                                  });
+                                  // DocumentReference users = FirebaseFirestore.instance
+                                  //     .collection('users')
+                                  //
+                                  //     .doc(FirebaseAuth.instance.currentUser!.uid)
+                                  //     .collection("bookmarks")
+                                  // .doc();
+                                  //     users.set({
+                                  //       "postID": users.id,
+                                  // });
+                                },
+                                icon: !isBookmarked
+                                    ? Icon(
+                                        Icons.bookmark_border,
+                                        color: white,
+                                      )
+                                    : const Icon(Icons.bookmark)),
+                          ),
                           Padding(
                             padding: EdgeInsets.only(right: 12.0, top: 10),
                             child: ImageIcon(
@@ -269,15 +252,11 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
                                       children: [
                                         Text(
                                           widget.MP['destinationname'],
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              color: white),
+                                          style: TextStyle(fontWeight: FontWeight.w500, color: white),
                                         ),
                                         Text(
                                           widget.MP['statename'],
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              color: white),
+                                          style: TextStyle(fontWeight: FontWeight.w500, color: white),
                                         )
                                       ],
                                     ),
@@ -312,7 +291,7 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
                         style: bodyText30W600(color: black),
                       ),
                       Text(
-                      widget.MP['experiences'],
+                        widget.MP['experiences'],
                       ),
                       addVerticalSpace(10),
                       Text(
@@ -322,11 +301,7 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
                       addVerticalSpace(5),
                       Text(
                         widget.MP['about'],
-                        style: TextStyle(
-                            height: 1.3,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w300,
-                            color: black),
+                        style: TextStyle(height: 1.3, fontSize: 18, fontWeight: FontWeight.w300, color: black),
                       ),
                       addVerticalSpace(15),
                       Text(
@@ -357,8 +332,7 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
                                       ),
                                     ),
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           widget.MP['daysnumber'][i],
@@ -388,10 +362,7 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
                       addVerticalSpace(2),
                       Text(
                         'Family/friends/Couple',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w300,
-                            color: black),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300, color: black),
                       ),
                       addVerticalSpace(15),
                       Text(
@@ -401,27 +372,23 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
                       addVerticalSpace(4),
                       Text(
                         widget.MP['includes'],
-                        style: TextStyle(
-                            height: 1.3,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w300,
-                            color: black),
+                        style: TextStyle(height: 1.3, fontSize: 18, fontWeight: FontWeight.w300, color: black),
                       ),
                       addVerticalSpace(15),
                       Text(
                         'Expected Budget',
                         style: bodyText20w700(color: black),
                       ),
-                       Row(
-                         children: [
-                           Text(
+                      Row(
+                        children: [
+                          Text(
                             widget.MP['Expected_Budget'],
+                          ),
+                          Text(
+                            '₹  /person',
+                          ),
+                        ],
                       ),
-                           Text(
-                             '₹  /person',
-                           ),
-                         ],
-                       ),
                       addVerticalSpace(height(context) * 0.1),
                       addVerticalSpace(8)
                     ],
@@ -436,28 +403,23 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
             child: CustomButton(
                 name: 'Save trip and get quotes',
                 onPressed: () {
-               if(_email == "" || _mobileNum == ""){
+                  if (_email == "" || _mobileNum == "") {
                     NumberpoppubDialog(context);
-                      }
-                      else {
-                 if (FirebaseAuth.instance.currentUser!.uid !=
-                     null) {
-                   updatesavetrip();
-                   // addsavetrip();
-                 } else {
-                   updatesavetrip();
-                 }
-                 Navigator.push(
-                     context,
-                     MaterialPageRoute(
-                         builder: (context) =>
-                         const SaveTripAndGetQuote(
-                           message1:
-                           'Our travel partners may request you change in date as per travel seat reservations',
-                           message2:
-                           'Expected budget: 5000 per person (Cost includes hotel booking and travel booking)',
-                         )));
-               }
+                  } else {
+                    if (FirebaseAuth.instance.currentUser!.uid != null) {
+                      updatesavetrip();
+                      // addsavetrip();
+                    } else {
+                      updatesavetrip();
+                    }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SaveTripAndGetQuote(
+                                  message1: 'Our travel partners may request you change in date as per travel seat reservations',
+                                  message2: 'Expected budget: 5000 per person (Cost includes hotel booking and travel booking)',
+                                )));
+                  }
                 }),
           )
         ],
@@ -465,4 +427,3 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
     );
   }
 }
-

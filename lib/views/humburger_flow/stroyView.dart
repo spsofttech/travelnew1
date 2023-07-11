@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/story_view.dart';
-import 'package:travel_app/views/humburger_flow/tourist_spot_screen.dart';
-import 'package:travel_app/views/humburger_flow/trip_library_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/tourist_spot_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/trip_library_screen.dart';
 
 import '../../model/DayWiseTripModel.dart';
 import '../../utils/constant.dart';

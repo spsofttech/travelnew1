@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/widget/custom_button.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
 
 List planDetails = [];
 int selectedIndex = 0;
@@ -15,8 +15,7 @@ class GoPrimaSubscriptionScreen extends StatefulWidget {
   const GoPrimaSubscriptionScreen({super.key});
 
   @override
-  State<GoPrimaSubscriptionScreen> createState() =>
-      _GoPrimaSubscriptionScreenState();
+  State<GoPrimaSubscriptionScreen> createState() => _GoPrimaSubscriptionScreenState();
 }
 
 class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
@@ -126,8 +125,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
           children: [
             RichText(
                 text: TextSpan(children: [
-              TextSpan(
-                  text: 'Unexplored\n', style: bodyText20w700(color: primary)),
+              TextSpan(text: 'Unexplored\n', style: bodyText20w700(color: primary)),
               TextSpan(text: 'Places', style: bodyText20w700(color: black)),
             ])),
             Image.asset('assets/images/4rth.png'),
@@ -159,9 +157,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
           children: [
             RichText(
                 text: TextSpan(children: [
-              TextSpan(
-                  text: 'Travel alone\n',
-                  style: bodyText20w700(color: primary)),
+              TextSpan(text: 'Travel alone\n', style: bodyText20w700(color: primary)),
               TextSpan(text: 'Trips', style: bodyText20w700(color: black)),
             ])),
             Image.asset('assets/images/5th.png'),
@@ -193,11 +189,8 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
           children: [
             RichText(
                 text: TextSpan(children: [
-              TextSpan(
-                  text: 'Plan trips\n', style: bodyText20w700(color: primary)),
-              TextSpan(
-                  text: 'from multiple cities',
-                  style: bodyText20w700(color: black)),
+              TextSpan(text: 'Plan trips\n', style: bodyText20w700(color: primary)),
+              TextSpan(text: 'from multiple cities', style: bodyText20w700(color: black)),
             ])),
             // Image.asset('assets/images/5th.png'),
             Icon(
@@ -249,22 +242,16 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RichText(
                       text: TextSpan(children: [
-                    TextSpan(
-                        text: 'Go ', style: bodyText30W600(color: primary)),
-                    TextSpan(
-                        text: 'Explore!\n',
-                        style: bodyText30W600(color: black)),
-                    TextSpan(
-                        text: 'Go ', style: bodyText30W600(color: primary)),
-                    TextSpan(
-                        text: 'Prima.', style: bodyText30W600(color: black)),
+                    TextSpan(text: 'Go ', style: bodyText30W600(color: primary)),
+                    TextSpan(text: 'Explore!\n', style: bodyText30W600(color: black)),
+                    TextSpan(text: 'Go ', style: bodyText30W600(color: primary)),
+                    TextSpan(text: 'Prima.', style: bodyText30W600(color: black)),
                   ])),
                   addVerticalSpace(height(context) * 0.05),
                   CarouselSlider(
@@ -325,22 +312,10 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
                     },
                     child: RichText(
                         text: TextSpan(children: [
-                      TextSpan(
-                          text: '    Select your plan or try Prima\n',
-                          style: bodyText14normal(color: black)),
-                      TextSpan(
-                          text: 'Free ',
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: primary)),
-                      TextSpan(
-                          text: 'for 7 days (limited ',
-                          style: TextStyle(color: black)),
-                      TextSpan(
-                          text: 'features',
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: primary)),
+                      TextSpan(text: '    Select your plan or try Prima\n', style: bodyText14normal(color: black)),
+                      TextSpan(text: 'Free ', style: TextStyle(decoration: TextDecoration.underline, color: primary)),
+                      TextSpan(text: 'for 7 days (limited ', style: TextStyle(color: black)),
+                      TextSpan(text: 'features', style: TextStyle(decoration: TextDecoration.underline, color: primary)),
                       TextSpan(text: ')', style: TextStyle(color: black)),
                     ])),
                   )),
@@ -352,10 +327,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
                 child: const Text(
                   'Already member know status Have an Issue contact us',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      height: 1.3,
-                      decoration: TextDecoration.underline,
-                      fontSize: 13),
+                  style: TextStyle(height: 1.3, decoration: TextDecoration.underline, fontSize: 13),
                 ),
               ),
             ),
@@ -367,8 +339,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
         padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         width: width(context),
         decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
             color: Colors.white,
             boxShadow: [
               BoxShadow(
@@ -376,8 +347,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
                 blurRadius: 5,
               ),
             ]),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           loading
               ? const CircularProgressIndicator()
               : Padding(
@@ -386,9 +356,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        planDetails.isNotEmpty
-                            ? planDetails[selectedIndex]['price']
-                            : 'X00',
+                        planDetails.isNotEmpty ? planDetails[selectedIndex]['price'] : 'X00',
                         style: bodyText16w600(color: black),
                       ),
                       addVerticalSpace(5),
@@ -441,8 +409,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
         context: context,
         builder: (_) => AlertDialog(
               contentPadding: const EdgeInsets.all(6),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
               content: Builder(
                 builder: (context) {
                   var height = MediaQuery.of(context).size.height;
@@ -458,8 +425,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
                             Text(
                               'Enjoy 7 days Prima trial membership as a welcome gift. To avail complete features subscribe now',
                               textAlign: TextAlign.center,
-                              style:
-                                  bodyText16normal(spacing: 1.3, color: black),
+                              style: bodyText16normal(spacing: 1.3, color: black),
                             ),
                             addVerticalSpace(height * 0.07),
                             Row(
@@ -472,8 +438,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
                                   child: Container(
                                     height: 35,
                                     width: 100,
-                                    decoration:
-                                        myOutlineBoxDecoration(1, primary, 10),
+                                    decoration: myOutlineBoxDecoration(1, primary, 10),
                                     child: Center(
                                       child: Text(
                                         'Continue Trial',
@@ -487,8 +452,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
                                   child: Container(
                                     height: 35,
                                     width: 100,
-                                    decoration:
-                                        myFillBoxDecoration(0, primary, 10),
+                                    decoration: myFillBoxDecoration(0, primary, 10),
                                     child: Center(
                                       child: Text(
                                         'Subscribe',
@@ -512,8 +476,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
         context: context,
         builder: (_) => AlertDialog(
               contentPadding: const EdgeInsets.all(6),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
               content: Builder(
                 builder: (context) {
                   var height = MediaQuery.of(context).size.height;
@@ -533,21 +496,16 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
                         RichText(
                             text: TextSpan(children: [
                           TextSpan(
-                              text:
-                                  'Your subscription is live now. Go explore your \n               trip by access to all',
+                              text: 'Your subscription is live now. Go explore your \n               trip by access to all',
                               style: bodyText12Small(color: black)),
-                          TextSpan(
-                              text: ' features.',
-                              style:
-                                  bodyText14w600(spacing: 1.2, color: primary))
+                          TextSpan(text: ' features.', style: bodyText14w600(spacing: 1.2, color: primary))
                         ])),
                         addVerticalSpace(20),
                         Container(
                           padding: EdgeInsets.all(8),
                           height: height * 0.13,
                           width: width * 0.7,
-                          decoration: myFillBoxDecoration(
-                              0, black.withOpacity(0.1), 10),
+                          decoration: myFillBoxDecoration(0, black.withOpacity(0.1), 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -568,20 +526,10 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
                                   RichText(
                                       text: TextSpan(children: [
                                     TextSpan(
-                                        text:
-                                            'Your subscription ends on \nFeb 03, 2022\n',
-                                        style: TextStyle(
-                                            height: 1.3,
-                                            fontSize: 12,
-                                            color: black)),
+                                        text: 'Your subscription ends on \nFeb 03, 2022\n', style: TextStyle(height: 1.3, fontSize: 12, color: black)),
                                     TextSpan(
                                         text: 'Extend Subscription',
-                                        style: TextStyle(
-                                            decoration:
-                                                TextDecoration.underline,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                            color: primary))
+                                        style: TextStyle(decoration: TextDecoration.underline, fontSize: 12, fontWeight: FontWeight.w600, color: primary))
                                   ]))
                                 ],
                               ),
@@ -619,15 +567,15 @@ class PlanDetailsWidget extends StatefulWidget {
 
 class _PlanDetailsWidgetState extends State<PlanDetailsWidget> {
   getPrimaPlans() async {
-    var x = await FirebaseFirestore.instance
-        .collection('primaPlans')
-        .doc('planDeatils')
-        .get();
+    DocumentSnapshot<Map<String, dynamic>> x = await FirebaseFirestore.instance.collection('primaPlans').doc('planDeatils').get();
     planDetails.clear();
-    print(x.data());
+
+    print(x.data()!['data']);
+
     x.data()!.forEach((key, value) {
       planDetails.add(value);
     });
+
     planDetails.forEach((element) {
       print(element['no']);
     });
@@ -690,9 +638,8 @@ class _PlanDetailsWidgetState extends State<PlanDetailsWidget> {
                     decoration: selectedIndex == i
                         ? BoxDecoration(
                             border: Border.all(width: 2, color: primary),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10) //
-                                    ),
+                            borderRadius: const BorderRadius.all(Radius.circular(10) //
+                                ),
                             color: Colors.white,
                             boxShadow: const [
                                 BoxShadow(
@@ -709,8 +656,7 @@ class _PlanDetailsWidgetState extends State<PlanDetailsWidget> {
                           children: [
                             Text(
                               planDetails[i]['planName'],
-                              style:
-                                  bodytext12Bold(color: black.withOpacity(0.4)),
+                              style: bodytext12Bold(color: black.withOpacity(0.4)),
                             ),
                             selectedIndex == i
                                 ? Icon(

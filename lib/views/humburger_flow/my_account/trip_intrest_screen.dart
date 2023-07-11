@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_app/utils/constant.dart';
+import 'package:travelnew_app/utils/constant.dart';
 
 import '../../../widget/custom_appbar.dart';
 import '../../../widget/custom_button.dart';
+import '../../home/plan_trip_screen.dart';
 
 class YourTripInterest extends StatefulWidget {
   @override
@@ -66,6 +67,28 @@ class _YourTripInterestState extends State<YourTripInterest> {
     });
 
     //print(trip_interest_data);
+  }
+
+  putIntrest() async {
+    usereTripIntrest.clear();
+    DocumentSnapshot<Map<String, dynamic>> profile =
+        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+
+    QuerySnapshot<Map<String, dynamic>> trip_intrest_snapshot = await FirebaseFirestore.instance.collection('Category Interest').get();
+    print("${trip_intrest_snapshot.docs[0].data()['data']}");
+    print("${trip_intrest_snapshot.docs[0].id}");
+
+    int b = 0;
+    trip_intrest_snapshot.docs.forEach((element) {
+      //trip_interest_data_list.add([]);
+      // List c = element.data()['data'];
+      // print(element.id);
+      usereTripIntrest.addAll(profile.data()!['${element.id}'] ?? []);
+      //trip_interest_catName.add("${element.id}");
+      b++;
+    });
+
+    print(usereTripIntrest);
   }
 
   @override
@@ -178,7 +201,10 @@ class _YourTripInterestState extends State<YourTripInterest> {
                 width: width(context) * 0.5,
                 child: CustomButton(
                     name: 'Save',
-                    onPressed: () {
+                    onPressed: () async {
+                      showAPICallPendingDialog(context);
+                      await putIntrest();
+                      Navigator.pop(context);
                       Navigator.pop(context);
                     }),
               ),
@@ -729,7 +755,7 @@ class _AdventurefilterChipWidgetState extends State<AdventurefilterChipWidget> {
   void getDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
       DocumentSnapshot<Map<String, dynamic>> profile =
-          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("primaAccount").doc("profile").get();
+          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       print("---- ${profile.data()!['${widget.catName}'] == null}   -------------");
       NatureList = profile.data()![widget.catName] ?? [];
       setState(() {});
@@ -749,7 +775,7 @@ class _AdventurefilterChipWidgetState extends State<AdventurefilterChipWidget> {
               if (NatureList.contains(widget.chipName[i]['name'])) {
                 NatureList.removeAt(NatureList.indexOf(widget.chipName[i]['name']));
                 CollectionReference users = FirebaseFirestore.instance.collection('users');
-                users.doc(FirebaseAuth.instance.currentUser!.uid).collection("primaAccount").doc("profile").update({
+                users.doc(FirebaseAuth.instance.currentUser!.uid).update({
                   '${widget.catName}': FieldValue.arrayRemove([widget.chipName[i]['name']])
                 });
                 setState(() {});
@@ -757,7 +783,7 @@ class _AdventurefilterChipWidgetState extends State<AdventurefilterChipWidget> {
               } else {
                 NatureList.add(widget.chipName[i]['name']);
                 CollectionReference users = FirebaseFirestore.instance.collection('users');
-                users.doc(FirebaseAuth.instance.currentUser!.uid).collection("primaAccount").doc("profile").update({
+                users.doc(FirebaseAuth.instance.currentUser!.uid).update({
                   '${widget.catName}': FieldValue.arrayUnion([widget.chipName[i]['name']])
                 });
                 setState(() {});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/custom_textfield.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/custom_textfield.dart';
 
 import '../../../widget/custom_appbar.dart';
 
@@ -19,9 +19,7 @@ class _B2BRegistrationScreenState extends State<B2BRegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: CustomAppBar(title: 'TravelNew Biz Registration')),
+      appBar: PreferredSize(preferredSize: Size.fromHeight(50), child: CustomAppBar(title: 'TravelNew Biz Registration')),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -56,10 +54,7 @@ class _B2BRegistrationScreenState extends State<B2BRegistrationScreen> {
                   onTap: () {},
                   child: Text(
                     'Why is this required?',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: primary,
-                        decoration: TextDecoration.underline),
+                    style: TextStyle(fontWeight: FontWeight.w600, color: primary, decoration: TextDecoration.underline),
                   )),
             ),
             addVerticalSpace(8),
@@ -71,10 +66,7 @@ class _B2BRegistrationScreenState extends State<B2BRegistrationScreen> {
                   onTap: () {},
                   child: Text(
                     'Explain about this?',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: primary,
-                        decoration: TextDecoration.underline),
+                    style: TextStyle(fontWeight: FontWeight.w600, color: primary, decoration: TextDecoration.underline),
                   )),
             ),
             addVerticalSpace(8),
@@ -100,15 +92,9 @@ class _B2BRegistrationScreenState extends State<B2BRegistrationScreen> {
                   },
                   child: RichText(
                       text: TextSpan(children: [
+                    TextSpan(text: 'I accept the ', style: bodyText14normal(color: black)),
                     TextSpan(
-                        text: 'I accept the ',
-                        style: bodyText14normal(color: black)),
-                    TextSpan(
-                        text: 'Terms and Conditions',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: primary,
-                            decoration: TextDecoration.underline))
+                        text: 'Terms and Conditions', style: TextStyle(fontWeight: FontWeight.w400, color: primary, decoration: TextDecoration.underline))
                   ])),
                 ),
               ],

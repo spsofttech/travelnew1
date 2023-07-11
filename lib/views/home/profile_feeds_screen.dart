@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/views/home/home_screen.dart';
+import 'package:travelnew_app/views/home/home_screen.dart';
 
 import '../../model/home_model.dart';
 import '../../utils/constant.dart';

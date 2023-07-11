@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
 
 import '../../utils/constant.dart';
 
@@ -11,12 +11,10 @@ class ExploreTripSuggestionScreen extends StatefulWidget {
   const ExploreTripSuggestionScreen({super.key});
 
   @override
-  State<ExploreTripSuggestionScreen> createState() =>
-      _ExploreTripSuggestionScreenState();
+  State<ExploreTripSuggestionScreen> createState() => _ExploreTripSuggestionScreenState();
 }
 
-class _ExploreTripSuggestionScreenState
-    extends State<ExploreTripSuggestionScreen> {
+class _ExploreTripSuggestionScreenState extends State<ExploreTripSuggestionScreen> {
   String _string = 'Shopping';
   final TextEditingController suggestion1 = TextEditingController();
   final TextEditingController suggestion2 = TextEditingController();
@@ -27,37 +25,28 @@ class _ExploreTripSuggestionScreenState
         .doc('Mahaveer_travalar')
         .collection('Explore_ads')
         .doc('Fatured')
-        .update({
-      "suggestion1" : suggestion1.text,
-      "suggestion2" : suggestion2.text
-
-    });
+        .update({"suggestion1": suggestion1.text, "suggestion2": suggestion2.text});
   }
-  String _name ="";
-  String _address ="";
-  String _date ="";
-  void getDetails() async{
+
+  String _name = "";
+  String _address = "";
+  String _date = "";
+  void getDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var ads = await FirebaseFirestore.instance
-          .collection('Travalar')
-          .doc('Mahaveer_travalar')
-          .collection('Explore_ads')
-          .doc('Fatured')
-          .get();
+      var ads = await FirebaseFirestore.instance.collection('Travalar').doc('Mahaveer_travalar').collection('Explore_ads').doc('Fatured').get();
       _name = ads.data()?['name'];
       _address = ads.data()?['address'];
       _date = ads.data()?['date'];
-
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
+
   @override
   void initState() {
     getDetails();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,14 +110,13 @@ class _ExploreTripSuggestionScreenState
                       });
                     },
                     items: ['Shopping', 'Riding']
-                        .map<DropdownMenuItem<String>>(
-                            (String value) => DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: bodytext12Bold(color: black),
-                                  ),
-                                ))
+                        .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: bodytext12Bold(color: black),
+                              ),
+                            ))
                         .toList(),
 
                     // add extra sugar..
@@ -151,21 +139,20 @@ class _ExploreTripSuggestionScreenState
                 decoration: myFillBoxDecoration(0, black.withOpacity(0.1), 15),
                 width: width(context) * 0.95,
                 child: TextField(
-                  controller: suggestion1,
+                    controller: suggestion1,
                     maxLines: 4,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(10),
                       hintStyle: bodyText13normal(color: black),
-                      hintText:
-                          'Suggest any changes or additional information for the section ',
+                      hintText: 'Suggest any changes or additional information for the section ',
                     ))),
             addVerticalSpace(20),
             Container(
                 decoration: myFillBoxDecoration(0, black.withOpacity(0.1), 15),
                 width: width(context) * 0.95,
                 child: TextField(
-                  controller: suggestion2,
+                    controller: suggestion2,
                     maxLines: 2,
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -202,8 +189,7 @@ class _ExploreTripSuggestionScreenState
         context: context,
         builder: (_) => AlertDialog(
               contentPadding: const EdgeInsets.all(6),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
               content: Builder(
                 builder: (context) {
                   var height = MediaQuery.of(context).size.height;

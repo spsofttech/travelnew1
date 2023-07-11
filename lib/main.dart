@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/views/edit_prima_screen/prima_trip_1to4_screen.dart';
-import 'package:travel_app/views/home/home_screen.dart';
+import 'package:travelnew_app/views/edit_prima_screen/prima_trip_1to4_screen.dart';
+import 'package:travelnew_app/views/home/home_screen.dart';
 
-import 'package:travel_app/views/start/on_boarding_screen.dart';
-import 'package:travel_app/views/start/sign_up_screen.dart';
-import 'package:travel_app/widget/my_bottom_navbar.dart';
+import 'package:travelnew_app/views/start/on_boarding_screen.dart';
+import 'package:travelnew_app/views/start/sign_up_screen.dart';
+import 'package:travelnew_app/widget/my_bottom_navbar.dart';
 
 import 'views/edit_prima_screen/edit_prima_trip_screen.dart';
 

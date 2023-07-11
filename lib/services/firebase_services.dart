@@ -7,23 +7,20 @@ import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/start/create_new_password.dart';
-import 'package:travel_app/views/start/sign_in_screen.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/start/create_new_password.dart';
+import 'package:travelnew_app/views/start/sign_in_screen.dart';
 
 class FirebaseServices {
   final _auth = FirebaseAuth.instance;
   final _googleSignIn = GoogleSignIn();
   signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
       if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
-        final AuthCredential authCredential = GoogleAuthProvider.credential(
-            accessToken: googleSignInAuthentication.accessToken,
-            idToken: googleSignInAuthentication.idToken);
+        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+        final AuthCredential authCredential =
+            GoogleAuthProvider.credential(accessToken: googleSignInAuthentication.accessToken, idToken: googleSignInAuthentication.idToken);
         await _auth.signInWithCredential(authCredential);
       }
     } on FirebaseAuthException catch (e) {
@@ -40,8 +37,7 @@ class FirebaseServices {
   signInWithFacebook() async {
     try {
       final LoginResult loginResult = await FacebookAuth.instance.login();
-      final OAuthCredential facebookAuthCredential =
-          FacebookAuthProvider.credential(loginResult.accessToken!.token);
+      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
       await _auth.signInWithCredential(facebookAuthCredential);
     } on FirebaseAuthException catch (e) {
       print(e);
@@ -64,16 +60,14 @@ class FirebaseServices {
           builder: (context) {
             return AlertDialog(
               title: const Text("Reset Password"),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               actionsAlignment: MainAxisAlignment.center,
               actionsPadding: const EdgeInsets.all(2),
               content: const Text(
                   "Hey! A password reset link has been sent to your email. Please check your inbox and use the link to reset your password. Once you have reset your password, you can log in to your account with your new credentials."),
               actions: <Widget>[
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: Colors.amber),
                     child: Container(
@@ -92,8 +86,7 @@ class FirebaseServices {
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (_) => SignInScreen()));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => SignInScreen()));
                     },
                   ),
                 ),

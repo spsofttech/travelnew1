@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/views/save_your_trips/save_your_trips.dart';
-import 'package:travel_app/widget/custom_dropdown_button.dart';
-import 'package:travel_app/widget/custom_textfield.dart';
+import 'package:travelnew_app/views/save_your_trips/save_your_trips.dart';
+import 'package:travelnew_app/widget/custom_dropdown_button.dart';
+import 'package:travelnew_app/widget/custom_textfield.dart';
 
 import '../../model/save_trip_model.dart';
 import '../../utils/constant.dart';
@@ -100,8 +100,8 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
     if (FirebaseAuth.instance.currentUser != null) {
       var details =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
-      _email = details.data()?['emailId'];
-      _mobnum = details.data()?['mobileNumber'];
+      _email = details.data()?['emailId'] ?? "";
+      _mobnum = details.data()?['mobileNumber'] ?? "";
     }
 
     setState(() {});

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:travel_app/services/firebase_services.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/start/create_new_password.dart';
-import 'package:travel_app/views/start/sign_up_screen.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/custom_textfield.dart';
+import 'package:travelnew_app/services/firebase_services.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/start/create_new_password.dart';
+import 'package:travelnew_app/views/start/sign_up_screen.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/custom_textfield.dart';
 
 class ForgotPassword extends StatelessWidget {
   ForgotPassword({super.key});
@@ -84,10 +84,7 @@ class ForgotPassword extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 8.0),
                   child: InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => SignUpScreen())));
+                        Navigator.push(context, MaterialPageRoute(builder: ((context) => SignUpScreen())));
                       },
                       child: Text(
                         'Sign up with new email id?',
@@ -105,11 +102,9 @@ class ForgotPassword extends StatelessWidget {
 
                       //Send-Password-Reset-Link//
                       if (_controller.text == null) {
-                        Fluttertoast.showToast(
-                            msg: "Please enter email address");
+                        Fluttertoast.showToast(msg: "Please enter email address");
                       }
-                      FirebaseServices()
-                          .passwordReset(_controller.text, context);
+                      FirebaseServices().passwordReset(_controller.text, context);
                     })
               ],
             ),

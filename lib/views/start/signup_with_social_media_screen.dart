@@ -4,22 +4,20 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:travel_app/services/firebase_services.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/utils/firebaseAuth.dart';
-import 'package:travel_app/views/start/sign_in_screen.dart';
-import 'package:travel_app/widget/my_bottom_navbar.dart';
+import 'package:travelnew_app/services/firebase_services.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/utils/firebaseAuth.dart';
+import 'package:travelnew_app/views/start/sign_in_screen.dart';
+import 'package:travelnew_app/widget/my_bottom_navbar.dart';
 
 class SignupWithSocialMediaScreen extends StatefulWidget {
   const SignupWithSocialMediaScreen({super.key});
 
   @override
-  State<SignupWithSocialMediaScreen> createState() =>
-      _SignupWithSocialMediaScreenState();
+  State<SignupWithSocialMediaScreen> createState() => _SignupWithSocialMediaScreenState();
 }
 
-class _SignupWithSocialMediaScreenState
-    extends State<SignupWithSocialMediaScreen> {
+class _SignupWithSocialMediaScreenState extends State<SignupWithSocialMediaScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   @override
@@ -36,10 +34,7 @@ class _SignupWithSocialMediaScreenState
               alignment: Alignment.topRight,
               child: TextButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) => MyBottomBar())));
+                    Navigator.push(context, MaterialPageRoute(builder: ((context) => MyBottomBar())));
                   },
                   child: Text(
                     'I’ll do it later',
@@ -103,8 +98,7 @@ class _SignupWithSocialMediaScreenState
             InkWell(
               onTap: () async {
                 await FirebaseServices().signInWithFacebook();
-                Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => MyBottomBar())));
+                Navigator.push(context, MaterialPageRoute(builder: ((context) => MyBottomBar())));
                 // signing with facebook
               },
               child: Container(
@@ -147,8 +141,7 @@ class _SignupWithSocialMediaScreenState
             addVerticalSpace(15),
             InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => SignInScreen())));
+                Navigator.push(context, MaterialPageRoute(builder: ((context) => SignInScreen())));
               },
               child: Container(
                 height: 50,
@@ -175,10 +168,7 @@ class _SignupWithSocialMediaScreenState
                   },
                   child: Text(
                     'Why Login?',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: primary,
-                        decoration: TextDecoration.underline),
+                    style: TextStyle(fontWeight: FontWeight.w600, color: primary, decoration: TextDecoration.underline),
                   )),
             ),
             addVerticalSpace(30),
@@ -187,24 +177,13 @@ class _SignupWithSocialMediaScreenState
               child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(children: [
+                    TextSpan(text: 'By Proceeding further you agree to Travel New’s ', style: bodyText14normal(spacing: 1.4, color: black)),
                     TextSpan(
-                        text:
-                            'By Proceeding further you agree to Travel New’s ',
-                        style: bodyText14normal(spacing: 1.4, color: black)),
-                      TextSpan(
                       text: 'Terms of Services & Privacy Policy. ',
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {},
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          height: 1.4,
-                          color: black,
-                          decoration: TextDecoration.underline),
+                      recognizer: TapGestureRecognizer()..onTap = () {},
+                      style: TextStyle(fontWeight: FontWeight.w600, height: 1.4, color: black, decoration: TextDecoration.underline),
                     ),
-                    TextSpan(
-                        text:
-                            'To sign up, you need to be at least 18. You can hide your DOB',
-                        style: bodyText14normal(spacing: 1.4, color: black))
+                    TextSpan(text: 'To sign up, you need to be at least 18. You can hide your DOB', style: bodyText14normal(spacing: 1.4, color: black))
                   ])),
             )
           ],
@@ -212,46 +191,52 @@ class _SignupWithSocialMediaScreenState
       )),
     );
   }
+
   dialog1(BuildContext context) {
-
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          contentPadding: const EdgeInsets.all(6),
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0))),
-          content: Builder(
-            builder: (context) {
-              var height = MediaQuery.of(context).size.height;
-              var width = MediaQuery.of(context).size.width;
+              contentPadding: const EdgeInsets.all(6),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              content: Builder(
+                builder: (context) {
+                  var height = MediaQuery.of(context).size.height;
+                  var width = MediaQuery.of(context).size.width;
 
-              return Container(
-                height: 200,
-               child: Center(child: Text('We won’t post anything without\n                your consent',style: TextStyle(fontFamily: GoogleFonts.roboto().fontFamily),)),
-              );
-            },
-          ),
-        ));
+                  return Container(
+                    height: 200,
+                    child: Center(
+                        child: Text(
+                      'We won’t post anything without\n                your consent',
+                      style: TextStyle(fontFamily: GoogleFonts.roboto().fontFamily),
+                    )),
+                  );
+                },
+              ),
+            ));
   }
-  dialog2(BuildContext context) {
 
+  dialog2(BuildContext context) {
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          contentPadding: const EdgeInsets.all(6),
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0))),
-          content: Builder(
-            builder: (context) {
-              var height = MediaQuery.of(context).size.height;
-              var width = MediaQuery.of(context).size.width;
+              contentPadding: const EdgeInsets.all(6),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              content: Builder(
+                builder: (context) {
+                  var height = MediaQuery.of(context).size.height;
+                  var width = MediaQuery.of(context).size.width;
 
-              return Container(
-                height: 200,
-                child: Center(child: Text('             Login is required to save your trips, \n               connect with travelers and more. \n  It also enables syncing your trips and data on the \n                    occasion of handset change.',style: TextStyle(fontFamily: GoogleFonts.roboto().fontFamily),)),
-              );
-            },
-          ),
-        ));
+                  return Container(
+                    height: 200,
+                    child: Center(
+                        child: Text(
+                      '             Login is required to save your trips, \n               connect with travelers and more. \n  It also enables syncing your trips and data on the \n                    occasion of handset change.',
+                      style: TextStyle(fontFamily: GoogleFonts.roboto().fontFamily),
+                    )),
+                  );
+                },
+              ),
+            ));
   }
 }

@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/views/aspired_trip/save_trip_and_get_qoute.dart';
-import 'package:travel_app/views/home/festival_and_celebrations_screen.dart';
-import 'package:travel_app/views/humburger_flow/trip_library_screen.dart';
-import 'package:travel_app/views/start/sign_in_screen.dart';
-import 'package:travel_app/views/start/signup_with_social_media_screen.dart';
+import 'package:travelnew_app/views/aspired_trip/save_trip_and_get_qoute.dart';
+import 'package:travelnew_app/views/home/festival_and_celebrations_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/trip_library_screen.dart';
+import 'package:travelnew_app/views/start/sign_in_screen.dart';
+import 'package:travelnew_app/views/start/signup_with_social_media_screen.dart';
 
 import '../../utils/constant.dart';
 import '../../widget/custom_appbar.dart';

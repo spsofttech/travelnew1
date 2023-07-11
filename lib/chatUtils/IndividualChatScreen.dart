@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../utils/constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:travel_app/chatUtils/chatModel.dart';
-import 'package:travel_app/chatUtils/OwnMessageComponent.dart';
-import 'package:travel_app/chatUtils/ReplyComponent.dart';
-import 'package:travel_app/chatUtils/MessageModel.dart';
+import 'package:travelnew_app/chatUtils/chatModel.dart';
+import 'package:travelnew_app/chatUtils/OwnMessageComponent.dart';
+import 'package:travelnew_app/chatUtils/ReplyComponent.dart';
+import 'package:travelnew_app/chatUtils/MessageModel.dart';
 
 class IndividualPage extends StatefulWidget {
   IndividualPage({

@@ -2,45 +2,45 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 //--------------------------------------------------  ADMIN -------------------------------------------------------
-
-const List<String> travelNewTripState = [
-  'Select',
-  'Tripura',
-  'Gujarat',
-  'Mizoram',
-  'Punjab',
-  'Uttar Pradesh',
-  'Uttrakhand',
-  'Karnataka',
-  'Madhya Pradesh',
-  'Odisha',
-  'Himachal Pradesh',
-  'Chandigarh',
-  'Delhi',
-  'Sikkim',
-  'Assam',
-  'Telangana',
-  'Rajasthan',
-  'Maharashtra',
-  'Andhra Pradesh',
-  'Haryana',
-  'Kerala',
-  'Madhya Pradesh',
-  'Manipur',
-  'Bihar',
-  'West Bengal',
-  'Jammu and Kashmir',
-  'Tamil Nadu'
-];
-
-const List<String> travelNewTripSubType = [
-  'Select',
-  'Adventure Trip',
-  'Couple Trip',
-  'Family Trip',
-  'Friends Trip',
-  'Religious trips',
-];
+//
+// const List<String> travelNewTripState = [
+//   'Select',
+//   'Tripura',
+//   'Gujarat',
+//   'Mizoram',
+//   'Punjab',
+//   'Uttar Pradesh',
+//   'Uttrakhand',
+//   'Karnataka',
+//   'Madhya Pradesh',
+//   'Odisha',
+//   'Himachal Pradesh',
+//   'Chandigarh',
+//   'Delhi',
+//   'Sikkim',
+//   'Assam',
+//   'Telangana',
+//   'Rajasthan',
+//   'Maharashtra',
+//   'Andhra Pradesh',
+//   'Haryana',
+//   'Kerala',
+//   'Madhya Pradesh',
+//   'Manipur',
+//   'Bihar',
+//   'West Bengal',
+//   'Jammu and Kashmir',
+//   'Tamil Nadu'
+// ];
+//
+// const List<String> travelNewTripSubType = [
+//   'Select',
+//   'Adventure Trip',
+//   'Couple Trip',
+//   'Family Trip',
+//   'Friends Trip',
+//   'Religious trips',
+// ];
 
 //-----------------------------------------------------------------------------------------------------------------
 double height(BuildContext context) {
@@ -363,5 +363,8 @@ String UserState = "";
 String USERNAME = "";
 String USERIMAGE = "";
 String USER_UID = "";
+double USER_lat = 0;
+double USER_long = 0;
 String NoUserNetworkImage = "https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_640.png";
 Map<String, dynamic> UserDataMap = {};
+bool USER_IS_PRIMA = false;

@@ -7,12 +7,12 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/humburger_flow/my_account/trip_intrest_screen.dart';
-import 'package:travel_app/views/humburger_flow/trip_library_screen.dart';
-import 'package:travel_app/widget/custom_appbar.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/custom_textfield.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/humburger_flow/my_account/trip_intrest_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/trip_library_screen.dart';
+import 'package:travelnew_app/widget/custom_appbar.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/custom_textfield.dart';
 
 import '../../widget/custom_dropdown_button.dart';
 import '../save_your_trips/save_your_trips.dart';
@@ -25,8 +25,13 @@ class PlanATrip extends StatefulWidget {
   State<PlanATrip> createState() => _PlanATripState();
 }
 
+List usereTripIntrest = [];
+
 class _PlanATripState extends State<PlanATrip> {
   var Trip_type_vise;
+  List<Map<String, dynamic>> trip_interest_catName = [
+    {'val': "Select", 'prima': false}
+  ];
 
   // final items = ['Mumbai', 'Pune', 'indore', 'Jaipur', 'Baroda'];
   // final items3 = ['Mumbai', 'Pune', 'indore', 'Jaipur', 'Baroda'];
@@ -39,7 +44,7 @@ class _PlanATripState extends State<PlanATrip> {
   getIntrest() async {
     usereTripIntrest.clear();
     DocumentSnapshot<Map<String, dynamic>> profile =
-        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("primaAccount").doc("profile").get();
+        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
 
     QuerySnapshot<Map<String, dynamic>> trip_intrest_snapshot = await FirebaseFirestore.instance.collection('Category Interest').get();
     print("${trip_intrest_snapshot.docs[0].data()['data']}");
@@ -56,6 +61,22 @@ class _PlanATripState extends State<PlanATrip> {
     });
 
     //print(trip_interest_data);
+  }
+
+  Future<bool> getMainIntrest() async {
+    trip_interest_catName.clear();
+    QuerySnapshot<Map<String, dynamic>> trip_intrest_snapshot = await FirebaseFirestore.instance.collection('Category Interest').get();
+    // print("${trip_intrest_snapshot.docs[0].data()['data']}");
+    // print("${trip_intrest_snapshot.docs[0].id}");
+
+    int b = 0;
+    trip_intrest_snapshot.docs.forEach((element) {
+      trip_interest_catName.add({'val': "${element.id}", 'prima': element.data()['prima'] == 0 ? false : true});
+      b++;
+    });
+
+    return true;
+    printc(trip_interest_catName);
   }
 
   //String startplace = "";
@@ -141,7 +162,6 @@ class _PlanATripState extends State<PlanATrip> {
   int totalDays = 0;
   bool dateEnable = true;
   bool? flexible;
-  List usereTripIntrest = [];
 
   @override
   Widget build(BuildContext context) {
@@ -198,41 +218,55 @@ class _PlanATripState extends State<PlanATrip> {
                                 bottom: BorderSide(color: Colors.black26),
                                 right: BorderSide(color: Colors.black26),
                                 left: BorderSide(color: Colors.black26))),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: DropdownButton<String>(
-                            borderRadius: BorderRadius.circular(10),
-                            value: _string1,
-                            isExpanded: true,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _string1 = newValue!;
-                              });
-                            },
-                            items: travelNewTripSubType
-                                .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
+                        child: FutureBuilder(
+                          future: getMainIntrest(),
+                          builder: (context, snapshot) {
+                            print("--- ${snapshot.hasError}----" + '${trip_interest_catName}');
+                            if (snapshot.hasData) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: DropdownButton<Map<String, dynamic>>(
+                                  borderRadius: BorderRadius.circular(10),
+                                  // value: null,
+                                  hint: Text("${_string1}"),
+                                  isExpanded: true,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _string1 = newValue!['val'];
+                                    });
+                                  },
+                                  items: trip_interest_catName.map<DropdownMenuItem<Map<String, dynamic>>>((Map<String, dynamic> value) {
+                                    printc(value['prima']);
+                                    return DropdownMenuItem<Map<String, dynamic>>(
                                       value: value,
                                       child: Padding(
                                         padding: const EdgeInsets.only(left: 5),
                                         child: Text(
-                                          value,
-                                          style: const TextStyle(fontSize: 15, color: Colors.black),
+                                          value['val'].toString(),
+                                          style: TextStyle(
+                                              fontSize: 15, color: (value['prima'] == USER_IS_PRIMA) || USER_IS_PRIMA ? Colors.black : Colors.grey),
                                         ),
                                       ),
-                                    ))
-                                .toList(),
-                            // add extra sugar..
-                            icon: const Padding(
-                              padding: EdgeInsets.only(bottom: 8.0),
-                              child: Icon(
-                                Icons.arrow_drop_down,
-                              ),
-                            ),
-                            iconSize: 25,
-                            iconEnabledColor: primary,
-                            iconDisabledColor: black.withOpacity(0.7),
-                            underline: const SizedBox(),
-                          ),
+                                    );
+                                  }).toList(),
+                                  // add extra sugar..
+                                  icon: const Padding(
+                                    padding: EdgeInsets.only(bottom: 8.0),
+                                    child: Icon(
+                                      Icons.arrow_drop_down,
+                                    ),
+                                  ),
+                                  iconSize: 25,
+                                  iconEnabledColor: primary,
+                                  iconDisabledColor: black.withOpacity(0.7),
+                                  underline: const SizedBox(),
+                                ),
+                              );
+                            } else {
+                              print("--- ${snapshot.hasError}----");
+                              return SizedBox();
+                            }
+                          },
                         ),
                       ),
                     ),
@@ -260,42 +294,61 @@ class _PlanATripState extends State<PlanATrip> {
                                 bottom: BorderSide(color: Colors.black26),
                                 right: BorderSide(color: Colors.black26),
                                 left: BorderSide(color: Colors.black26))),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: DropdownButton<String>(
-                            borderRadius: BorderRadius.circular(10),
-                            value: _string2,
-                            isExpanded: true,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _string2 = newValue!;
-                              });
-                            },
-                            items: travelNewTripState
-                                .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 5),
-                                        child: Text(
-                                          value,
-                                          style: const TextStyle(fontSize: 15, color: Colors.black),
-                                        ),
-                                      ),
-                                    ))
-                                .toList(),
+                        child: FutureBuilder(
+                          future: FirebaseFirestore.instance.collection('State').doc("State_Name").get(),
+                          builder: (context, snapshot) {
+                            print("--------");
+                            if (snapshot.hasData) {
+                              // print("--------${snapshot.data!.data()!['states']}");
+                              List<String> travelNewTripState = ["Select"];
+                              List state_data = snapshot.data!.data()!['states'];
 
-                            // add extra sugar..
-                            icon: const Padding(
-                              padding: EdgeInsets.only(bottom: 8.0),
-                              child: Icon(
-                                Icons.arrow_drop_down,
-                              ),
-                            ),
-                            iconSize: 25,
-                            iconEnabledColor: primary,
-                            iconDisabledColor: black.withOpacity(0.7),
-                            underline: const SizedBox(),
-                          ),
+                              state_data.forEach((element) {
+                                travelNewTripState.add(element.toString());
+                              });
+
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: DropdownButton<String>(
+                                  borderRadius: BorderRadius.circular(10),
+                                  // value: _string2,
+                                  isExpanded: true,
+                                  hint: Text("${_string2}"),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _string2 = newValue!;
+                                    });
+                                  },
+                                  items: travelNewTripState
+                                      .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 5),
+                                              child: Text(
+                                                value,
+                                                style: const TextStyle(fontSize: 15, color: Colors.black),
+                                              ),
+                                            ),
+                                          ))
+                                      .toList(),
+
+                                  // add extra sugar..
+                                  icon: const Padding(
+                                    padding: EdgeInsets.only(bottom: 8.0),
+                                    child: Icon(
+                                      Icons.arrow_drop_down,
+                                    ),
+                                  ),
+                                  iconSize: 25,
+                                  iconEnabledColor: primary,
+                                  iconDisabledColor: black.withOpacity(0.7),
+                                  underline: const SizedBox(),
+                                ),
+                              );
+                            } else {
+                              return SizedBox();
+                            }
+                          },
                         ),
                       ),
                     ),

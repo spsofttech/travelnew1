@@ -6,11 +6,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/views/humburger_flow/my_account/my_following_trip_friends.dart';
-import 'package:travel_app/views/humburger_flow/my_account/report_incorrect_user_screen.dart';
-import 'package:travel_app/views/start/sign_in_screen.dart';
-import 'package:travel_app/widget/custom_appbar.dart';
-import 'package:travel_app/widget/custom_textfield.dart';
+import 'package:travelnew_app/views/humburger_flow/my_account/my_following_trip_friends.dart';
+import 'package:travelnew_app/views/humburger_flow/my_account/report_incorrect_user_screen.dart';
+import 'package:travelnew_app/views/start/sign_in_screen.dart';
+import 'package:travelnew_app/widget/custom_appbar.dart';
+import 'package:travelnew_app/widget/custom_textfield.dart';
 
 import 'package:numberpicker/numberpicker.dart';
 import 'package:age_calculator/age_calculator.dart';

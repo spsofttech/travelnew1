@@ -5,8 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/aspired_trip/aspired_trip2_screen.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/aspired_trip/aspired_trip2_screen.dart';
 
 class SliderWidget extends StatefulWidget {
   List imageList;
@@ -23,19 +23,14 @@ class _SliderWidgetState extends State<SliderWidget> {
   String _picks = "";
   String _visitSeason = "";
   String _image = "";
-  void getDetails() async{
+  void getDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var trip = await FirebaseFirestore.instance
-          .collection('Aspired_trips')
-          .doc('Trip1')
-          .get();
-      _picks = trip.data()?['tripnumber'];
-      _visitSeason = trip.data()?['visitcategory'];
-      _image = trip.data()?['imageUrl'];
+      var trip = await FirebaseFirestore.instance.collection('Aspired_trips').doc('Trip1').get();
+      _picks = trip.data()?['tripnumber'] ?? "";
+      _visitSeason = trip.data()?['visitcategory'] ?? "";
+      _image = trip.data()?['imageUrl'] ?? '';
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -72,10 +67,7 @@ class _SliderWidgetState extends State<SliderWidget> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (ctx) => AspiredTrip2Screen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (ctx) => AspiredTrip2Screen()));
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.9,
@@ -104,8 +96,7 @@ class _SliderWidgetState extends State<SliderWidget> {
                               padding: EdgeInsets.symmetric(horizontal: 15),
                               color: Colors.white.withOpacity(0.1),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     '$_visitSeason',

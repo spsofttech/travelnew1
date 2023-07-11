@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/edit_prima_screen/prima_trip_1to4_screen.dart';
-import 'package:travel_app/views/publish%20your%20trip/step1.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/custom_dropdown_button.dart';
-import 'package:travel_app/widget/custom_textfield.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/edit_prima_screen/prima_trip_1to4_screen.dart';
+import 'package:travelnew_app/views/publish%20your%20trip/step1.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/custom_dropdown_button.dart';
+import 'package:travelnew_app/widget/custom_textfield.dart';
 
 class EditPrimaTripScreen extends StatefulWidget {
   const EditPrimaTripScreen({super.key});

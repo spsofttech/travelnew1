@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:travel_app/utils/constant.dart';
+import 'package:travelnew_app/utils/constant.dart';
 
 import '../../model/save_trip_model.dart';
 import '../../widget/custom_appbar.dart';
@@ -107,9 +107,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
                 child: GridView.builder(
                     itemCount: feedBackCheckboxList.length,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 3.5, crossAxisCount: 3),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(childAspectRatio: 3.5, crossAxisCount: 3),
                     itemBuilder: (ctx, i) {
                       return Row(
                         children: [
@@ -160,8 +158,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
               ),
               addVerticalSpace(15),
               Container(
-                  decoration:
-                      myFillBoxDecoration(0, black.withOpacity(0.1), 15),
+                  decoration: myFillBoxDecoration(0, black.withOpacity(0.1), 15),
                   width: width(context) * 0.9,
                   child: TextButton(
                       onPressed: () {
@@ -174,7 +171,9 @@ class _FeedBackPageState extends State<FeedBackPage> {
                               : !uploaded
                                   ? SizedBox()
                                   : Icon(Icons.check_circle_outline),
-                                  SizedBox(width: 5,),
+                          SizedBox(
+                            width: 5,
+                          ),
                           const Text(
                             'Upload Screen shot or any reference image',
                             style: TextStyle(fontSize: 13, color: Colors.black),
@@ -252,10 +251,8 @@ class _FeedBackPageState extends State<FeedBackPage> {
       'refImageLink': refImageLink ?? 'url',
       'feedbackMessage': feedbackMessage,
     };
-    x.set({
-      "${FirebaseAuth.instance.currentUser?.uid ?? 'UnAuthUser'}_${((DateTime.now().millisecondsSinceEpoch) / 1000).floor()}":
-          data
-    }, SetOptions(merge: true));
+    x.set({"${FirebaseAuth.instance.currentUser?.uid ?? 'UnAuthUser'}_${((DateTime.now().millisecondsSinceEpoch) / 1000).floor()}": data},
+        SetOptions(merge: true));
 
     setState(() {
       for (var element in feedBackCheckboxList) {
@@ -269,8 +266,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
         context: context,
         builder: (_) => AlertDialog(
               contentPadding: const EdgeInsets.all(6),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
               content: Builder(
                 builder: (context) {
                   var height = MediaQuery.of(context).size.height;

@@ -2,18 +2,19 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:intl/intl.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/humburger_flow/upcoming_trips.dart';
-import 'package:travel_app/views/publish%20your%20trip/step1.dart';
-import 'package:travel_app/views/publish%20your%20trip/step2.dart';
-import 'package:travel_app/views/save_your_trips/save_trip_step_1.dart';
-import 'package:travel_app/views/save_your_trips/save_trip_step_2.dart';
-import 'package:travel_app/views/save_your_trips/save_trip_step_3.dart';
-import 'package:travel_app/widget/custom_appbar.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/custom_dropdown_button.dart';
-import 'package:travel_app/widget/custom_textfield.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/humburger_flow/upcoming_trips.dart';
+import 'package:travelnew_app/views/publish%20your%20trip/step1.dart';
+import 'package:travelnew_app/views/publish%20your%20trip/step2.dart';
+import 'package:travelnew_app/views/save_your_trips/save_trip_step_1.dart';
+import 'package:travelnew_app/views/save_your_trips/save_trip_step_2.dart';
+import 'package:travelnew_app/views/save_your_trips/save_trip_step_3.dart';
+import 'package:travelnew_app/widget/custom_appbar.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/custom_dropdown_button.dart';
+import 'package:travelnew_app/widget/custom_textfield.dart';
 
 import '../../model/DayWiseTripModel.dart';
 import '../../model/prima_profile_model.dart';
@@ -21,13 +22,18 @@ import '../../model/prima_profile_model.dart';
 List<Map<String, String>> tripdataForStore = [];
 String targetState = '';
 String targetType = '';
-List<List<DayTripModel>> finalData = [];
+List<List<DayTripModel>> finalDataMain = [];
+List<DayTripModel> smapleData = [];
+RxString trip_city_name = "".obs;
+double trip_citi_lat = 0;
+double trip_citi_long = 0;
 
 class SaveYourTripsScreen extends StatefulWidget {
   final String type_Of_Trip;
   final String plamTrip_at;
   final int trip_days;
   final List interestList;
+
   const SaveYourTripsScreen(
       {Key? key, this.type_Of_Trip = 'Friends Trip', this.plamTrip_at = "Karnataka", this.trip_days = -1, this.interestList = const [""]})
       : super(key: key);

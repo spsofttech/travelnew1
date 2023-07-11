@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/model/save_trip_model.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/widget/custom_button.dart';
+import 'package:travelnew_app/model/save_trip_model.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
 
 import '../../../widget/custom_appbar.dart';
 
@@ -11,17 +11,14 @@ class ReportIncorrectUserScreen extends StatefulWidget {
   const ReportIncorrectUserScreen({super.key});
 
   @override
-  State<ReportIncorrectUserScreen> createState() =>
-      _ReportIncorrectUserScreenState();
+  State<ReportIncorrectUserScreen> createState() => _ReportIncorrectUserScreenState();
 }
 
 class _ReportIncorrectUserScreenState extends State<ReportIncorrectUserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
-          child: CustomAppBar(title: 'Report Incorrect User')),
+      appBar: PreferredSize(preferredSize: const Size.fromHeight(50), child: CustomAppBar(title: 'Report Incorrect User')),
       body: Padding(
         padding: const EdgeInsets.only(top: 12.0, left: 10, right: 5),
         child: Column(
@@ -58,8 +55,7 @@ class _ReportIncorrectUserScreenState extends State<ReportIncorrectUserScreen> {
               child: GridView.builder(
                   itemCount: incorrectCheckboxList.length,
                   physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 3.5, crossAxisCount: 3),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(childAspectRatio: 3.5, crossAxisCount: 3),
                   itemBuilder: (ctx, i) {
                     return Row(
                       children: [
@@ -130,8 +126,7 @@ class _ReportIncorrectUserScreenState extends State<ReportIncorrectUserScreen> {
         context: context,
         builder: (_) => AlertDialog(
               contentPadding: const EdgeInsets.all(6),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
               content: Builder(
                 builder: (context) {
                   var height = MediaQuery.of(context).size.height;

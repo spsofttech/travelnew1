@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/prima_my_account_screen.dart';
-import 'package:travel_app/widget/custom_button.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/prima_my_account_screen.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
 
 import '../../../utils/constant.dart';
 import '../my_account/trip_intrest_screen.dart';
@@ -19,10 +19,8 @@ class TripoMeterManage extends StatelessWidget {
         .collection("primaAccount")
         .doc("tripometer")
         .set({
-
-      //tripomerter details to be added
-
-    })
+          //tripomerter details to be added
+        })
         .then((value) => print("Details Saved"))
         .catchError((error) => print("Failed to add Tripometer Details: $error"));
   }
@@ -34,14 +32,11 @@ class TripoMeterManage extends StatelessWidget {
         .collection("primaAccount")
         .doc("tripometer")
         .update({
-
-      //tripomerter details to be updated
-
-    })
+          //tripomerter details to be updated
+        })
         .then((value) => print("Details Updated"))
         .catchError((error) => print("Failed to Update Tripometer Details: $error"));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +52,7 @@ class TripoMeterManage extends StatelessWidget {
                   child: Container(
                     height: height(context) * 0.42,
                     width: width(context) * 1,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: AssetImage('assets/images/prima3.png'))),
+                    decoration: const BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/images/prima3.png'))),
                     child: SafeArea(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,19 +68,17 @@ class TripoMeterManage extends StatelessWidget {
                               )),
                           Padding(
                             padding: const EdgeInsets.only(top: 12.0),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  addVerticalSpace(7),
-                                  Text(
-                                    'Tripometer',
-                                    style: bodyText20w700(color: white),
-                                  ),
-                                  Text(
-                                    'Tourist spot interest, Manage Tripometer',
-                                    style: bodyText12Small(color: Colors.white),
-                                  )
-                                ]),
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                              addVerticalSpace(7),
+                              Text(
+                                'Tripometer',
+                                style: bodyText20w700(color: white),
+                              ),
+                              Text(
+                                'Tourist spot interest, Manage Tripometer',
+                                style: bodyText12Small(color: Colors.white),
+                              )
+                            ]),
                           ),
                           Padding(
                             padding: EdgeInsets.only(right: 12.0, top: 10),
@@ -121,20 +111,17 @@ class TripoMeterManage extends StatelessWidget {
                             decoration: shadowDecoration(5, 2),
                             height: 23,
                             width: width(context) * 0.35,
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    'Verified Member',
-                                    style: bodytext12Bold(color: black),
-                                  ),
-                                  Icon(
-                                    Icons.help,
-                                    color: black.withOpacity(0.4),
-                                    size: 20,
-                                  ),
-                                ]),
+                            child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                              Text(
+                                'Verified Member',
+                                style: bodytext12Bold(color: black),
+                              ),
+                              Icon(
+                                Icons.help,
+                                color: black.withOpacity(0.4),
+                                size: 20,
+                              ),
+                            ]),
                           ),
                           const Divider(
                             height: 35,
@@ -151,11 +138,7 @@ class TripoMeterManage extends StatelessWidget {
                               ),
                               IconButton(
                                   onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (ctx) =>
-                                                YourTripInterest()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (ctx) => YourTripInterest()));
                                   },
                                   icon: Icon(Icons.edit_note))
                             ],
@@ -175,16 +158,13 @@ class TripoMeterManage extends StatelessWidget {
                               TextButton(
                                   onPressed: () => showDialog<String>(
                                         context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                          title: const Text(
-                                              ' Why are these required?'),
+                                        builder: (BuildContext context) => AlertDialog(
+                                          title: const Text(' Why are these required?'),
                                           content: const Text(
                                               'This helps in knowing what kind of trip you like when someone visits your profile and when you are visiting other’s profile'),
                                           actions: <Widget>[
                                             TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context, 'OK'),
+                                              onPressed: () => Navigator.pop(context, 'OK'),
                                               child: const Text('OK'),
                                             ),
                                           ],
@@ -204,20 +184,17 @@ class TripoMeterManage extends StatelessWidget {
                             style: bodyText12Small(color: black),
                           ),
                           addVerticalSpace(13),
-                          CustomButton(name: 'Save', onPressed: (){ if (FirebaseAuth.instance.currentUser!.uid != null) {
-                            updateTripometerDetails;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (ctx) => PrimaMyAccount()));
-                          } else {
-                            addtripometerDetails().whenComplete(() =>
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (ctx) => PrimaMyAccount())));
-                          }
-                          })
+                          CustomButton(
+                              name: 'Save',
+                              onPressed: () {
+                                if (FirebaseAuth.instance.currentUser!.uid != null) {
+                                  updateTripometerDetails;
+                                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => PrimaMyAccount()));
+                                } else {
+                                  addtripometerDetails()
+                                      .whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (ctx) => PrimaMyAccount())));
+                                }
+                              })
                         ],
                       ),
                     ))

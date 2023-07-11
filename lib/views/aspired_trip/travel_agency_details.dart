@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/aspired_trip/checklist_budget_screen_travel_agency.dart';
-import 'package:travel_app/views/aspired_trip/explore_trip_destinaton_screen_travelagency.dart';
-import 'package:travel_app/views/humburger_flow/trip_library_screen.dart';
-import 'package:travel_app/widget/custom_button.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/aspired_trip/checklist_budget_screen_travel_agency.dart';
+import 'package:travelnew_app/views/aspired_trip/explore_trip_destinaton_screen_travelagency.dart';
+import 'package:travelnew_app/views/humburger_flow/trip_library_screen.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
 
 import 'detailsOfTripWidget.dart';
 import 'your_stay_screen_travel_agency.dart';

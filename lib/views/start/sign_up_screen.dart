@@ -4,10 +4,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/start/sign_in_screen.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/my_bottom_navbar.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/start/sign_in_screen.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/my_bottom_navbar.dart';
 import 'package:intl/intl.dart';
 
 import '../../widget/custom_textfield.dart';

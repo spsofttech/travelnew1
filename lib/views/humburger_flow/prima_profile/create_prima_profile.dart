@@ -8,13 +8,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:intl/intl.dart';
-import 'package:travel_app/views/humburger_flow/my_account/trip_intrest_screen.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/prima_my_account_screen.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/prima_profile_screen.dart';
-import 'package:travel_app/widget/custom_appbar.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/custom_dropdown_button.dart';
-import 'package:travel_app/widget/custom_textfield.dart';
+import 'package:travelnew_app/views/humburger_flow/my_account/trip_intrest_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/prima_my_account_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/prima_profile_screen.dart';
+import 'package:travelnew_app/widget/custom_appbar.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/custom_dropdown_button.dart';
+import 'package:travelnew_app/widget/custom_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../utils/constant.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -117,11 +117,12 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
   String _string1 = "Male";
   String _image = "";
   String firstname = "";
+
   void getDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("primaAccount").doc("profile").get();
-      _image = profile.data()?['image'];
+      _image = profile.data()!['image'] ?? "";
       // url = profile.data()?['document'];
       firstnameController.text = profile.data()?['firstName'];
       firstname = profile.data()?['firstName'];

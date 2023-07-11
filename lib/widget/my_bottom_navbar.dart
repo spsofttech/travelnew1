@@ -5,16 +5,16 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travel_app/providers/locProvider.dart';
-import 'package:travel_app/providers/location_provider.dart';
+import 'package:travelnew_app/providers/locProvider.dart';
+import 'package:travelnew_app/providers/location_provider.dart';
 import 'package:location/location.dart' as loco;
 
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/home/inbox_screen.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/prima_profile_screen.dart';
-import 'package:travel_app/views/humburger_flow/upcoming_trips.dart';
-import 'package:travel_app/widget/custom_tab_indicator.dart';
-import 'package:travel_app/widget/prima_bottom_navbar.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/home/inbox_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/prima_profile_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/upcoming_trips.dart';
+import 'package:travelnew_app/widget/custom_tab_indicator.dart';
+import 'package:travelnew_app/widget/prima_bottom_navbar.dart';
 
 import '../dummy.dart';
 import '../views/home/home_screen.dart';
@@ -41,6 +41,7 @@ registerUserSignupPage(String address, String lati, String lngi, String locality
           SetOptions(merge: true));
     }
   }
+
   print('-----lat' + lati);
   print('-----lat' + lngi);
 }
@@ -389,7 +390,8 @@ Future<void> _getAddressFromLatLng(Position position) async {
     Placemark place = placemarks[0];
 
     _currentAddress = "${place.locality}, ${place.postalCode}, ${place.country}";
-
+    USER_lat = _currentPosition!.latitude;
+    USER_long = _currentPosition!.longitude;
     registerUserSignupPage(
         _currentAddress, _currentPosition!.latitude.toStringAsFixed(2), _currentPosition!.longitude.toStringAsFixed(2), place.locality ?? '');
   }).catchError((e) {

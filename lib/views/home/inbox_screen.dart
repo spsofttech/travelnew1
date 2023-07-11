@@ -3,10 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/chatUtils/chatCard.dart';
-import 'package:travel_app/chatUtils/chatModel.dart';
-import 'package:travel_app/widget/custom_appbar.dart';
-import 'package:travel_app/widget/custom_button.dart';
+import 'package:travelnew_app/chatUtils/chatCard.dart';
+import 'package:travelnew_app/chatUtils/chatModel.dart';
+import 'package:travelnew_app/widget/custom_appbar.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
 
 import '../../utils/constant.dart';
 import '../../widget/custom_textfield.dart';

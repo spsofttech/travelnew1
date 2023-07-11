@@ -5,14 +5,14 @@ import 'dart:math';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:travel_app/chatUtils/IndividualChatScreen.dart';
-import 'package:travel_app/model/prima_profile_model.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/about_me_screen.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/create_prima_profile.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/prima_my_account_screen.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/travel_photos_screen.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/custom_dropdown_button.dart';
+import 'package:travelnew_app/chatUtils/IndividualChatScreen.dart';
+import 'package:travelnew_app/model/prima_profile_model.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/about_me_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/create_prima_profile.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/prima_my_account_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/travel_photos_screen.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/custom_dropdown_button.dart';
 
 import '../../../chatUtils/chatModel.dart';
 import '../../../utils/constant.dart';
@@ -28,14 +28,10 @@ class UserPrimaProfileScreen extends StatefulWidget {
 class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
   String imgURL = '';
   getData() async {
-    var x = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.chat.sender)
-        .get();
+    var x = await FirebaseFirestore.instance.collection('users').doc(widget.chat.sender).get();
     imgURL = x.data()!['profileImg'] ??
         'https://firebasestorage.googleapis.com/v0/b/travelnew-79e2e.appspot.com/o/profileImg?alt=media&token=39dc5e0e-8a3d-41cf-94c0-8ca03147aa7a';
     setState(() {});
-
   }
 
   @override
@@ -59,12 +55,8 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
   String _otherintrest = "";
   void getDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('primaAccount')
-          .doc('profile')
-          .get();
+      var profile =
+          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       image = profile.data()?['imageUrl'];
       // Name = profile.data()?['fullName'];
       Name = profile.data()?['fullName'];
@@ -78,10 +70,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
   String _address = "";
   void getlocationDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get();
+      var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       _address = profile.data()?['locality'];
       setState(() {});
     }
@@ -164,13 +153,8 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
                   height: height(context) * 0.42,
                   width: width(context) * 1,
                   decoration: widget.userDetails['profileImg'] == ""
-                      ? BoxDecoration(
-                          image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage('assets/images/prima3.png')))
-                      : BoxDecoration(
-                          image: DecorationImage(
-                              fit: BoxFit.fill, image: NetworkImage(widget.userDetails['profileImg'] ))),
+                      ? BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/images/prima3.png')))
+                      : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(widget.userDetails['profileImg']))),
                   child: SafeArea(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,17 +194,12 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
                                   value: 2,
                                   child: ShareProfileAction(),
                                 ),
-                                PopupMenuItem<int>(
-                                    value: 3, child: ActivityProfileAction())
+                                PopupMenuItem<int>(value: 3, child: ActivityProfileAction())
                               ];
                             },
                             onSelected: (value) {
                               if (value == 0) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PrimaMyAccount()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => PrimaMyAccount()));
                               } else if (value == 1) {
                                 print("Settings menu is selected.");
                               } else if (value == 2) {
@@ -317,7 +296,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>IndividualPage(chatModel: widget.chat, img: imgURL)));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => IndividualPage(chatModel: widget.chat, img: imgURL)));
                             },
                             child: Column(
                               children: [
@@ -414,11 +393,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
                           ),
                           TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (ctx) =>
-                                            TravelPhotosScreen()));
+                                Navigator.push(context, MaterialPageRoute(builder: (ctx) => TravelPhotosScreen()));
                               },
                               child: Text(
                                 'View all>',
@@ -431,8 +406,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
                         padding: EdgeInsets.all(8),
                         height: height(context) * 0.13,
                         width: width(context) * 0.95,
-                        decoration:
-                            myFillBoxDecoration(0, black.withOpacity(0.08), 15),
+                        decoration: myFillBoxDecoration(0, black.withOpacity(0.08), 15),
                         child: SizedBox(
                           height: height(context) * 0.13,
                           child: ListView.builder(
@@ -442,8 +416,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       SizedBox(
                                         height: height(context) * 0.11,
@@ -484,8 +457,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
         context: context,
         builder: (_) => AlertDialog(
               contentPadding: const EdgeInsets.all(6),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
               content: Builder(
                 builder: (context) {
                   var height = MediaQuery.of(context).size.height;
@@ -527,8 +499,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
         context: context,
         builder: (_) => AlertDialog(
               contentPadding: const EdgeInsets.all(6),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
               content: Builder(
                 builder: (context) {
                   var height = MediaQuery.of(context).size.height;
@@ -550,9 +521,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
                             'Select a trip for Invitation',
                             style: bodyText14w600(color: black),
                           ),
-                          CustomDropDownButton(
-                              itemList: locationList,
-                              lableText: '  Trip Invitation  '),
+                          CustomDropDownButton(itemList: locationList, lableText: '  Trip Invitation  '),
                           Text(
                             'Trips requesting for new trip friends are only listed here',
                             style: bodyText12Small(color: black),
@@ -580,8 +549,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
         context: context,
         builder: (_) => AlertDialog(
               contentPadding: const EdgeInsets.all(6),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
               content: Builder(
                 builder: (context) {
                   var height = MediaQuery.of(context).size.height;
@@ -600,8 +568,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
                           ),
                           addVerticalSpace(height * 0.01),
                           Container(
-                              decoration: myFillBoxDecoration(
-                                  0, black.withOpacity(0.1), 15),
+                              decoration: myFillBoxDecoration(0, black.withOpacity(0.1), 15),
                               width: width * 0.94,
                               // height: height(context) * 0.08,
                               child: TextField(
@@ -611,8 +578,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
                                       border: InputBorder.none,
                                       contentPadding: EdgeInsets.all(10),
                                       hintStyle: bodyText13normal(color: black),
-                                      hintText:
-                                          'Write something interesting'))),
+                                      hintText: 'Write something interesting'))),
                           Text(
                             'Please send message only to the person whomm you know well. TravelNew has a zero-tolerance policy for spam',
                             style: bodyText12Small(spacing: 1.4, color: black),
@@ -646,8 +612,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
           return Container(
             padding: EdgeInsets.all(10),
             height: height(context) * 0.6,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(
                 'You have following request to be your trip friend',
                 textAlign: TextAlign.center,
@@ -660,96 +625,84 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
                       itemBuilder: (ctx, i) {
                         return Column(
                           children: [
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                              const CircleAvatar(
+                                backgroundImage: AssetImage('assets/images/nearbyfestivals.png'),
+                                radius: 30,
+                              ),
+                              addHorizontalySpace(5),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const CircleAvatar(
-                                    backgroundImage: AssetImage(
-                                        'assets/images/nearbyfestivals.png'),
-                                    radius: 30,
+                                  Text(
+                                    'Sumit patil',
+                                    style: bodyText16w600(color: black),
                                   ),
-                                  addHorizontalySpace(5),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  addVerticalSpace(3),
+                                  Row(
                                     children: [
+                                      Image.asset(
+                                        'assets/images/Vector (1).png',
+                                        color: primary,
+                                      ),
+                                      addHorizontalySpace(1),
                                       Text(
-                                        'Sumit patil',
-                                        style: bodyText16w600(color: black),
-                                      ),
-                                      addVerticalSpace(3),
-                                      Row(
-                                        children: [
-                                          Image.asset(
-                                            'assets/images/Vector (1).png',
-                                            color: primary,
-                                          ),
-                                          addHorizontalySpace(1),
-                                          Text(
-                                            'Software Developer',
-                                            style:
-                                                bodyText12Small(color: black),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.location_on,
-                                            color: primary,
-                                          ),
-                                          addHorizontalySpace(1),
-                                          Text(
-                                            'Pune',
-                                            style:
-                                                bodyText12Small(color: black),
-                                          )
-                                        ],
-                                      ),
+                                        'Software Developer',
+                                        style: bodyText12Small(color: black),
+                                      )
                                     ],
                                   ),
-                                  Spacer(),
-                                  Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                  Row(
                                     children: [
-                                      InkWell(
-                                        onTap: () {},
-                                        child: Container(
-                                          height: 25,
-                                          width: 100,
-                                          decoration: myFillBoxDecoration(
-                                              0, primary, 5),
-                                          child: Center(
-                                            child: Text(
-                                              'Accept',
-                                              style:
-                                                  bodyText14w600(color: black),
-                                            ),
-                                          ),
-                                        ),
+                                      Icon(
+                                        Icons.location_on,
+                                        color: primary,
                                       ),
-                                      addVerticalSpace(10),
-                                      InkWell(
-                                        onTap: () {},
-                                        child: Container(
-                                          height: 25,
-                                          width: 100,
-                                          decoration: myOutlineBoxDecoration(
-                                              1, primary, 5),
-                                          child: Center(
-                                            child: Text(
-                                              'Deny',
-                                              style:
-                                                  bodyText14w600(color: black),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                      addHorizontalySpace(1),
+                                      Text(
+                                        'Pune',
+                                        style: bodyText12Small(color: black),
+                                      )
                                     ],
-                                  )
-                                ]),
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  InkWell(
+                                    onTap: () {},
+                                    child: Container(
+                                      height: 25,
+                                      width: 100,
+                                      decoration: myFillBoxDecoration(0, primary, 5),
+                                      child: Center(
+                                        child: Text(
+                                          'Accept',
+                                          style: bodyText14w600(color: black),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  addVerticalSpace(10),
+                                  InkWell(
+                                    onTap: () {},
+                                    child: Container(
+                                      height: 25,
+                                      width: 100,
+                                      decoration: myOutlineBoxDecoration(1, primary, 5),
+                                      child: Center(
+                                        child: Text(
+                                          'Deny',
+                                          style: bodyText14w600(color: black),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ]),
                             const Divider(
                               thickness: 1,
                             )
@@ -770,13 +723,10 @@ class TripFriendsAndMutualFriendsWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TripFriendsAndMutualFriendsWidget> createState() =>
-      _TripFriendsAndMutualFriendsWidgetState();
+  State<TripFriendsAndMutualFriendsWidget> createState() => _TripFriendsAndMutualFriendsWidgetState();
 }
 
-class _TripFriendsAndMutualFriendsWidgetState
-    extends State<TripFriendsAndMutualFriendsWidget>
-    with TickerProviderStateMixin {
+class _TripFriendsAndMutualFriendsWidgetState extends State<TripFriendsAndMutualFriendsWidget> with TickerProviderStateMixin {
   List<dynamic> friendsInVicinity = [];
   bool loading = false;
 
@@ -785,10 +735,7 @@ class _TripFriendsAndMutualFriendsWidgetState
       loading = true;
     });
     var x = await FirebaseFirestore.instance.collection('users').get();
-    var y = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
+    var y = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
 
     double userLat = double.parse(y.data()!['lat']);
     double userLng = double.parse(y.data()!['lng']);
@@ -801,8 +748,7 @@ class _TripFriendsAndMutualFriendsWidgetState
       double dist = calculateDistance(userLat, userLng, lat, lng);
 
       print('$lat -- $lng -- $dist');
-      if (dist <= 30 &&
-          element.data()['UID'] == FirebaseAuth.instance.currentUser!.uid) {
+      if (dist <= 30 && element.data()['UID'] == FirebaseAuth.instance.currentUser!.uid) {
         friendsInVicinity.add(element.data());
       }
     }
@@ -814,9 +760,7 @@ class _TripFriendsAndMutualFriendsWidgetState
   double calculateDistance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
     var c = cos;
-    var a = 0.5 -
-        c((lat2 - lat1) * p) / 2 +
-        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    var a = 0.5 - c((lat2 - lat1) * p) / 2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
   }
 
@@ -834,28 +778,19 @@ class _TripFriendsAndMutualFriendsWidgetState
     super.dispose();
   }
 
-
   getTripFriends() async {
     tripAndMutualfrnds.clear();
-    var x = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
+    var x = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
     List abc = x.data()!['tripFriends'];
     print(abc);
     for (var element in abc) {
-      var y = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(element)
-          .get();
+      var y = await FirebaseFirestore.instance.collection('users').doc(element).get();
       tripAndMutualfrnds.add(y.data());
     }
     print(tripAndMutualfrnds);
-    print('|||||||||||||||||||||||||||||||');setState(() {
-      
-    });
+    print('|||||||||||||||||||||||||||||||');
+    setState(() {});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -872,16 +807,11 @@ class _TripFriendsAndMutualFriendsWidgetState
             controller: controller,
             onTap: (value) {},
             isScrollable: false,
-            indicator: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(10),
-                color: primary),
+            indicator: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(10), color: primary),
             indicatorColor: primary,
             labelColor: black,
-            labelStyle:
-                const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-            unselectedLabelStyle:
-                const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+            labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            unselectedLabelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
             tabs: const [
               Tab(
                 text: 'Trip Friends',
@@ -928,10 +858,7 @@ class _TripFriendsAndMutualFriendsWidgetState
                     onTap: () {},
                     child: const Text(
                       'You have trip friend request >',
-                      style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600),
+                      style: TextStyle(decoration: TextDecoration.underline, fontSize: 12, fontWeight: FontWeight.w600),
                     ),
                   )
                 ],
@@ -970,10 +897,7 @@ class _TripFriendsAndMutualFriendsWidgetState
                     onTap: () {},
                     child: const Text(
                       'You have trip friend request >',
-                      style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600),
+                      style: TextStyle(decoration: TextDecoration.underline, fontSize: 12, fontWeight: FontWeight.w600),
                     ),
                   )
                 ],
@@ -1012,12 +936,8 @@ class _TripometerCircleWidgetState extends State<TripometerCircleWidget> {
 
   void getTripometerDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("tripoMeter")
-          .doc("profile")
-          .get();
+      var profile =
+          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("tripoMeter").doc("profile").get();
       adventure = profile.data()?['Adventure'];
       city = profile.data()?['City'];
       nature = profile.data()?['Nature'];

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/widget/custom_appbar.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/my_bottom_navbar.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/widget/custom_appbar.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/my_bottom_navbar.dart';
 
 class TripMapScreen extends StatefulWidget {
   const TripMapScreen({super.key});
@@ -20,25 +20,17 @@ class _TripMapScreenState extends State<TripMapScreen> {
 
   List<Step> stepList() => [
         Step(
-            state: _activeCurrentStep <= 0
-                ? StepState.editing
-                : StepState.complete,
+            state: _activeCurrentStep <= 0 ? StepState.editing : StepState.complete,
             isActive: _activeCurrentStep >= 0,
             title: const Text('Udupi City'),
             // title: const SizedBox(),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(''),
-                addVerticalSpace(10),
-                Text('10 minutes drive')
-              ],
+              children: [Text(''), addVerticalSpace(10), Text('10 minutes drive')],
             ),
             content: const SizedBox()),
         Step(
-            state: _activeCurrentStep <= 1
-                ? StepState.editing
-                : StepState.complete,
+            state: _activeCurrentStep <= 1 ? StepState.editing : StepState.complete,
             isActive: _activeCurrentStep >= 1,
             title: const Text('Sri Krishna Math'),
             // title: const SizedBox(),
@@ -96,9 +88,7 @@ class _TripMapScreenState extends State<TripMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-          child: CustomAppBar(title: 'Trip Schedule'),
-          preferredSize: Size.fromHeight(50)),
+      appBar: PreferredSize(child: CustomAppBar(title: 'Trip Schedule'), preferredSize: Size.fromHeight(50)),
       body: Column(
         children: [
           Text(
@@ -126,9 +116,7 @@ class _TripMapScreenState extends State<TripMapScreen> {
                             margin: EdgeInsets.only(left: 10),
                             height: 25,
                             width: width(context) * 0.16,
-                            decoration: currentIndex == i
-                                ? myFillBoxDecoration(0, primary, 6)
-                                : myFillBoxDecoration(0, white, 6),
+                            decoration: currentIndex == i ? myFillBoxDecoration(0, primary, 6) : myFillBoxDecoration(0, white, 6),
                             child: Center(child: Text(daysList[i])),
                           ),
                         ),
@@ -228,10 +216,7 @@ class _TripMapScreenState extends State<TripMapScreen> {
           CustomButton(
               name: 'Save your trip',
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TravelNewBookingConfirm()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TravelNewBookingConfirm()));
               }),
           addVerticalSpace(30)
         ],
@@ -251,10 +236,7 @@ class TravelNewBookingConfirm extends StatelessWidget {
           Container(
             height: height(context) * 0.43,
             width: double.infinity,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('assets/images/temple.png'))),
+            decoration: const BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/images/temple.png'))),
           ),
           Padding(
             padding: const EdgeInsets.all(13.0),
@@ -266,8 +248,7 @@ class TravelNewBookingConfirm extends StatelessWidget {
                   style: bodyText18w600(color: black),
                 ),
                 addVerticalSpace(5),
-                const Text(
-                    'Hey Alexander, Thank you for your booking request . Our certified travel guide(s) will approach you'),
+                const Text('Hey Alexander, Thank you for your booking request . Our certified travel guide(s) will approach you'),
                 addVerticalSpace(height(context) * 0.07),
                 Center(
                   child: SizedBox(
@@ -276,10 +257,7 @@ class TravelNewBookingConfirm extends StatelessWidget {
                     child: CustomButton(
                         name: 'Home',
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MyBottomBar()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => MyBottomBar()));
                         }),
                   ),
                 )

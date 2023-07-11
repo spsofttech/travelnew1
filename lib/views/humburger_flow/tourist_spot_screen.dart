@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:travel_app/views/humburger_flow/improve_listing_screen.dart';
-import 'package:travel_app/widget/custom_button.dart';
+import 'package:travelnew_app/views/humburger_flow/improve_listing_screen.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
 
 import '../../model/DayWiseTripModel.dart';
 import '../../utils/constant.dart';

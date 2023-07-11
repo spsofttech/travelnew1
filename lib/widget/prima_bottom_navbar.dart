@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/home/inbox_screen.dart';
-import 'package:travel_app/views/humburger_flow/my_account/my_trip_friends.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/prima_profile_screen.dart';
-import 'package:travel_app/views/humburger_flow/upcoming_trips.dart';
-import 'package:travel_app/views/publish%20your%20trip/publish_your_trip.dart';
-import 'package:travel_app/widget/custom_tab_indicator.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/home/inbox_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/my_account/my_trip_friends.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/prima_profile_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/upcoming_trips.dart';
+import 'package:travelnew_app/views/publish%20your%20trip/publish_your_trip.dart';
+import 'package:travelnew_app/widget/custom_tab_indicator.dart';
 
 import '../views/home/home_screen.dart';
 import 'my_bottom_navbar.dart';
@@ -19,8 +19,7 @@ class PrimaMyBottomBar extends StatefulWidget {
   State<PrimaMyBottomBar> createState() => _PrimaMyBottomBarState();
 }
 
-class _PrimaMyBottomBarState extends State<PrimaMyBottomBar>
-    with TickerProviderStateMixin {
+class _PrimaMyBottomBarState extends State<PrimaMyBottomBar> with TickerProviderStateMixin {
   GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   final PageStorageBucket bucket = PageStorageBucket();
   TabController? tabController;
@@ -63,13 +62,12 @@ class _PrimaMyBottomBarState extends State<PrimaMyBottomBar>
                     ),
                   ),
                 ),
-                const Tab(
-                  icon: Icon(Icons.person_search_sharp)
-                  // ImageIcon(
-                  //   // AssetImage(
-                  //   //   'assets/images/navbar5.png',
-                  //   ),
-                  ),
+                const Tab(icon: Icon(Icons.person_search_sharp)
+                    // ImageIcon(
+                    //   // AssetImage(
+                    //   //   'assets/images/navbar5.png',
+                    //   ),
+                    ),
                 const Tab(
                   icon: ImageIcon(
                     AssetImage(
@@ -86,10 +84,7 @@ class _PrimaMyBottomBarState extends State<PrimaMyBottomBar>
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (ctx) => const MyBottomBar()));
+                    Navigator.push(context, MaterialPageRoute(builder: (ctx) => const MyBottomBar()));
                   },
                   child: const Tab(
                     icon: SizedBox(

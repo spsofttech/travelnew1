@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/aspired_trip/explore_trip_suggestion.dart';
-import 'package:travel_app/widget/custom_button.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/aspired_trip/explore_trip_suggestion.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
 
 class ExploreTripDestination extends StatefulWidget {
   const ExploreTripDestination({super.key});

@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:intl/intl.dart';
-import 'package:travel_app/views/publish%20your%20trip/publish_your_trip.dart';
-import 'package:travel_app/widget/custom_dropdown_button.dart';
-import 'package:travel_app/widget/custom_textfield.dart';
+import 'package:travelnew_app/views/publish%20your%20trip/publish_your_trip.dart';
+import 'package:travelnew_app/widget/custom_dropdown_button.dart';
+import 'package:travelnew_app/widget/custom_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../utils/constant.dart';
 

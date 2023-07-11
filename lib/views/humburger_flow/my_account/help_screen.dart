@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/aspired_trip/feedback_page.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/aspired_trip/feedback_page.dart';
 
 import '../../../widget/custom_appbar.dart';
 
@@ -16,12 +16,8 @@ class HelpScreen extends StatefulWidget {
 
 class _HelpScreenState extends State<HelpScreen> {
   getFAQs() async {
-    var x = await FirebaseFirestore.instance
-        .collection('helpAndSafety')
-        .doc('FAQs')
-        .get();
-    var sortedByKeyMap = Map.fromEntries(x.data()!.entries.toList()
-      ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
+    var x = await FirebaseFirestore.instance.collection('helpAndSafety').doc('FAQs').get();
+    var sortedByKeyMap = Map.fromEntries(x.data()!.entries.toList()..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
     sortedByKeyMap.forEach((key, value) {
       faqsList.add(value);
     });
@@ -43,9 +39,7 @@ class _HelpScreenState extends State<HelpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: CustomAppBar(title: 'Help')),
+      appBar: PreferredSize(preferredSize: Size.fromHeight(50), child: CustomAppBar(title: 'Help')),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,20 +54,17 @@ class _HelpScreenState extends State<HelpScreen> {
             SizedBox(
               // height: height(context) * 1.1,
               child: ListView.builder(
-                shrinkWrap: true,
+                  shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: faqsList.length,
                   itemBuilder: (context, i) {
                     return Column(
                       children: [
                         Theme(
-                          data: ThemeData(
-
-                    ),
+                          data: ThemeData(),
                           child: ExpansionTile(
                             iconColor: primary,
-
-                initiallyExpanded: i == selectedTile,
+                            initiallyExpanded: i == selectedTile,
                             onExpansionChanged: ((newState) {
                               if (newState)
                                 setState(() {
@@ -108,19 +99,14 @@ class _HelpScreenState extends State<HelpScreen> {
               padding: const EdgeInsets.only(top: 6, right: 12.0, bottom: 20),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (ctx) => FeedBackPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => FeedBackPage()));
                 },
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: RichText(
                       text: TextSpan(children: [
-                    TextSpan(
-                        text: 'Didn’t find answer?',
-                        style: bodyText14normal(color: black)),
-                    TextSpan(
-                        text: ' Share feedback',
-                        style: bodyText14normal(color: primary))
+                    TextSpan(text: 'Didn’t find answer?', style: bodyText14normal(color: black)),
+                    TextSpan(text: ' Share feedback', style: bodyText14normal(color: primary))
                   ])),
                 ),
               ),

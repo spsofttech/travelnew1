@@ -10,17 +10,17 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:travel_app/model/home_model.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/home/festival_and_celebrations_screen.dart';
-import 'package:travel_app/views/home/plan_trip_screen.dart';
-import 'package:travel_app/views/home/profile_feeds_screen.dart';
-import 'package:travel_app/views/home/quick_escape_screen.dart';
-import 'package:travel_app/views/prima/go_prima_screen.dart';
-import 'package:travel_app/views/start/sign_up_screen.dart';
-import 'package:travel_app/widget/my_bottom_navbar.dart';
+import 'package:travelnew_app/model/home_model.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/home/festival_and_celebrations_screen.dart';
+import 'package:travelnew_app/views/home/plan_trip_screen.dart';
+import 'package:travelnew_app/views/home/profile_feeds_screen.dart';
+import 'package:travelnew_app/views/home/quick_escape_screen.dart';
+import 'package:travelnew_app/views/prima/go_prima_screen.dart';
+import 'package:travelnew_app/views/start/sign_up_screen.dart';
+import 'package:travelnew_app/widget/my_bottom_navbar.dart';
 //import 'package:provider/provider.dart';
-import 'package:travel_app/widget/my_drawer.dart';
+import 'package:travelnew_app/widget/my_drawer.dart';
 
 import '../../providers/location_provider.dart';
 import '../../widget/custom_overlaping_widget.dart';
@@ -67,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
     USERIMAGE = UserDataMap['image'] ?? "https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_640.png";
     USERNAME = UserDataMap['fullName'] ?? "User";
     USER_UID = FirebaseAuth.instance.currentUser!.uid;
+    USER_IS_PRIMA = UserDataMap['isPrima'] ?? false;
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await _collectionRef.get();
     // Get data from docs and convert map to List

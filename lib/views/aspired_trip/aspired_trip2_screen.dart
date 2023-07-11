@@ -3,15 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/views/aspired_trip/aspired_trip_details_screen.dart';
-import 'package:travel_app/widget/custom_appbar.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/custom_textfield.dart';
+import 'package:travelnew_app/views/aspired_trip/aspired_trip_details_screen.dart';
+import 'package:travelnew_app/widget/custom_appbar.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/custom_textfield.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/db/firebaseDB.dart';
 import '../../utils/constant.dart';
-import 'package:travel_app/views/start/signup_with_social_media_screen.dart';
-import 'package:travel_app/views/humburger_flow/trip_library_screen.dart';
+import 'package:travelnew_app/views/start/signup_with_social_media_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/trip_library_screen.dart';
 
 var _count = 0;
 void getCount(_count) async {
@@ -26,8 +26,7 @@ class aspiredScreen extends StatefulWidget {
   State<aspiredScreen> createState() => _aspiredScreen();
 }
 
-class _aspiredScreen extends State<aspiredScreen>
-    with TickerProviderStateMixin {
+class _aspiredScreen extends State<aspiredScreen> with TickerProviderStateMixin {
   TabController? _tabController;
   bool isShow = false;
 
@@ -95,10 +94,8 @@ class _aspiredScreen extends State<aspiredScreen>
                         color: primary),
                     indicatorColor: primary,
                     labelColor: black,
-                    labelStyle: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w600),
-                    unselectedLabelStyle: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w400),
+                    labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                    unselectedLabelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
                     tabs: const [
                       Tab(
                         text: 'Aspired Trip',
@@ -110,8 +107,7 @@ class _aspiredScreen extends State<aspiredScreen>
                   ),
                 ),
                 Expanded(
-                  child:
-                      TabBarView(controller: _tabController, children: const [
+                  child: TabBarView(controller: _tabController, children: const [
                     AspiredTrip2Screen(),
                     AspiredTrip2Screen(),
                   ]),
@@ -135,8 +131,7 @@ class AspiredTrip2Screen extends StatefulWidget {
 class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
   bool isShow = false;
 
-  CollectionReference _collectionRef =
-      FirebaseFirestore.instance.collection('Aspired_trips');
+  CollectionReference _collectionRef = FirebaseFirestore.instance.collection('Aspired_trips');
 
   Future<void> getData() async {
     // Get docs from collection reference
@@ -199,12 +194,8 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
       // });
     } else {
       Bookmarklist.add(context);
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('users');
-      users
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("bookmarks")
-          .add({
+      CollectionReference users = FirebaseFirestore.instance.collection('users');
+      users.doc(FirebaseAuth.instance.currentUser!.uid).collection("bookmarks").add({
         'id': _id,
         'image': _imagee,
         'location': _location,
@@ -238,16 +229,14 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      AspiredTripDetailsScreen(
+                                  builder: (context) => AspiredTripDetailsScreen(
                                         MP: allData[i],
                                       )));
                         } else {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  SignupWithSocialMediaScreen(),
+                              builder: (context) => SignupWithSocialMediaScreen(),
                             ),
                           );
                         }
@@ -262,11 +251,8 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
                             Stack(
                               children: [
                                 ClipRRect(
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(15),
-                                        topRight: Radius.circular(15)),
-                                    child:
-                                        Image.network(allData[i]['imageUrl'])),
+                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                                    child: Image.network(allData[i]['imageUrl'])),
                                 Positioned(
                                   top: -5,
                                   right: -5,
@@ -276,13 +262,11 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
                                         // bookmark();
                                         if (!isBookmarked) {
                                           Bookmarklist.add(context);
-                                          DocumentReference users =
-                                              FirebaseFirestore.instance
-                                                  .collection('users')
-                                                  .doc(FirebaseAuth.instance
-                                                      .currentUser!.uid)
-                                                  .collection("bookmarks")
-                                                  .doc();
+                                          DocumentReference users = FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                                              .collection("bookmarks")
+                                              .doc();
                                           users.set({
                                             'id': _id,
                                             "postID": users.id,
@@ -292,11 +276,9 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
                                             'title': _title,
                                           });
                                         } else {
-                                          var trip = await FirebaseFirestore
-                                              .instance
+                                          var trip = await FirebaseFirestore.instance
                                               .collection('users')
-                                              .doc(FirebaseAuth
-                                                  .instance.currentUser!.uid)
+                                              .doc(FirebaseAuth.instance.currentUser!.uid)
                                               .collection('bookmarks')
                                               .doc()
                                               .get();
@@ -323,10 +305,8 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
                                       padding: EdgeInsets.only(left: 5),
                                       color: black.withOpacity(0.5),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             width: width(context) * 0.88,
@@ -341,19 +321,12 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
                                                 Row(
                                                   children: [
                                                     Text(
-                                                      allData[i]
-                                                          ['destinationname'],
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: white),
+                                                      allData[i]['destinationname'],
+                                                      style: TextStyle(fontWeight: FontWeight.w500, color: white),
                                                     ),
                                                     Text(
                                                       allData[i]['statename'],
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: white),
+                                                      style: TextStyle(fontWeight: FontWeight.w500, color: white),
                                                     ),
                                                   ],
                                                 ),
@@ -362,13 +335,11 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
                                                   children: [
                                                     Text(
                                                       allData[i]['tripdays'],
-                                                      style: bodyText14w600(
-                                                          color: Colors.yellow),
+                                                      style: bodyText14w600(color: Colors.yellow),
                                                     ),
                                                     Text(
                                                       '  Days',
-                                                      style: bodyText14w600(
-                                                          color: Colors.yellow),
+                                                      style: bodyText14w600(color: Colors.yellow),
                                                     ),
                                                   ],
                                                 )
@@ -386,8 +357,7 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
                                 children: [
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           allData[i]['tripname'],
@@ -403,23 +373,18 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
                                           children: [
                                             Text(
                                               'Expected ₹: ',
-                                              style:
-                                                  bodyText14w600(color: black),
+                                              style: bodyText14w600(color: black),
                                             ),
                                             Text(
                                               allData[i]['Budget'],
-                                              style:
-                                                  bodyText14w600(color: black),
+                                              style: bodyText14w600(color: black),
                                             ),
                                             Text(
                                               ' /per person',
-                                              style:
-                                                  bodyText14w600(color: black),
+                                              style: bodyText14w600(color: black),
                                             ),
                                             Spacer(),
-                                            TextButton(
-                                                child: Text('get quotes'),
-                                                onPressed: () {})
+                                            TextButton(child: Text('get quotes'), onPressed: () {})
                                           ],
                                         )
                                       ],

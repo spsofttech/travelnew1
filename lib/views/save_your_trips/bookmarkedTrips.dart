@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/save_your_trips/save_your_trips.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/save_your_trips/save_your_trips.dart';
 
 import '../../services/db/firebaseDB.dart';
 import '../humburger_flow/trip_library_screen.dart';
@@ -36,10 +36,7 @@ class _BookmarkedTripsState extends State<BookmarkedTrips> {
 
   void getDummyTrip01() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var dummy = await FirebaseFirestore.instance
-          .collection('dummyTrips')
-          .doc('2Xhglp1fUkvx3AGV6aQA')
-          .get();
+      var dummy = await FirebaseFirestore.instance.collection('dummyTrips').doc('2Xhglp1fUkvx3AGV6aQA').get();
       _title = dummy.data()?['title'];
       _subtitle = dummy.data()?['subtitle'];
       _image = dummy.data()?['image'];
@@ -48,8 +45,7 @@ class _BookmarkedTripsState extends State<BookmarkedTrips> {
     }
   }
 
-  CollectionReference dummyFuture =
-      FirebaseFirestore.instance.collection('dummyTrips');
+  CollectionReference dummyFuture = FirebaseFirestore.instance.collection('dummyTrips');
 
   bool isBookmarked = true;
   @override
@@ -79,36 +75,24 @@ class _BookmarkedTripsState extends State<BookmarkedTrips> {
           builder: ((context, snapshot) {
             print(snapshot.data);
             if (widget.isBookmarked || snapshot.hasData) {
-              Map<String, dynamic> data =
-                  snapshot.data?.data() as Map<String, dynamic>;
+              Map<String, dynamic> data = snapshot.data?.data() as Map<String, dynamic>;
               return ListView.builder(
                   itemCount: 1,
                   itemBuilder: (ctx, i) {
                     return CustomTripDataList(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const SaveYourTripsScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const SaveYourTripsScreen()));
                       },
                       title: data['title'],
                       subtitle: data['subtitle'],
-                      img: data['image'] ??
-                          "https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder.png",
+                      img: data['image'] ?? "https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder.png",
                       location: data['location'] ?? 'Udupi, Karnataka',
                       containerYellowBox: const SizedBox(),
                       icon: IconButton(
                           onPressed: () async {
-                            SharedPreferences _prefs =
-                                await SharedPreferences.getInstance();
+                            SharedPreferences _prefs = await SharedPreferences.getInstance();
                             if (!isBookmarked) {
-                              await FirebaseDB().addBookmark(
-                                  widget.docID,
-                                  data['title'],
-                                  data['subtitle'],
-                                  data['image'],
-                                  data['location']);
+                              await FirebaseDB().addBookmark(widget.docID, data['title'], data['subtitle'], data['image'], data['location']);
                             } else {
                               var docID = _prefs.getString('docID');
                               FirebaseDB().removeBookmark(docID);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/widget/custom_appbar.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/widget/custom_appbar.dart';
 
 class SaveCardScreen extends StatelessWidget {
   const SaveCardScreen({super.key});
@@ -10,9 +10,7 @@ class SaveCardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-          child: CustomAppBar(title: 'My card'),
-          preferredSize: Size.fromHeight(50)),
+      appBar: PreferredSize(child: CustomAppBar(title: 'My card'), preferredSize: Size.fromHeight(50)),
       body: Column(
         children: [
           addVerticalSpace(20),
@@ -30,8 +28,7 @@ class SaveCardScreen extends StatelessWidget {
                   style: bodyText16w600(color: black),
                 ),
                 addVerticalSpace(10),
-                const Text(
-                    'Save tour Credit/Debit cards for faster payments. Your cards are secure with us.')
+                const Text('Save tour Credit/Debit cards for faster payments. Your cards are secure with us.')
               ],
             ),
           ),

@@ -5,15 +5,15 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:travel_app/model/prima_profile_model.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/about_me_screen.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/create_prima_profile.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/prima_my_account_screen.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/travel_photos_screen.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/user_prima_profile_screen.dart';
-import 'package:travel_app/views/prima/go_prima_screen.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/custom_dropdown_button.dart';
+import 'package:travelnew_app/model/prima_profile_model.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/about_me_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/create_prima_profile.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/prima_my_account_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/travel_photos_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/user_prima_profile_screen.dart';
+import 'package:travelnew_app/views/prima/go_prima_screen.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/custom_dropdown_button.dart';
 
 import '../../../utils/constant.dart';
 
@@ -48,12 +48,8 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
   String _merriedstatus = "";
   void getDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('primaAccount')
-          .doc('profile')
-          .get();
+      var profile =
+          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       image = profile.data()?['imageUrl'];
       Name = profile.data()?['fullName'];
       _profession = profile.data()?['profession'];
@@ -61,20 +57,14 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
       _otherintrest = profile.data()?['userInterest'];
       _gender = profile.data()?['gender'];
       _merriedstatus = profile.data()?['maritalStatus'];
-
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   String _address = "";
   void getlocationDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get();
+      var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       _address = profile.data()?['locality'];
       setState(() {});
     }
@@ -141,8 +131,8 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
       TextSpan(text: "My activity feeds")
     ]));
   }
-  CollectionReference _collectionRef =
-  FirebaseFirestore.instance
+
+  CollectionReference _collectionRef = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .collection("primaAccount")
@@ -153,10 +143,10 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
     QuerySnapshot querySnapshot = await _collectionRef.get();
     // Get data from docs and convert map to List
     allphotoData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    setState(() {
-    });
+    setState(() {});
     print(allphotoData);
   }
+
   List allphotoData = [];
 
   @override
@@ -174,13 +164,8 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                   height: height(context) * 0.42,
                   width: width(context) * 1,
                   decoration: image == ""
-                      ? BoxDecoration(
-                          image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage('assets/images/prima3.png')))
-                      : BoxDecoration(
-                          image: DecorationImage(
-                              fit: BoxFit.fill, image: NetworkImage(image))),
+                      ? BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/images/prima3.png')))
+                      : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(image))),
                   child: SafeArea(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,19 +205,14 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                                   value: 2,
                                   child: ShareProfileAction(),
                                 ),
-                                PopupMenuItem<int>(
-                                    value: 3, child: ActivityProfileAction())
+                                PopupMenuItem<int>(value: 3, child: ActivityProfileAction())
                               ];
                             },
                             onSelected: (value) {
                               if (value == 0) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PrimaMyAccount()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => PrimaMyAccount()));
                               } else if (value == 1) {
-                                Navigator.push(context,MaterialPageRoute(builder: (context)=>GoPrimaSubscriptionScreen()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => GoPrimaSubscriptionScreen()));
                               } else if (value == 2) {
                                 print("Logout menu is selected.");
                               }
@@ -269,7 +249,10 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.location_on_outlined,color: primary,),
+                          Icon(
+                            Icons.location_on_outlined,
+                            color: primary,
+                          ),
                           Text(
                             '$_address',
                             style: TextStyle(fontSize: 20),
@@ -386,15 +369,16 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                         ],
                       ),
                       addVerticalSpace(14),
-                      if(_aboutme == "")
+                      if (_aboutme == "")
                         Text(
                           '    --',
                           style: bodyText16normal(spacing: 1.5, color: black),
-                        )else
-                      Text(
-                        '$_aboutme',
-                        style: bodyText16normal(spacing: 1.5, color: black),
-                      ),
+                        )
+                      else
+                        Text(
+                          '$_aboutme',
+                          style: bodyText16normal(spacing: 1.5, color: black),
+                        ),
                       addVerticalSpace(15),
                       Text(
                         'Tripometer of  $Name',
@@ -431,11 +415,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                           ),
                           TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (ctx) =>
-                                            TravelPhotosScreen()));
+                                Navigator.push(context, MaterialPageRoute(builder: (ctx) => TravelPhotosScreen()));
                               },
                               child: Text(
                                 'View all>',
@@ -448,8 +428,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                         padding: EdgeInsets.all(8),
                         height: height(context) * 0.13,
                         width: width(context) * 0.95,
-                        decoration:
-                            myFillBoxDecoration(0, black.withOpacity(0.08), 15),
+                        decoration: myFillBoxDecoration(0, black.withOpacity(0.08), 15),
                         child: SizedBox(
                           height: height(context) * 0.13,
                           child: ListView.builder(
@@ -459,8 +438,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       SizedBox(
                                         height: height(context) * 0.11,
@@ -481,15 +459,16 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                         'Other Interests',
                         style: bodyText20w700(color: black),
                       ),
-                       if(_otherintrest == "")
-                      Text(
-                        '   --',
-                        style: bodyText13normal(spacing: 1.4, color: black),
-                      )else
-                      Text(
-                        '$_otherintrest',
-                        style: bodyText13normal(spacing: 1.4, color: black),
-                      )
+                      if (_otherintrest == "")
+                        Text(
+                          '   --',
+                          style: bodyText13normal(spacing: 1.4, color: black),
+                        )
+                      else
+                        Text(
+                          '$_otherintrest',
+                          style: bodyText13normal(spacing: 1.4, color: black),
+                        )
                     ],
                   ),
                 ),
@@ -790,13 +769,10 @@ class TripFriendsAndMutualFriendsWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TripFriendsAndMutualFriendsWidget> createState() =>
-      _TripFriendsAndMutualFriendsWidgetState();
+  State<TripFriendsAndMutualFriendsWidget> createState() => _TripFriendsAndMutualFriendsWidgetState();
 }
 
-class _TripFriendsAndMutualFriendsWidgetState
-    extends State<TripFriendsAndMutualFriendsWidget>
-    with TickerProviderStateMixin {
+class _TripFriendsAndMutualFriendsWidgetState extends State<TripFriendsAndMutualFriendsWidget> with TickerProviderStateMixin {
   TabController? controller;
   @override
   void initState() {
@@ -814,23 +790,16 @@ class _TripFriendsAndMutualFriendsWidgetState
 
   getTripFriends() async {
     tripAndMutualfrnds.clear();
-    var x = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
+    var x = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
     List abc = x.data()!['tripFriends'];
     print(abc);
     for (var element in abc) {
-      var y = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(element)
-          .get();
+      var y = await FirebaseFirestore.instance.collection('users').doc(element).get();
       tripAndMutualfrnds.add(y.data());
     }
     print(tripAndMutualfrnds);
-    print('|||||||||||||||||||||||||||||||');setState(() {
-
-    });
+    print('|||||||||||||||||||||||||||||||');
+    setState(() {});
   }
 
   getMutualFriends() async {}
@@ -844,7 +813,10 @@ class _TripFriendsAndMutualFriendsWidgetState
       decoration: myFillBoxDecoration(0, black.withOpacity(0.08), 15),
       child: Column(
         children: [
-          Text('Trip Friend',style: TextStyle( fontFamily: GoogleFonts.roboto().fontFamily,fontSize: 20),),
+          Text(
+            'Trip Friend',
+            style: TextStyle(fontFamily: GoogleFonts.roboto().fontFamily, fontSize: 20),
+          ),
           // TabBar(
           //   indicatorSize: TabBarIndicatorSize.tab,
           //   unselectedLabelColor: Colors.grey,
@@ -876,50 +848,46 @@ class _TripFriendsAndMutualFriendsWidgetState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   addVerticalSpace(10),
-                  if(tripAndMutualfrnds.length!=null )
-                  SizedBox(
-                    height: height(context) * 0.14,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: tripAndMutualfrnds.length,
-                        itemBuilder: (ctx, i) {
-                          return InkWell(
-                            onTap: (() {
-
-                             // Navigator.push(context, MaterialPageRoute(builder: (_)=>UserPrimaProfileScreen(userDetails: tripAndMutualfrnds[i])));
-                            }),
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    child: SizedBox(
-                                      height: height(context) * 0.11,
-                                      width: width(context) * 0.23,
-                                      child: Image.asset(
-                                        tripAndMutualfrnds[i]['profileImg'],
-                                        fit: BoxFit.fill,
+                  if (tripAndMutualfrnds.length != null)
+                    SizedBox(
+                      height: height(context) * 0.14,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: tripAndMutualfrnds.length,
+                          itemBuilder: (ctx, i) {
+                            return InkWell(
+                              onTap: (() {
+                                // Navigator.push(context, MaterialPageRoute(builder: (_)=>UserPrimaProfileScreen(userDetails: tripAndMutualfrnds[i])));
+                              }),
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      child: SizedBox(
+                                        height: height(context) * 0.11,
+                                        width: width(context) * 0.23,
+                                        child: Image.asset(
+                                          tripAndMutualfrnds[i]['profileImg'],
+                                          fit: BoxFit.fill,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  addVerticalSpace(5),
-                                  Text(tripAndMutualfrnds[i]['fullName']),
-                                ],
+                                    addVerticalSpace(5),
+                                    Text(tripAndMutualfrnds[i]['fullName']),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }),
-                  ),
+                            );
+                          }),
+                    ),
                   addVerticalSpace(18),
                   InkWell(
                     onTap: () {},
                     child: const Text(
                       'You have trip friend request >',
-                      style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600),
+                      style: TextStyle(decoration: TextDecoration.underline, fontSize: 12, fontWeight: FontWeight.w600),
                     ),
                   )
                 ],
@@ -1000,18 +968,19 @@ class _TripometerCircleWidgetState extends State<TripometerCircleWidget> {
 
   void getTripometerDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("tripoMeter")
-          .doc("profile")
-          .get();
+      var profile =
+          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("tripoMeter").doc("profile").get();
       adventure = profile.data()?['Adventure'];
       city = profile.data()?['City'];
       nature = profile.data()?['Nature'];
       religlous = profile.data()?['Religlous'];
       setState(() {
-        tripoMeterValue = [adventure.round().toInt().roundToDouble(), city.round().toInt().roundToDouble(), nature.round().toInt().roundToDouble(), religlous.round().toInt().roundToDouble()];
+        tripoMeterValue = [
+          adventure.round().toInt().roundToDouble(),
+          city.round().toInt().roundToDouble(),
+          nature.round().toInt().roundToDouble(),
+          religlous.round().toInt().roundToDouble()
+        ];
       });
     }
   }

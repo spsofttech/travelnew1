@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/about_me_screen.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/personal_info_screen.dart';
-import 'package:travel_app/views/humburger_flow/prima_profile/tripometer_manage_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/about_me_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/personal_info_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/prima_profile/tripometer_manage_screen.dart';
 
 import '../../../utils/constant.dart';
 
@@ -17,28 +17,22 @@ class PrimaMyAccount extends StatefulWidget {
 }
 
 class _PrimaMyAccountState extends State<PrimaMyAccount> {
-
   String _name = "";
   void getDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('primaAccount')
-          .doc('profile')
-          .get();
+      var profile =
+          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       _name = profile.data()?['fullName'];
-
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
+
   @override
   void initState() {
     getDetails();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,10 +44,7 @@ class _PrimaMyAccountState extends State<PrimaMyAccount> {
             child: Container(
               height: height(context) * 0.42,
               width: width(context) * 1,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage('assets/images/prima3.png'))),
+              decoration: const BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/images/prima3.png'))),
               child: SafeArea(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,15 +96,13 @@ class _PrimaMyAccountState extends State<PrimaMyAccount> {
                       height: 23,
                       width: width(context) * 0.35,
                       decoration: shadowDecoration(5, 3),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(
-                              Icons.star_rate_rounded,
-                              color: primary,
-                              size: 20,
-                            ),
-                          ]),
+                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                        Icon(
+                          Icons.star_rate_rounded,
+                          color: primary,
+                          size: 20,
+                        ),
+                      ]),
                     ),
                     const Divider(
                       height: 35,
@@ -126,10 +115,7 @@ class _PrimaMyAccountState extends State<PrimaMyAccount> {
                       ),
                       subtitle: Text('Contact, Account informations'),
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (ctx) => PersonalInformationScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (ctx) => PersonalInformationScreen()));
                       },
                       trailing: Icon(Icons.arrow_forward_ios),
                     ),
@@ -144,10 +130,7 @@ class _PrimaMyAccountState extends State<PrimaMyAccount> {
                       ),
                       subtitle: Text('Bio, Other interest'),
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (ctx) => AboutMeScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (ctx) => AboutMeScreen()));
                       },
                       trailing: Icon(Icons.arrow_forward_ios),
                     ),

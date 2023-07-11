@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/services/db/firebaseDB.dart';
+import 'package:travelnew_app/services/db/firebaseDB.dart';
 
 import '../utils/constant.dart';
 
@@ -8,12 +8,7 @@ class AccountDropdown extends StatefulWidget {
   List<String> settingList;
   final String privacyList;
   String subTitle;
-  AccountDropdown(
-      {super.key,
-      required this.privacyList,
-      required this.subTitle,
-      this.onChanged,
-      required this.settingList});
+  AccountDropdown({super.key, required this.privacyList, required this.subTitle, this.onChanged, required this.settingList});
 
   @override
   State<AccountDropdown> createState() => _AccountDropdownState();
@@ -41,18 +36,15 @@ class _AccountDropdownState extends State<AccountDropdown> {
                   widget.subTitle = newValue!;
                 });
                 //----To-Update-Who-Can-See-(Value)-----/
-                UpdateAccountVisibility().updatePrivacyVisibility(
-                    widget.subTitle, widget.privacyList);
+                UpdateAccountVisibility().updatePrivacyVisibility(widget.subTitle, widget.privacyList);
               },
 
               items: widget.settingList
-                  .map<DropdownMenuItem<String>>((String value) =>
-                      DropdownMenuItem<String>(
+                  .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
                         value: value,
                         child: Text(
                           value,
-                          style:
-                              bodyText16normal(color: black.withOpacity(0.4)),
+                          style: bodyText16normal(color: black.withOpacity(0.4)),
                         ),
                       ))
                   .toList(),

@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/views/save_your_trips/save_your_trips.dart';
-import 'package:travel_app/widget/custom_dropdown_button.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/views/save_your_trips/save_your_trips.dart';
+import 'package:travelnew_app/widget/custom_dropdown_button.dart';
+import 'dart:math' as math;
 
 class SaveTripStep2 extends StatefulWidget {
   SaveTripStep2({super.key});
@@ -16,15 +18,26 @@ class SaveTripStep2 extends StatefulWidget {
   State<SaveTripStep2> createState() => _SaveTripStep2State();
 }
 
+double calculateDistance(lat1, lon1, lat2, lon2) {
+  var p = 0.017453292519943295;
+  var c = math.cos;
+  var a = 0.5 - c((lat2 - lat1) * p) / 2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+  return 12742 * math.asin(math.sqrt(a));
+}
+
+double distant_in_km = 0;
+
 class _SaveTripStep2State extends State<SaveTripStep2> {
   final List saveTripList1 = [
     {'img': 'assets/images/road.png', 'name': 'Road'},
     {'img': 'assets/images/plane.png', 'name': 'Flight'},
   ];
+
   final List saveTripList2 = [
     {'img': 'assets/images/train.png', 'name': 'Train'},
     {'img': 'assets/images/plane.png', 'name': 'Flight'},
   ];
+
   final List saveTripList3 = [
     {'img': 'assets/images/plane.png', 'name': 'Flight'},
   ];
@@ -36,6 +49,7 @@ class _SaveTripStep2State extends State<SaveTripStep2> {
   String startplace = "";
   String endplace = "";
   String mode = "";
+
   void getData() async {
     if (FirebaseAuth.instance.currentUser != null) {
       var profile = await FirebaseFirestore.instance
@@ -47,7 +61,10 @@ class _SaveTripStep2State extends State<SaveTripStep2> {
       startplace = profile.data()?['StartTrip'];
       endplace = profile.data()?['endtrip'];
       mode = profile.data()?['tripmode'];
+      changemode = mode;
     }
+    distant_in_km = calculateDistance(USER_lat, USER_long, trip_citi_lat, trip_citi_long);
+
     setState(() {});
   }
 
@@ -85,10 +102,10 @@ class _SaveTripStep2State extends State<SaveTripStep2> {
         Icon(Icons.arrow_downward),
         addVerticalSpace(10),
         Text('Trip Destination'),
-        Text(
-          '${finalData[0][0].data[0].tripCity}',
-          style: bodyText16w600(color: black),
-        ),
+        Obx(() => Text(
+              '${trip_city_name.value}',
+              style: bodyText16w600(color: black),
+            )),
         const Divider(
           height: 30,
           thickness: 1,
@@ -295,7 +312,7 @@ class _SaveTripStep2State extends State<SaveTripStep2> {
           thickness: 1,
         ),
         addVerticalSpace(15),
-        if (mode == 'Bus')
+        if (mode == 'Bus' && changemode == 'Bus')
           SizedBox(
             width: width(context) * 0.56,
             child: CustomDropDownButton(
@@ -303,16 +320,41 @@ class _SaveTripStep2State extends State<SaveTripStep2> {
               lableText: '  Bus booking  ',
             ),
           )
-        else if (mode == 'Train')
+        else if (mode == 'Train' && changemode == 'Train') ...[
           SizedBox(
             width: width(context) * 0.56,
             child: CustomDropDownButton(
               itemList: ['Yes', 'No'],
               lableText: '  Train booking  ',
             ),
+          )
+        ] else if (mode == 'Flight' && changemode == 'Flight')
+          SizedBox(
+            width: width(context) * 0.56,
+            child: CustomDropDownButton(
+              itemList: ['Rent me a vehicle', 'I’ll use my own'],
+              lableText: '  Bus booking  ',
+            ),
+          )
+        else if (changemode == 'Train')
+          SizedBox(
+            width: width(context) * 0.56,
+            child: CustomDropDownButton(
+              itemList: ['Yes', 'No'],
+              lableText: '  Train booking  ',
+            ),
+          )
+        else if (changemode == 'Flight')
+          SizedBox(
+            width: width(context) * 0.56,
+            child: CustomDropDownButton(
+              itemList: ['Yes', 'No'],
+              lableText: '  Flight booking  ',
+            ),
           ),
         addVerticalSpace(15),
-        Text('It will take 8 hours to reach')
+        Text('It will take ${distant_in_km / 20} hours to reach'),
+        Text('It is on ${distant_in_km} KM Far'),
       ],
     );
   }

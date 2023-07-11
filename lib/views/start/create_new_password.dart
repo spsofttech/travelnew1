@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_app/utils/constant.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/custom_textfield.dart';
+import 'package:travelnew_app/utils/constant.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/custom_textfield.dart';
 
 class CreateNewPassword extends StatelessWidget {
   const CreateNewPassword({super.key});
@@ -44,10 +44,7 @@ class CreateNewPassword extends StatelessWidget {
                   onPressed: () {},
                   child: Text(
                     'Resend OTP',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        decoration: TextDecoration.underline,
-                        color: black),
+                    style: TextStyle(fontWeight: FontWeight.w600, decoration: TextDecoration.underline, color: black),
                   ))
             ],
           ),

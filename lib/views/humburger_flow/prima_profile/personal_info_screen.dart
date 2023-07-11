@@ -17,10 +17,10 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:travel_app/model/save_trip_model.dart';
-import 'package:travel_app/widget/custom_button.dart';
-import 'package:travel_app/widget/custom_textfield.dart';
-import 'package:travel_app/providers/image_provider.dart';
+import 'package:travelnew_app/model/save_trip_model.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
+import 'package:travelnew_app/widget/custom_textfield.dart';
+import 'package:travelnew_app/providers/image_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../utils/constant.dart';
 import '../../../widget/custom_dropdown_button.dart';
@@ -31,8 +31,7 @@ import 'package:path/path.dart' as j;
 class PersonalInformationScreen extends StatefulWidget {
   const PersonalInformationScreen({super.key});
   @override
-  State<PersonalInformationScreen> createState() =>
-      _PersonalInformationScreenState();
+  State<PersonalInformationScreen> createState() => _PersonalInformationScreenState();
 }
 
 class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
@@ -49,10 +48,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   bool _prima = false;
   detailUser() async {
     final _fireStore = FirebaseFirestore.instance;
-    await _fireStore
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .update({
+    await _fireStore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
       'fullName': firstName.text + " " + lastName.text,
       'firstName': firstName.text,
       'LastName': lastName.text,
@@ -80,10 +76,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
 
   void getData() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get();
+      var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       img = profile.data()?['profileuserImage'];
       url = profile.data()?['document'];
       firstName.text = profile.data()?['firstName'];
@@ -138,13 +131,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                     height: height(context) * 0.42,
                     width: width(context) * 1,
                     decoration: img == ""
-                        ? BoxDecoration(
-                            image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: AssetImage('assets/images/prima3.png')))
-                        : BoxDecoration(
-                            image: DecorationImage(
-                                fit: BoxFit.fill, image: NetworkImage(img))),
+                        ? BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/images/prima3.png')))
+                        : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(img))),
                     child: SafeArea(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,9 +157,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               padding: EdgeInsets.only(right: 12.0, top: 10),
                               child: IconButton(
                                 onPressed: () {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      builder: ((builder) => bottomSheet()));
+                                  showModalBottomSheet(context: context, builder: ((builder) => bottomSheet()));
                                 },
                                 icon: ImageIcon(
                                   color: white,
@@ -299,17 +285,11 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                             addVerticalSpace(10),
                             InkWell(
                                 onTap: () {
-                                  showSnackBar(
-                                      context,
-                                      "This helps in listing your profile while searching by other travelers",
-                                      Colors.green);
+                                  showSnackBar(context, "This helps in listing your profile while searching by other travelers", Colors.green);
                                 },
                                 child: Text(
                                   'Why is this required?',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: primary,
-                                      decoration: TextDecoration.underline),
+                                  style: TextStyle(fontWeight: FontWeight.w600, color: primary, decoration: TextDecoration.underline),
                                 )),
                             Divider(
                               height: 30,
@@ -331,9 +311,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     child: Text('Email ID:')),
                                 SizedBox(
                                     // height: 37,
-                                    child: Text(FirebaseAuth
-                                        .instance.currentUser!.email
-                                        .toString())),
+                                    child: Text(FirebaseAuth.instance.currentUser!.email.toString())),
                               ],
                             ),
                             addVerticalSpace(15),
@@ -358,17 +336,11 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                             ),
                             TextButton(
                                 onPressed: () async {
-                                  await showSnackBar(
-                                      context,
-                                      "For quotes and booking and for Emergency use ",
-                                      Colors.green);
+                                  await showSnackBar(context, "For quotes and booking and for Emergency use ", Colors.green);
                                 },
                                 child: Text(
                                   'Why is this required?',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: primary,
-                                      decoration: TextDecoration.underline),
+                                  style: TextStyle(fontWeight: FontWeight.w600, color: primary, decoration: TextDecoration.underline),
                                 )),
                             Divider(
                               thickness: 5,
@@ -396,8 +368,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   children: [
                                     Text(
                                       '+ Upload your ID',
-                                      style: bodyText16w600(
-                                          color: black.withOpacity(0.5)),
+                                      style: bodyText16w600(color: black.withOpacity(0.5)),
                                     ),
                                   ],
                                 ),
@@ -413,10 +384,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 name: 'Save',
                                 onPressed: () {
                                   detailUser();
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (ctx) => MyAccountScreen()));
+                                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => MyAccountScreen()));
                                   showSnackBar(context, "Added", Colors.green);
                                 }),
                             addHorizontalySpace(20),
@@ -426,12 +394,12 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         ),
       ),
     );
-
   }
+
   Future<void> selectDOBdate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
         context: context,
-        builder: (BuildContext context, Widget ?child) {
+        builder: (BuildContext context, Widget? child) {
           return Theme(
             data: ThemeData(
               primarySwatch: Colors.grey,
@@ -452,7 +420,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                   secondary: Colors.black),
               dialogBackgroundColor: Colors.white,
             ),
-            child: child ??Text(""),
+            child: child ?? Text(""),
           );
         },
         initialDate: DateTime.now(),
@@ -460,9 +428,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         lastDate: DateTime.now());
     if (picked != null) {
       print(picked);
-      String formattedDate =
-      DateFormat('yyyy-MM-dd')
-          .format(picked);
+      String formattedDate = DateFormat('yyyy-MM-dd').format(picked);
 
       setState(() {
         dateOfBirth.text = formattedDate;
@@ -475,7 +441,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   Future<void> selectAniversyDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
         context: context,
-        builder: (BuildContext context, Widget ?child) {
+        builder: (BuildContext context, Widget? child) {
           return Theme(
             data: ThemeData(
               primarySwatch: Colors.grey,
@@ -496,7 +462,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                   secondary: Colors.black),
               dialogBackgroundColor: Colors.white,
             ),
-            child: child ??Text(""),
+            child: child ?? Text(""),
           );
         },
         initialDate: DateTime.now(),
@@ -504,9 +470,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         lastDate: DateTime.now());
     if (picked != null) {
       print(picked);
-      String formattedDate =
-      DateFormat('yyyy-MM-dd')
-          .format(picked);
+      String formattedDate = DateFormat('yyyy-MM-dd').format(picked);
 
       setState(() {
         anniversaryDate.text = formattedDate;
@@ -568,12 +532,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       value: selectDocumentList[i].isSelected,
                                       onChanged: (value) {
                                         setState(() {
-                                          for (var element
-                                              in selectDocumentList) {
+                                          for (var element in selectDocumentList) {
                                             element.isSelected = false;
                                           }
-                                          selectDocumentList[i].isSelected =
-                                              value!;
+                                          selectDocumentList[i].isSelected = value!;
                                         });
                                       },
                                     ),
@@ -598,8 +560,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                         children: [
                           Text(
                             '+ Upload ',
-                            style:
-                                bodyText14w600(color: black.withOpacity(0.5)),
+                            style: bodyText14w600(color: black.withOpacity(0.5)),
                           ),
                         ],
                       ),
@@ -653,14 +614,11 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
 
   void pickUploadImage() async {
     final image = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        maxWidth: MediaQuery.of(context).size.width,
-        maxHeight: MediaQuery.of(context).size.height,
-        imageQuality: 75);
+        source: ImageSource.gallery, maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height, imageQuality: 75);
     Reference ref = FirebaseStorage.instance.ref().child('profileImg');
-    if(image  == null) return;
+    if (image == null) return;
     File? _img = File(image.path);
-   _img = await _cropImage(imageFile: _img);
+    _img = await _cropImage(imageFile: _img);
     await ref.putFile(File(image!.path));
     ref.getDownloadURL().then((value) {
       print(value);
@@ -669,32 +627,27 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       });
     });
   }
-   Future<File?> _cropImage({required File imageFile}) async {
-    CroppedFile? croppedImage =
-        await ImageCropper().cropImage(sourcePath: imageFile.path);
-    if(croppedImage == null ) return null;
+
+  Future<File?> _cropImage({required File imageFile}) async {
+    CroppedFile? croppedImage = await ImageCropper().cropImage(sourcePath: imageFile.path);
+    if (croppedImage == null) return null;
     return File(croppedImage.path);
-   }
- // void _cropImage(filePath) async {
- //    File croppedImage = (await ImageCropper.cropImage(
- //      sourcePath: filePath,
- //      maxWidth: 1080,
- //      maxHeight: 1080,
- //    )) as File;
- //    if (croppedImage != null) {
- //      imageFile = croppedImage;
- //      setState(() {});
- //    }
- //  }
-
-
+  }
+  // void _cropImage(filePath) async {
+  //    File croppedImage = (await ImageCropper.cropImage(
+  //      sourcePath: filePath,
+  //      maxWidth: 1080,
+  //      maxHeight: 1080,
+  //    )) as File;
+  //    if (croppedImage != null) {
+  //      imageFile = croppedImage;
+  //      setState(() {});
+  //    }
+  //  }
 
   void cameraPickUploadImage() async {
     final image = await ImagePicker().pickImage(
-        source: ImageSource.camera,
-        maxWidth: MediaQuery.of(context).size.width,
-        maxHeight: MediaQuery.of(context).size.height,
-        imageQuality: 75);
+        source: ImageSource.camera, maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height, imageQuality: 75);
     Reference ref = FirebaseStorage.instance.ref().child('profileImg');
 
     await ref.putFile(File(image!.path));
@@ -709,10 +662,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   bool isSelected = false;
   void PickUploadDocument() async {
     final image = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        maxWidth: MediaQuery.of(context).size.width,
-        maxHeight: MediaQuery.of(context).size.height,
-        imageQuality: 75);
+        source: ImageSource.gallery, maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height, imageQuality: 75);
     Reference ref = FirebaseStorage.instance.ref().child('document');
 
     await ref.putFile(File(image!.path));
@@ -779,7 +729,6 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       ),
     );
   }
-
 }
 
 class FireBaseApi {
