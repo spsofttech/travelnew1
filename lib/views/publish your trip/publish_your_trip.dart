@@ -671,7 +671,7 @@ class _PublishYourTripScreenState extends State<PublishYourTripScreen> {
                                   if (allFill) {
                                     print("object-000000");
                                     await getPrimaTripData();
-
+                                    await addPublishTripDetails();
                                     setState(() {
                                       //dataSecondPageLodedCount = 0;
                                       _activeCurrentStep += 1;
@@ -685,10 +685,11 @@ class _PublishYourTripScreenState extends State<PublishYourTripScreen> {
                                 {
                                   bool allFill = true;
                                   print("lenth spot ---${selectedTouristSpot.where((element) => element.value).toList().length}");
-                                  if (selectedTouristSpot.where((element) => element.value).toList().length < 2) {
-                                    showSimpleTost(context, txt: "Please Select At least 2 Spot ");
+                                  if (selectedTouristSpot.where((element) => element.value).toList().length < 1) {
+                                    showSimpleTost(context, txt: "Please Select At least 1 Spot ");
                                     allFill = false;
                                   }
+
                                   if (DoInTripController.text.length < 100) {
                                     showSimpleTost(context, txt: "Please Type Discription atleast 100 charactor");
                                     allFill = false;
@@ -707,7 +708,7 @@ class _PublishYourTripScreenState extends State<PublishYourTripScreen> {
                                     showSimpleTost(context, txt: "Please Select All Details");
                                   } else {
                                     showAPICallPendingDialog(context);
-                                    await addPublishTripDetails();
+
                                     await addStep2PublishTripDetails();
                                     await addStep3PublishTripDetails();
 

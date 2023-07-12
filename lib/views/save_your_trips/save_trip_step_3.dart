@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travelnew_app/views/save_your_trips/save_your_trips.dart';
 import 'package:travelnew_app/widget/custom_dropdown_button.dart';
@@ -14,12 +17,14 @@ import '../../utils/constant.dart';
 
 enum includes { one, two, three, four }
 
+includes _value = includes.one;
 final TextEditingController DepatureDateController = TextEditingController();
 
 String _string1 = "Select";
 String _string2 = "Select";
 String hotaltype = "";
 String incl1 = "";
+
 updatePlanTrip() async {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   users.doc(FirebaseAuth.instance.currentUser!.uid).collection("Plan_trip").doc(FirebaseAuth.instance.currentUser!.uid).update({
@@ -39,8 +44,9 @@ String _image = "";
 String _date = "";
 String _tripName = "";
 String _tripType = "";
+String _startDate = "";
 bool? flexibledate;
-
+int _bookingId = 0;
 void getData() async {
   if (FirebaseAuth.instance.currentUser != null) {
     var profile = await FirebaseFirestore.instance
@@ -57,7 +63,11 @@ void getData() async {
     _tripName = profile.data()?['endtrip'];
     _tripType = profile.data()?['tripPlan'];
     _totalday = profile.data()?['totalDays'];
+    _startDate = profile.data()?['StartDate'];
   }
+
+  _bookingId = DateTime.now().microsecondsSinceEpoch;
+  DepatureDateController.text = _startDate;
   // setState(() {
   //
   // });
@@ -65,25 +75,56 @@ void getData() async {
 
 int _totalday = 0;
 
-addUpcomingTrip() async {
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
-  users.doc(FirebaseAuth.instance.currentUser!.uid).collection("upcomingtrip").add({
-    // "image": _image ?? "",
-    "tirpname": "${place} Trip",
-    "address": place,
-    "date": _date,
-    "tripsport": '1',
-    "travelTrip": true,
-    "tripDocId": "${tripdataForStore[0]['docId']}",
-    "tripImg": "${tripdataForStore[0]['tripImage']}",
-    "tripType": _tripType,
-    "totalDays": _totalday,
-    "state": "${targetState}",
-    'tripType': "${targetType}"
-  });
-  // setState(() {
-  //
-  // });
+// addUpcomingTrip() async {
+//   CollectionReference users = FirebaseFirestore.instance.collection('users');
+//   users.doc(FirebaseAuth.instance.currentUser!.uid).collection("upcomingtrip").add({
+//     // "image": _image ?? "",
+//     "tirpname": "${place} Trip",
+//     "address": place,
+//     "date": _date,
+//     "tripsport": '1',
+//     "travelTrip": true,
+//     "tripDocId": "${tripdataForStore[0]['docId']}",
+//     "tripImg": "${tripdataForStore[0]['tripImage']}",
+//     "tripType": _tripType,
+//     "totalDays": _totalday,
+//     "state": "${targetState}",
+//     'tripType': "${targetType}",
+//   });
+//   // setState(() {
+//   //
+//   // });
+// }
+
+addupcomingtrip() async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    // DocumentReference profile =
+    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("upcomingtrip").add({
+      'image': _image,
+      'date': _date,
+      "tripDocId": "${tripdataForStore[0]['docId']}",
+      "tripImg": "${tripdataForStore[0]['tripImage']}",
+      'address': place,
+      'tirpname': "${place} Trip",
+      'tripsport': trip_city_name.value,
+      "travelTrip": true,
+      "state": "${targetState}",
+      'daysnumber': _totalday,
+      "I'm Flexible with date": flexibledate,
+      "tripType": _tripType,
+      'departuredate': DepatureDateController.text,
+      "Hoteltype": hotaltype,
+      "TripDays": _totalday,
+      "childer": _string1,
+      "Adults": _string2,
+      "bookingId": _bookingId,
+      "Includes": _value.name,
+      "bookingeresponse": 'bookingres',
+      "AirIndia": 'airind',
+      "Seat": '_seats',
+      "Endtrip": _tripName,
+    });
+  }
 }
 
 class SaveTripStep3 extends StatefulWidget {
@@ -114,8 +155,6 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
     super.initState();
   }
 
-  includes _value = includes.one;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -128,26 +167,30 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
           children: [
             SizedBox(
               width: width(context) * 0.4,
-              child: Text(
-                '$place Trip',
-                style: bodyText16w600(color: black),
-              ),
+              child: Obx(() => Text(
+                    '${trip_city_name.value} Trip',
+                    style: bodyText16w600(color: black),
+                  )),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  'Booking id: 540986',
-                  style: bodyText16w600(color: black),
+                SizedBox(
+                  width: width(context) * 0.40,
+                  child: Text(
+                    'Booking id: ${_bookingId}',
+                    overflow: TextOverflow.ellipsis,
+                    style: bodyText16w600(color: black),
+                  ),
                 ),
-                TextButton(
-                    onPressed: () {
-                      contactDialog(context);
-                    },
-                    child: Text(
-                      'Your contact detail',
-                      style: bodyText14w600(color: primary),
-                    )),
+                // TextButton(
+                //     onPressed: () {
+                //       contactDialog(context);
+                //     },
+                //     child: Text(
+                //       'Your contact detail',
+                //       style: bodyText14w600(color: primary),
+                //     )),
               ],
             )
           ],
@@ -164,7 +207,9 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
                       width: width(context) * 0.6,
                       child: CustomTextFieldWidget(Enable: false, controller: DepatureDateController, labelText: 'Departure date'))
                 else
-                  SizedBox(width: width(context) * 0.6, child: CustomTextFieldWidget(controller: DepatureDateController, labelText: 'Departure date')),
+                  SizedBox(
+                      width: width(context) * 0.6,
+                      child: CustomTextFieldWidget(Enable: false, controller: DepatureDateController, labelText: 'Departure date')),
                 addVerticalSpace(5),
                 SizedBox(width: width(context) * 0.6, child: const Text('You’ve preferred our travel partner suggesting a date'))
               ],
@@ -200,8 +245,11 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
           style: bodyText16w600(color: black),
         ),
         addVerticalSpace(20),
-        Row(
-          children: [Text('       Adults'), Text('                                                          Children')],
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            children: [Text('Adults'), Spacer(), Text('Children')],
+          ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

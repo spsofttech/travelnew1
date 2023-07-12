@@ -324,7 +324,7 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
                 'host': USER_UID,
                 'tripName': tripName,
                 'addres': tripAddress,
-              }),
+              }, isHost: true, onlyFriends: true),
             if (selectIndex == 1) PlaceVisitingScreen(),
             if (selectIndex == 2) EntertainmentTab(hostId: USER_UID),
             if (selectIndex == 3) const WhatToBringTab(),
@@ -468,40 +468,51 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
                 return Column(
                   children: [
                     for (int i = 0; i < items.length; i++)
-                      InkWell(
-                        onTapDown: (detail) {
-                          overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
-                          tapXY = detail.globalPosition;
-                          showMenu(context: context, position: relRectSize, items: [
-                            PopupMenuItem(
-                                onTap: () {
-                                  removeItem(removeMap: items[i]);
-                                },
-                                child: Text("Delete"))
-                          ]);
-                        },
-                        child: ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(100)),
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: USERIMAGE == ""
-                                  ? BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(NoUserNetworkImage)))
-                                  : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(USERIMAGE))),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            onTapDown: (detail) {
+                              overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
+                              tapXY = detail.globalPosition;
+                              showMenu(context: context, position: relRectSize, items: [
+                                PopupMenuItem(
+                                    onTap: () {
+                                      removeItem(removeMap: items[i]);
+                                    },
+                                    child: Text("Delete"))
+                              ]);
+                            },
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(100)),
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: items[i]['user']['userImage'] == ""
+                                      ? BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(NoUserNetworkImage)))
+                                      : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(items[i]['user']['userImage']))),
 
-                              // myFillBoxDecoration(
-                              //     0, black.withOpacity(0.2), 50),
+                                  // myFillBoxDecoration(
+                                  //     0, black.withOpacity(0.2), 50),
+                                ),
+                              ),
+                              title: Text(
+                                '${items[i]['user']['name']}',
+                                style: bodyText16w600(color: black),
+                              ),
+                              subtitle: Text(items[i]['itemName']),
+                              trailing: Text('Rs. ${items[i]['iteamAmout']}'),
                             ),
                           ),
-                          title: Text(
-                            '${items[i]['user']['name']}',
-                            style: bodyText16w600(color: black),
+                          addVerticalSpace(10),
+                          Text(
+                            '${items[i]['dis']}',
+                            style: TextStyle(height: 1.3),
                           ),
-                          subtitle: Text(items[i]['itemName']),
-                          trailing: Text('Rs. ${items[i]['iteamAmout']}'),
-                        ),
+                          addVerticalSpace(15),
+                        ],
                       )
                   ],
                 );
@@ -510,12 +521,6 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
               }
             },
           ),
-          addVerticalSpace(20),
-          const Text(
-            'The document you upload here is not visible to anyone and it is only saved in your device. It is offlineit also makes you a verified traveller, that helps you in quick check-ins and mee',
-            style: TextStyle(height: 1.3),
-          ),
-          addVerticalSpace(15),
           Row(
             children: [
               Spacer(),
@@ -733,10 +738,11 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
   }
 
   Future<void> addItems(BuildContext context) async {
-    RxString selectedUserName = "Select Friend".obs;
-    Map selectedUserMap = {};
+    // RxString selectedUserName = "Select Friend".obs;
+    //Map selectedUserMap = {};
     final TextEditingController iteamcontroller = TextEditingController();
     final TextEditingController amountcontroller = TextEditingController();
+    final TextEditingController disController = TextEditingController();
 
     addIteamDetails() async {
       if (FirebaseAuth.instance.currentUser != null) {
@@ -747,11 +753,18 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
             .doc(FirebaseAuth.instance.currentUser!.uid);
         await profile.update({
           'items': FieldValue.arrayUnion([
-            {"itemName": iteamcontroller.text, "itemType": _string, "user": selectedUserMap, "iteamAmout": amountcontroller.text}
+            {
+              "itemName": iteamcontroller.text,
+              "itemType": _string,
+              "user": {'name': USERNAME, 'uid': USER_UID, 'userImage': USERIMAGE},
+              "iteamAmout": amountcontroller.text,
+              'dis': disController.text
+            }
           ])
         });
         // setState(() {});
       }
+      Navigator.pop(context);
     }
 
     return showModalBottomSheet<void>(
@@ -761,165 +774,169 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
         borderRadius: BorderRadius.circular(20.0),
       ),
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, setState) {
-          return Container(
-              padding: EdgeInsets.all(12),
-              height: height(context) * 0.75,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Spacer(),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.close,
-                            color: black,
-                          ))
-                    ],
-                  ),
-                  CustomTextFieldWidget(
-                    //itemList: tripLocation,
-                    controller: iteamcontroller,
-                    labelText: 'Enter your item',
-                  ),
-                  addVerticalSpace(20),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border(
-                            top: BorderSide(
-                              color: Colors.black,
-                            ),
-                            bottom: BorderSide(color: Colors.black),
-                            right: BorderSide(color: Colors.black),
-                            left: BorderSide(color: Colors.black))),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: DropdownButton<String>(
-                        borderRadius: BorderRadius.circular(10),
-                        value: _string,
-                        isExpanded: true,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _string = newValue!;
-                          });
+        return Container(
+            padding: EdgeInsets.all(12),
+            height: height(context) * 0.75,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Spacer(),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
                         },
-                        items: ['Take on rent', 'Carry while travel', 'Buy while travel']
-                            .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: bodytext12Bold(color: black),
-                                  ),
-                                ))
-                            .toList(),
-
-                        // add extra sugar..
-                        icon: const Padding(
-                          padding: EdgeInsets.only(bottom: 8.0),
-                          child: Icon(
-                            Icons.arrow_drop_down,
+                        icon: Icon(
+                          Icons.close,
+                          color: black,
+                        ))
+                  ],
+                ),
+                CustomTextFieldWidget(
+                  //itemList: tripLocation,
+                  controller: iteamcontroller,
+                  labelText: 'Enter your item',
+                ),
+                addVerticalSpace(20),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border(
+                          top: BorderSide(
+                            color: Colors.black,
                           ),
-                        ),
-                        iconSize: 25,
-                        iconEnabledColor: primary,
-                        iconDisabledColor: black.withOpacity(0.7),
-                        underline: const SizedBox(),
-                      ),
-                    ),
-                  ),
-                  addVerticalSpace(20),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border(
-                            top: BorderSide(
-                              color: Colors.black,
-                            ),
-                            bottom: BorderSide(color: Colors.black),
-                            right: BorderSide(color: Colors.black),
-                            left: BorderSide(color: Colors.black))),
-                    child: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                          .collection("Prima_Trip_Plan")
-                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          List tripMember = snapshot.data!.data()!['friends'];
-                          tripMember = tripMember.where((element) => element['status'] == 1).toList();
-                          List requestMember = snapshot.data!.data()!['friends'];
-                          requestMember = requestMember.where((element) => element['status'] == 0).toList();
-                          return Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Obx(() => DropdownButton(
-                                  borderRadius: BorderRadius.circular(10),
-                                  // value: tripMember[0]['name'],
-                                  hint: Text("${selectedUserName.value}"),
-                                  isExpanded: true,
-                                  onChanged: (newValue) {
-                                    selectedUserName.value = newValue!;
-                                  },
-                                  items: tripMember
-                                      .map<DropdownMenuItem<String>>((value) => DropdownMenuItem(
-                                            onTap: () {
-                                              selectedUserMap = value;
-                                            },
-                                            value: value['name'],
-                                            child: Text(
-                                              value['name'],
-                                              style: bodytext12Bold(color: black),
-                                            ),
-                                          ))
-                                      .toList(),
-
-                                  // add extra sugar..
-                                  icon: const Padding(
-                                    padding: EdgeInsets.only(bottom: 8.0),
-                                    child: Icon(
-                                      Icons.arrow_drop_down,
-                                    ),
-                                  ),
-                                  iconSize: 25,
-                                  iconEnabledColor: primary,
-                                  iconDisabledColor: black.withOpacity(0.7),
-                                  underline: const SizedBox(),
-                                )),
-                          );
-                        } else {
-                          return SizedBox();
-                        }
+                          bottom: BorderSide(color: Colors.black),
+                          right: BorderSide(color: Colors.black),
+                          left: BorderSide(color: Colors.black))),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: DropdownButton<String>(
+                      borderRadius: BorderRadius.circular(10),
+                      value: _string,
+                      isExpanded: true,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _string = newValue!;
+                        });
                       },
+                      items: ['Take on rent', 'Carry while travel', 'Buy while travel']
+                          .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: bodytext12Bold(color: black),
+                                ),
+                              ))
+                          .toList(),
+
+                      // add extra sugar..
+                      icon: const Padding(
+                        padding: EdgeInsets.only(bottom: 8.0),
+                        child: Icon(
+                          Icons.arrow_drop_down,
+                        ),
+                      ),
+                      iconSize: 25,
+                      iconEnabledColor: primary,
+                      iconDisabledColor: black.withOpacity(0.7),
+                      underline: const SizedBox(),
                     ),
                   ),
-                  addVerticalSpace(20),
-                  CustomTextFieldWidget(
-                    kebordType: TextInputType.number,
-                    //itemList: tripLocation,
-                    controller: amountcontroller,
-                    labelText: 'Enter your amount',
-                  ),
-                  addVerticalSpace(30),
-                  CustomButton(
-                      name: 'Save',
-                      onPressed: () {
-                        // setState(() {});
-                        // Navigator.pop(context);
-                        if (iteamcontroller.text.isNotEmpty && selectedUserName.value != "Select Friend" && amountcontroller.text.isNotEmpty) {
-                          addIteamDetails();
-                        } else {
-                          showSimpleTost(context, txt: "Please Fil all details");
-                        }
-                      })
-                ],
-              ));
-        });
+                ),
+                addVerticalSpace(20),
+                CustomTextFieldWidget(
+                  //itemList: tripLocation,
+                  controller: disController,
+                  labelText: 'Enter your item Discription',
+                ),
+                // addVerticalSpace(20),
+                // Container(
+                //   decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(10),
+                //       border: Border(
+                //           top: BorderSide(
+                //             color: Colors.black,
+                //           ),
+                //           bottom: BorderSide(color: Colors.black),
+                //           right: BorderSide(color: Colors.black),
+                //           left: BorderSide(color: Colors.black))),
+                //   child: StreamBuilder(
+                //     stream: FirebaseFirestore.instance
+                //         .collection('users')
+                //         .doc(FirebaseAuth.instance.currentUser!.uid)
+                //         .collection("Prima_Trip_Plan")
+                //         .doc(FirebaseAuth.instance.currentUser!.uid)
+                //         .snapshots(),
+                //     builder: (context, snapshot) {
+                //       if (snapshot.hasData) {
+                //         List tripMember = snapshot.data!.data()!['friends'];
+                //         tripMember = tripMember.where((element) => element['status'] == 1).toList();
+                //         List requestMember = snapshot.data!.data()!['friends'];
+                //         requestMember = requestMember.where((element) => element['status'] == 0).toList();
+                //         return Padding(
+                //           padding: EdgeInsets.only(left: 20),
+                //           child: Obx(() => DropdownButton(
+                //                 borderRadius: BorderRadius.circular(10),
+                //                 // value: tripMember[0]['name'],
+                //                 hint: Text("${selectedUserName.value}"),
+                //                 isExpanded: true,
+                //                 onChanged: (newValue) {
+                //                   selectedUserName.value = newValue!;
+                //                 },
+                //                 items: tripMember
+                //                     .map<DropdownMenuItem<String>>((value) => DropdownMenuItem(
+                //                           onTap: () {
+                //                             selectedUserMap = value;
+                //                           },
+                //                           value: value['name'],
+                //                           child: Text(
+                //                             value['name'],
+                //                             style: bodytext12Bold(color: black),
+                //                           ),
+                //                         ))
+                //                     .toList(),
+                //
+                //                 // add extra sugar..
+                //                 icon: const Padding(
+                //                   padding: EdgeInsets.only(bottom: 8.0),
+                //                   child: Icon(
+                //                     Icons.arrow_drop_down,
+                //                   ),
+                //                 ),
+                //                 iconSize: 25,
+                //                 iconEnabledColor: primary,
+                //                 iconDisabledColor: black.withOpacity(0.7),
+                //                 underline: const SizedBox(),
+                //               )),
+                //         );
+                //       } else {
+                //         return SizedBox();
+                //       }
+                //     },
+                //   ),
+                // ),
+                addVerticalSpace(20),
+                CustomTextFieldWidget(
+                  kebordType: TextInputType.number,
+                  //itemList: tripLocation,
+                  controller: amountcontroller,
+                  labelText: 'Enter your amount',
+                ),
+                addVerticalSpace(30),
+                CustomButton(
+                    name: 'Save',
+                    onPressed: () {
+                      // setState(() {});
+                      // Navigator.pop(context);
+                      if (iteamcontroller.text.isNotEmpty && amountcontroller.text.isNotEmpty) {
+                        addIteamDetails();
+                      } else {
+                        showSimpleTost(context, txt: "Please Fil all details");
+                      }
+                    })
+              ],
+            ));
       },
     );
   }

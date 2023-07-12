@@ -9,6 +9,7 @@ import 'package:travelnew_app/services/db/firebaseDB.dart';
 import 'package:travelnew_app/views/aspired_trip/travel_agency_details.dart';
 import 'package:travelnew_app/views/humburger_flow/tourist_spot_screen.dart';
 import 'package:travelnew_app/views/humburger_flow/trip_map_screen.dart';
+import 'package:travelnew_app/views/humburger_flow/upcoming_trips.dart';
 import 'package:travelnew_app/views/save_your_trips/bookmarkedTrips.dart';
 import 'package:travelnew_app/views/save_your_trips/save_your_trips.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
@@ -169,13 +170,7 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
             children: [
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (ctx) => BookmarkedTrips(
-                                docID: dockID,
-                                isBookmarked: isBookmarked,
-                              )));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => UpcomingTripsScreen()));
                 },
                 child: Container(
                   margin: const EdgeInsets.only(right: 10),
@@ -967,7 +962,9 @@ class TripLibraryDetailsScreen extends StatefulWidget {
   String targetType1;
   String targetState1;
   String docId;
-  TripLibraryDetailsScreen({super.key, required this.targetState1, required this.targetType1, required this.docId});
+  int totalDay;
+
+  TripLibraryDetailsScreen({super.key, required this.targetState1, required this.targetType1, required this.docId, required this.totalDay});
 
   @override
   State<TripLibraryDetailsScreen> createState() => _TripLibraryDetailsScreenState();
@@ -990,8 +987,6 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
   //   'Day 7',
   // ];
 
-  CollectionReference _collectionRef =
-      FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("upcomingtrip");
   // Future<void> getAllData() async {
   //   // Get docs from collection reference
   //   QuerySnapshot querySnapshot = await _collectionRef.get();
@@ -1002,59 +997,49 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
   // }
 
   // List allData = [];
-  List<DayTripData> data11 = [];
+  List<DayTripData> dataSub = [];
+  List<DayTripModel> data11 = [];
   @override
   void initState() {
     //getAllData();
-    gettutallData();
-    getTripData();
+    // gettutallData();
+    // getTripData();
     super.initState();
   }
 
-  Future getDataListModel() async {
-    // List<DayTripModel> data11 = [];
+  Future<List<DayTripModel>> getDataListModel() async {
+    QuerySnapshot<Map<String, dynamic>> data =
+        await FirebaseFirestore.instance.collection('Travel New').doc('${widget.targetType1}').collection(widget.docId).get();
 
     data11.clear();
-    QuerySnapshot<Map<String, dynamic>> dataDay = await FirebaseFirestore.instance
-        .collection('Trips_New')
-        .doc('${targetType}')
-        .collection('State')
-        .doc('${targetState}')
-        .collection('Trip')
-        .doc("${widget.docId}")
-        .collection("Days")
-        .get();
 
-    print("-------" + "${dataDay}");
+    printc("main List Lesnth -- ${data.docs.length}");
+    for (int ii = 0; ii < data.docs.length; ii++) {
+      // tripdataForStore.add({'docId': docid, 'tripImage': image});
+      List<DayTripData> data1 = [];
+      List dayDataList = data.docs[ii].data()['data'];
 
-    for (int ii = 0; ii < dataDay.docs.length; ii++) {
-      await FirebaseFirestore.instance
-          .collection('Trips_New')
-          .doc('${widget.targetType1}')
-          .collection('State')
-          .doc('${widget.targetState1}')
-          .collection('Trip')
-          .doc("${widget.docId}")
-          .collection("Days")
-          .doc("${dataDay.docs[ii].id}")
-          .collection("touristSpot")
-          .where('day', isEqualTo: dataDay.docs[ii].id)
-          .get()
-          .then((value) {
-        //  print("--${data.docs[ii].id}---${value.docs[0].data()['day']}");
+      printc("--${dayDataList.length}---");
 
-        for (int ii2 = 0; ii2 < value.docs.length; ii2++) {
-          //log("-- ---${value.docs[ii2].data()['day']}");
-          data11.add(DayTripData.fromJson(value.docs[ii2].data()));
-        }
-        // data11.add(DayTripModel(data: data1));
-        //finalData.add();
-      });
+      // print("---------");
+      //printc("${value.docs[ii].id}-------" + dayDataList.length.toString());
+      // printc(dayDataList[0]);
+      for (int ii2 = 0; ii2 < dayDataList.length; ii2++) {
+        //log("-- ---${value.docs[ii2].data()['day']}");
+        //printc(value.docs[0].data());
+
+        data1.add(DayTripData.fromJson(dayDataList[ii2]));
+      }
+
+      data11.add(DayTripModel(data: data1));
+      //finalData.add();
+
     }
     //print(data11);
     // firstIndex++;
-    // finalData.add([]);
+    // finalDataMain.add([]);
 
+    return data11;
     // print("-----" + "${finalData}");
   }
 
@@ -1062,20 +1047,20 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
   // CollectionReference _collectionRef2 =
   //     FirebaseFirestore.instance.collection('tripstate').doc('karnataka').collection('tripcity').doc('Bengaluru').collection('touristSport');
 
-  Future<void> gettutallData() async {
-    CollectionReference _collectionRef2 = FirebaseFirestore.instance
-        .collection('Trips_New')
-        .doc('${widget.targetType1}')
-        .collection('State')
-        .doc('${widget.targetState1}')
-        .collection('Trip');
-    // Get docs from collection reference
-    QuerySnapshot querySnapshot = await _collectionRef2.get();
-    // Get data from docs and convert map to List
-    turistSportallData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    setState(() {});
-    print(turistSportallData);
-  }
+  // Future<void> gettutallData() async {
+  //   CollectionReference _collectionRef2 = FirebaseFirestore.instance
+  //       .collection('Trips_New')
+  //       .doc('${widget.targetType1}')
+  //       .collection('State')
+  //       .doc('${widget.targetState1}')
+  //       .collection('Trip');
+  //   // Get docs from collection reference
+  //   QuerySnapshot querySnapshot = await _collectionRef2.get();
+  //   // Get data from docs and convert map to List
+  //   turistSportallData = querySnapshot.docs.map((doc) => doc.data()).toList();
+  //   setState(() {});
+  //   print(turistSportallData);
+  // }
 
   List turistSportallData = [];
 
@@ -1102,9 +1087,11 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
             future: getDataListModel(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
+                // printc(data11.length, 'g');
+                printc(int.parse(days.toString()), "g");
                 return ListView.builder(
                     padding: EdgeInsets.zero,
-                    itemCount: data11.length,
+                    itemCount: widget.totalDay,
                     itemBuilder: (context, i) {
                       return SizedBox(
                         height: height(context),
@@ -1118,8 +1105,8 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
                                         fit: BoxFit.fill,
-                                        image: data11[i].image! != ""
-                                            ? NetworkImage(data11[i].image!)
+                                        image: data11[i].data[0].image! != ""
+                                            ? NetworkImage(data11[i].data[0].image!)
                                             : NetworkImage(
                                                 "https://firebasestorage.googleapis.com/v0/b/travelnew-79e2e.appspot.com/o/featuredImages%2Ffeatured.png?alt=media&token=8ebc07d9-e50c-44a6-9c3e-b3ac65aac4b5"))),
                                 child: SafeArea(
@@ -1143,7 +1130,7 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
                                                   size: 20,
                                                 ),
                                                 Text(
-                                                  data11[i].state!,
+                                                  data11[i].data[0].state!,
                                                   style: bodyText16normal(color: white),
                                                 ),
                                               ],
@@ -1153,7 +1140,7 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
                                               child: Row(
                                                 children: [
                                                   Text(
-                                                    data11[i].type1!,
+                                                    data11[i].data[0].type1!,
                                                     style: bodyText14normal(color: white),
                                                   ),
                                                   Text(' Trip', style: bodyText14normal(color: white)),
@@ -1181,8 +1168,8 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
                                   height: 500,
                                   width: width(context) * 0.95,
                                   child: ListView.builder(
-                                      itemCount: int.parse(days.toString()),
-                                      itemBuilder: (ctx, i) {
+                                      itemCount: data11[i].data.length,
+                                      itemBuilder: (ctx, i2) {
                                         return Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
@@ -1199,14 +1186,17 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Text(
-                                                        "${i == 0 ? "Bonus" : "day $i"}",
+                                                        "${i2 == 0 ? "Bonus" : "day $i2"}",
                                                         style: bodyText18w600(color: black),
                                                       ),
                                                       addVerticalSpace(10),
-                                                      Text(
-                                                        "${data11[i].touristSpot!}",
-                                                        //turistSportallData[i]['name'],
-                                                        style: bodyText18w600(color: black),
+                                                      SizedBox(
+                                                        width: width(context) * 0.56,
+                                                        child: Text(
+                                                          "${data11[i].data[i2].touristSpot!}",
+                                                          //turistSportallData[i]['name'],
+                                                          style: bodyText18w600(color: black),
+                                                        ),
                                                       ),
                                                       addVerticalSpace(5),
                                                       // Text('Religious,Culture'),
@@ -1214,7 +1204,7 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
                                                       SizedBox(
                                                         width: width(context) * 0.56,
                                                         child: Text(
-                                                          "${data11[i].description!}",
+                                                          "${data11[i].data[i2].description!}",
 
                                                           //turistSportallData[i]['about'],
                                                           style: bodyText12Small(spacing: 1.4, color: black),
@@ -1237,7 +1227,7 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
                                                       height: height(context) * 0.12,
                                                       width: width(context) * 0.3,
                                                       child: Image.network(
-                                                        "${data11[i].image != "" ? data11[i].image : "https://media.istockphoto.com/id/490736905/photo/meenakshi-hindu-temple-in-madurai-tamil-nadu-south-india.jpg?s=612x612&w=0&k=20&c=OlOLvdryIdkdyKcY9gRPsM1RZa5HiP6QBr2JVAIvPb0="}",
+                                                        "${data11[i].data[i2].image != "" ? data11[i].data[i2].image : "https://media.istockphoto.com/id/490736905/photo/meenakshi-hindu-temple-in-madurai-tamil-nadu-south-india.jpg?s=612x612&w=0&k=20&c=OlOLvdryIdkdyKcY9gRPsM1RZa5HiP6QBr2JVAIvPb0="}",
 
                                                         //turistSportallData[i]['image'],
                                                         fit: BoxFit.fill,

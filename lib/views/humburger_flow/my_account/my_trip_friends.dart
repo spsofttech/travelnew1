@@ -20,7 +20,8 @@ import '../../../widget/custom_button.dart';
 
 class MyTripFriendsScreen extends StatefulWidget {
   List<Map<String, dynamic>> tripData;
-  MyTripFriendsScreen({required this.title, this.tripData = const []});
+  bool onlyFriend;
+  MyTripFriendsScreen({required this.title, this.tripData = const [], this.onlyFriend = false});
   String title;
 
   @override
@@ -570,19 +571,34 @@ class _MyTripFriendsScreenState extends State<MyTripFriendsScreen> {
     //   }
 
     //}
-    var x = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
-    List tfUIDs = x.data()!['tripFriends'] ?? [];
-    List _allUsers = [];
-    var y = await FirebaseFirestore.instance.collection('users').get();
+    // widget.onlyFriends
+    //     ? FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(FirebaseAuth.instance.currentUser!.uid)
+    //     .collection("friends")
+    //     .doc(FirebaseAuth.instance.currentUser!.uid)
+    //     .snapshots()
+    //     :
 
-    for (var element in y.docs) {
-      _allUsers.add(element.data());
-      for (var tf in tfUIDs) {
-        if (element.data()['UID'] == tf) {
-          tripFriend.add(element.data());
-        }
-      }
-    }
+    var x = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('friends')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    // List tfUIDs = x.data()!['tripFriends'] ?? [];
+    List _allUsers = [];
+    _allUsers = x.data()!['data'];
+    // var y = await FirebaseFirestore.instance.collection('users').get();
+    //
+    // for (var element in y.docs) {
+    //   _allUsers.add(element.data());
+    //   for (var tf in tfUIDs) {
+    //     if (element.data()['UID'] == tf) {
+    //       tripFriend.add(element.data());
+    //     }
+    //   }
+    // }
     setState(() {
       listo = _allUsers;
       // print(_allUsers);

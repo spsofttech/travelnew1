@@ -183,6 +183,7 @@ class _InboxScreenState extends State<InboxScreen> with TickerProviderStateMixin
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
+                      printc(snapshot.data!.data()!['data']);
                       List frdRequest = snapshot.data!.data()!['data'];
                       return SizedBox(
                         height: height(context) * 0.87,

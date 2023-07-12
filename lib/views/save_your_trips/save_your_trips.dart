@@ -105,8 +105,9 @@ class _SaveYourTripsScreenState extends State<SaveYourTripsScreen> {
                             name: 'Submit',
                             onPressed: () {
                               updatePlanTrip();
-                              addUpcomingTrip();
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => UpcomingTripsScreen()));
+                              addupcomingtrip();
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpcomingTripsScreen()));
                             }),
                       )
                     : SizedBox(

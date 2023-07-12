@@ -133,7 +133,7 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                   InkWell(
                     onTap: () {
                       if (FirebaseAuth.instance.currentUser != null) {
-                        Navigator.push(context, MaterialPageRoute(builder: (ctx) => TripLibraryScreen()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => TripLibraryScreen()));
                       } else {
                         showSnackBar(context, "Please Login First!", Colors.red);
                         Navigator.push(context, MaterialPageRoute(builder: (ctx) => SignupWithSocialMediaScreen()));
@@ -183,14 +183,15 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                                       MaterialPageRoute(
                                           builder: (context) => TripLibraryDetailsScreen(
                                                 targetState1: allData[index]['state'],
-                                                targetType1: allData[index]['tripType'],
+                                                targetType1: allData[index]['tripsport'],
                                                 docId: allData[index]['tripDocId'],
+                                                totalDay: allData[index]['daysnumber'],
                                               )))
                                   : SizedBox();
                             },
                             child: Container(
                               margin: EdgeInsets.only(top: 10, bottom: 5),
-                              height: height(context) * 0.380,
+                              height: height(context) * 0.35,
                               width: width(context) * 0.93,
                               decoration: shadowDecoration(15, 2),
                               child: Column(
@@ -198,9 +199,13 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                                 children: [
                                   Stack(
                                     children: [
-                                      ClipRRect(
-                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-                                          child: Image.network(allData[index]['tripImg'])),
+                                      SizedBox(
+                                        //height: height(context) * 0.35,
+                                        width: width(context) * 0.93,
+                                        child: ClipRRect(
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                                            child: Image.network(allData[index]['tripImg'])),
+                                      ),
                                       Positioned(
                                         top: 5,
                                         right: 40,

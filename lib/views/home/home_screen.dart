@@ -70,13 +70,15 @@ class _HomeScreenState extends State<HomeScreen> {
     USER_IS_PRIMA = UserDataMap['isPrima'] ?? false;
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await _collectionRef.get();
+    // allHomeData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    //await FirebaseFirestore.instance.collection("festivals").doc('ger54gsdrr34fg124').set(allHomeData[0]);
     // Get data from docs and convert map to List
-    allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    allHomeData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    //print(allHomeData[0][]);
     setState(() {});
-    print(allData);
   }
 
-  List allData = [];
+  List allHomeData = [];
   List allQuickData = [];
 
   List nameList = [];
@@ -398,10 +400,10 @@ class _HomeScreenState extends State<HomeScreen> {
               height: height(context) * 0.205,
               child: ListView.builder(
                   physics: BouncingScrollPhysics(),
-                  itemCount: allData.length,
+                  itemCount: allHomeData.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (ctx, i) {
-                    return i == allData.length - 1
+                    return i == allHomeData.length - 1
                         ? Stack(
                             children: [
                               Container(
@@ -417,7 +419,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         height: height(context) * 0.13,
                                         width: width(context) * 0.45,
                                         child: Image.network(
-                                          allData[1]['imageUrl'],
+                                          allHomeData[1]['imageUrl'],
                                           fit: BoxFit.fill,
                                         ),
                                       ),
@@ -431,13 +433,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  allData[1]['festivalname'],
+                                                  allHomeData[1]['festivalname'],
                                                   style: bodyText16w600(color: black),
                                                 ),
                                                 SizedBox(
                                                   width: width(context) * 0.35,
                                                   child: Text(
-                                                    allData[1]['Date'].toDate().toString(),
+                                                    allHomeData[1]['Date'].toDate().toString(),
                                                     overflow: TextOverflow.ellipsis,
                                                     style: bodyText12Small(color: black),
                                                   ),
@@ -485,7 +487,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: height(context) * 0.13,
                                     width: width(context) * 0.45,
                                     child: Image.network(
-                                      allData[i]['imageUrl'],
+                                      allHomeData[i]['imageUrl'],
                                       fit: BoxFit.fill,
                                     ),
                                   ),
@@ -498,13 +500,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              allData[i]['festivalname'],
+                                              allHomeData[i]['festivalname'],
                                               style: bodyText16w600(color: black),
                                             ),
                                             SizedBox(
                                               width: width(context) * 0.35,
                                               child: Text(
-                                                allData[i]['Date'].toDate().toString(),
+                                                allHomeData[i]['Date'].toString(),
                                                 overflow: TextOverflow.ellipsis,
                                                 style: bodyText12Small(color: black),
                                               ),
@@ -728,7 +730,7 @@ class _ProfileFeedWidgetState extends State<ProfileFeedWidget> {
     // Get data from docs and convert map to List
     allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     setState(() {});
-    print(allData);
+    log("${allData[0]}");
   }
 
   List allData = [];
@@ -784,7 +786,7 @@ class _ProfileFeedWidgetState extends State<ProfileFeedWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          allData[i]['Date'].toDate().toString(),
+                          allData[i]['Date'].toString(),
                           style: bodyText14normal(color: black),
                         ),
                         Text(

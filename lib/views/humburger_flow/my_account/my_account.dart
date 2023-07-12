@@ -95,6 +95,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
     if (FirebaseAuth.instance.currentUser != null) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       _prima = profile.data()?['isPrima'];
+      USER_IS_PRIMA = profile.data()?['isPrima'];
     }
     setState(() {});
   }
@@ -121,7 +122,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             InkWell(
               onTap: () async {
                 if (FirebaseAuth.instance.currentUser != null) {
-                  if (Name == "") {
+                  if (USER_IS_PRIMA == false) {
                     empatyprimaccout(context);
                   } else {
                     Navigator.push(context, MaterialPageRoute(builder: (ctx) => const PrimaProfileScreen()));

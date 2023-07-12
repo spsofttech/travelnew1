@@ -567,36 +567,38 @@ class PlanDetailsWidget extends StatefulWidget {
 
 class _PlanDetailsWidgetState extends State<PlanDetailsWidget> {
   getPrimaPlans() async {
-    DocumentSnapshot<Map<String, dynamic>> x = await FirebaseFirestore.instance.collection('primaPlans').doc('planDeatils').get();
+    DocumentSnapshot<Map<String, dynamic>> x = await FirebaseFirestore.instance.collection('PrimaPlans').doc('plans').get();
+    // DocumentSnapshot<Map<String, dynamic>> x = await FirebaseFirestore.instance.collection('trip_entertainment').doc('Adventure').get();
     planDetails.clear();
 
-    print(x.data()!['data']);
+    print(x.data());
 
     x.data()!.forEach((key, value) {
       planDetails.add(value);
     });
 
-    planDetails.forEach((element) {
-      print(element['no']);
-    });
-    List plans = [];
-    planDetails.forEach((element) {
-      plans.add(element);
-    });
-    print('[[[[[[[[[[[[[[[object]]]]]]]]]]]]]]]');
-    print(plans);
+    // planDetails.forEach((element) {
+    //   print(element['no']);
+    // });
+    // List plans = [];
+    // planDetails.forEach((element) {
+    //   plans.add(element);
+    //   planDetails.add(element);
+    // });
+    // print('[[[[[[[[[[[[[[[object]]]]]]]]]]]]]]]');
+    //print(plans);
 
-    planDetails.clear();
-    for (int i = 0; i < 4; i++) {
-      print(plans);
-      for (int j = 0; j <= 4; j++) {
-        print('$i $j ${plans[j]}');
-        if (plans[j]['no'] == (i + 1)) {
-          planDetails.add(plans[j]);
-          break;
-        }
-      }
-    }
+    // planDetails.clear();
+    // for (int i = 0; i < plans.length; i++) {
+    //   print(plans);
+    //   for (int j = 0; j <= plans.length; j++) {
+    //    // print('$i $j ${plans[j]}');
+    //     if (plans[j]['no'] == (i + 1)) {
+    //       planDetails.add(plans[j]);
+    //       break;
+    //     }
+    //   }
+    // }
 
     print(planDetails);
     setState(() {

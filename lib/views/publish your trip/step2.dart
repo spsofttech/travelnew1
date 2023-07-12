@@ -9,6 +9,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:travelnew_app/utils/constant.dart';
 import 'package:travelnew_app/views/publish%20your%20trip/publish_your_trip.dart';
+import 'package:travelnew_app/widget/custom_button.dart';
 import 'package:travelnew_app/widget/custom_dropdown_button.dart';
 
 import '../../model/DayWiseTripModel.dart';
@@ -106,6 +107,28 @@ class _Step2State extends State<Step2> {
     ));
   }
 
+  selectAndAddTrip(int i) {
+    selectedTouristSpot[i].value = !selectedTouristSpot[i].value;
+
+    // Call the user's CollectionReference to add a new user
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    users
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("Prima_Trip_Plan")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("tourisprot")
+        .add({
+      "TouristSportImage": cityTripData[i]['image'],
+      "TouristSportName": cityTripData[i]['name'],
+      "touristDes": cityTripData[i]['description'],
+      "address": selectedCityOfPrimaTrip,
+      "ischeck": selectedTouristSpot[i].value
+    }).then((value) {
+      // Navigator.pop(context);
+      showSimpleTost(context, txt: "Data Updated");
+    }).catchError((error) => print("Failed to add user: $error"));
+  }
+
   bool isClick = false;
   @override
   Widget build(BuildContext context) {
@@ -179,11 +202,31 @@ class _Step2State extends State<Step2> {
                               ),
                               Container(
                                 padding: EdgeInsets.only(left: 10),
-                                child: Text(
-                                  '${cityTripData[i]['name']}',
-                                  overflow: TextOverflow.ellipsis,
-                                ),
                                 width: width(context) * 0.30,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      '${cityTripData[i]['name']}',
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        selectAndAddTrip(i);
+                                      },
+                                      child: Container(
+                                        height: height(context) * 0.02,
+                                        width: width(context) * 0.15,
+                                        decoration: myFillBoxDecoration(0, primary, 10),
+                                        child: Center(
+                                          child: Text(
+                                            'Select',
+                                            style: bodyText12Small(color: black),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ],
                           ),

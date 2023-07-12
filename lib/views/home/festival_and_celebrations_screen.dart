@@ -317,7 +317,7 @@ class _FestivalsDataListState extends State<FestivalsDataList> {
                                             ),
                                             addHorizontalySpace(5),
                                             Text(
-                                              allData[index]['Date'].toDate().toString(),
+                                              allData[index]['Date'].toString(),
                                               style: TextStyle(fontWeight: FontWeight.w500, color: white),
                                             )
                                           ],

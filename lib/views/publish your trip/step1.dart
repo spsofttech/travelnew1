@@ -651,10 +651,10 @@ class _CoverPicScreenState extends State<CoverPicScreen> {
                 children: [
                   InkWell(
                     onTap: () {
-                      showSnackBar(context, "Your cover pic has been selected.", primary);
                       coverpicImage = coverImageList[i];
                       Navigator.pop(context);
-                      setState(() {});
+                      showSnackBar(context, "Your cover pic has been selected.", primary);
+                      //setState(() {});
                     },
                     child: SizedBox(
                       height: height(context) * 0.290,

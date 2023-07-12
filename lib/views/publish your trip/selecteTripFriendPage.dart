@@ -102,7 +102,9 @@ class _selectTripFriendPageState extends State<selectTripFriendPage> {
       });
     } else {
       await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("inbox").doc("request").set({
-        "data": {"id": FirebaseAuth.instance.currentUser!.uid, "image": USERIMAGE, "name": USERNAME, "status": 0}
+        "data": [
+          {"id": FirebaseAuth.instance.currentUser!.uid, "image": USERIMAGE, "name": USERNAME, "status": 0}
+        ]
       });
     }
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(

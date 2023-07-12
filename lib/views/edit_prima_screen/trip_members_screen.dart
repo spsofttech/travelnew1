@@ -17,7 +17,8 @@ import '../publish your trip/publish_your_trip.dart';
 class TripMembersTabPrimaProfile extends StatefulWidget {
   Map<String, dynamic> tripData;
   bool isHost;
-  TripMembersTabPrimaProfile({Key? key, required this.tripData, this.isHost = true}) : super(key: key);
+  bool onlyFriends;
+  TripMembersTabPrimaProfile({Key? key, required this.tripData, this.isHost = true, this.onlyFriends = false}) : super(key: key);
 
   @override
   State<TripMembersTabPrimaProfile> createState() => _TripMembersTabPrimaProfileState();
@@ -57,8 +58,8 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
     if (FirebaseAuth.instance.currentUser != null) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
-      hostname = profile.data()?['fullName'];
-      image = profile.data()?['imageUrl'];
+      hostname = profile.data()?['fullName'] ?? "";
+      image = profile.data()?['imageUrl'] ?? "";
       // print("-------List------${tripFriends.length}");
       setState(() {});
     }
@@ -185,10 +186,13 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              List tripMember = snapshot.data!.data()!['friends'];
+              String friendDocList = 'friends';
+              List tripMember = snapshot.data!.data()![friendDocList];
+              List requestMember = snapshot.data!.data()![friendDocList];
               tripMember = tripMember.where((element) => element['status'] == 1).toList();
-              List requestMember = snapshot.data!.data()!['friends'];
+
               requestMember = requestMember.where((element) => element['status'] == 0).toList();
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -209,10 +213,7 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MyTripFriendsScreen(
-                                        title: 'add New Member',
-                                        tripData: [widget.tripData],
-                                      )));
+                                  builder: (context) => MyTripFriendsScreen(title: 'add New Member', tripData: [widget.tripData], onlyFriend: true)));
                         },
                         child: Icon(
                           Icons.add_circle,

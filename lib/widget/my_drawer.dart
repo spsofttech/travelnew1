@@ -23,6 +23,7 @@ import 'package:travelnew_app/views/start/on_boarding_screen.dart';
 import 'package:travelnew_app/views/start/signup_with_social_media_screen.dart';
 
 import '../views/edit_prima_screen/prima_trip_1to4_screen.dart';
+import '../views/publish your trip/selecteTripFriendPage.dart';
 
 class MyDrawer extends StatefulWidget {
   MyDrawer({super.key});
@@ -328,8 +329,9 @@ class _MyDrawerState extends State<MyDrawer> {
                       padding: EdgeInsets.only(left: width(context) * 0.195, top: 8),
                       child: InkWell(
                         onTap: () {
-                          if (Name == "") {
+                          if (USER_IS_PRIMA == false) {
                             if (FirebaseAuth.instance.currentUser != null) {
+                              printc("txt");
                               empatyprimaccout(context);
                             } else {
                               empatyprimaccout(context);
@@ -361,7 +363,7 @@ class _MyDrawerState extends State<MyDrawer> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MyTripFriendsScreen(
+                                    builder: (context) => selectTripFriendPage(
                                           title: 'Friends in vicinity',
                                         )));
                           } else {
