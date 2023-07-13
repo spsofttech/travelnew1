@@ -297,9 +297,7 @@ class _InboxScreenState extends State<InboxScreen> with TickerProviderStateMixin
     DocumentSnapshot<Map<String, dynamic>> doc2 =
         await FirebaseFirestore.instance.collection('users').doc(addMap['id']).collection("friends").doc("data").get();
     bool docExist2 = doc2.exists;
-    DocumentSnapshot<Map<String, dynamic>> doc3 =
-        await FirebaseFirestore.instance.collection('users').doc(addMap['id']).collection("Prima_Trip_Plan").doc(addMap['id']).get();
-    bool docExist3 = doc3.exists;
+
     //String docExistString = await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("inbox").doc("request").id;
 
     //print("${{"frdId": friendUid, "userid": FirebaseAuth.instance.currentUser!.uid, "image": friendImg, "name": name, "status": 0}}");
@@ -316,13 +314,33 @@ class _InboxScreenState extends State<InboxScreen> with TickerProviderStateMixin
 
     if (docExist2) {
       await FirebaseFirestore.instance.collection('users').doc(addMap['id']).collection("friends").doc("data").update({
-        "data": FieldValue.arrayUnion([addMap])
+        "data": FieldValue.arrayUnion([
+          {'id': FirebaseAuth.instance.currentUser!.uid, 'image': USERIMAGE, 'name': USERNAME, 'status': 1}
+        ])
       });
     } else {
       await FirebaseFirestore.instance.collection('users').doc(addMap['id']).collection("friends").doc("data").set({
-        "data": FieldValue.arrayUnion([addMap])
+        "data": FieldValue.arrayUnion([
+          {'id': FirebaseAuth.instance.currentUser!.uid, 'image': USERIMAGE, 'name': USERNAME, 'status': 1}
+        ])
       });
     }
+
+    rejectFriendRequest(addMap, false);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        "Now You are Friends",
+        style: TextStyle(color: white),
+      ),
+      backgroundColor: primary,
+      duration: Duration(seconds: 3),
+    ));
+  }
+
+  addFriendAsTripFriend(addMap) async {
+    DocumentSnapshot<Map<String, dynamic>> doc3 =
+        await FirebaseFirestore.instance.collection('users').doc(addMap['id']).collection("Prima_Trip_Plan").doc(addMap['id']).get();
+    bool docExist3 = doc3.exists;
 
     await FirebaseFirestore.instance.collection('users').doc(addMap['id']).collection("Prima_Trip_Plan").doc(addMap['id']).update({
       "friends": FieldValue.arrayRemove([
@@ -335,15 +353,5 @@ class _InboxScreenState extends State<InboxScreen> with TickerProviderStateMixin
         {'id': FirebaseAuth.instance.currentUser!.uid, 'image': USERIMAGE, 'name': USERNAME, 'status': 1, 'host': addMap['host']}
       ])
     });
-
-    rejectFriendRequest(addMap, false);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        "Now You are Friends",
-        style: TextStyle(color: white),
-      ),
-      backgroundColor: primary,
-      duration: Duration(seconds: 3),
-    ));
   }
 }

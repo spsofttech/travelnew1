@@ -140,23 +140,24 @@ class _MyTripFriendsScreenState extends State<MyTripFriendsScreen> {
 
     //print("${{"frdId": friendUid, "userid": FirebaseAuth.instance.currentUser!.uid, "image": friendImg, "name": name, "status": 0}}");
     print(docExist);
-    if (docExist) {
-      await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("inbox").doc("request").update({
-        "data": FieldValue.arrayUnion([
-          {"id": FirebaseAuth.instance.currentUser!.uid, 'host': FirebaseAuth.instance.currentUser!.uid, "image": USERIMAGE, "name": USERNAME, "status": 0}
-        ])
-      });
-    } else {
-      await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("inbox").doc("request").set({
-        "data": {
-          "id": FirebaseAuth.instance.currentUser!.uid,
-          'host': FirebaseAuth.instance.currentUser!.uid,
-          "image": USERIMAGE,
-          "name": USERNAME,
-          "status": 0
-        }
-      });
-    }
+
+    // if (docExist) {
+    //   await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("inbox").doc("request").update({
+    //     "data": FieldValue.arrayUnion([
+    //       {"id": FirebaseAuth.instance.currentUser!.uid, 'host': FirebaseAuth.instance.currentUser!.uid, "image": USERIMAGE, "name": USERNAME, "status": 0}
+    //     ])
+    //   });
+    // } else {
+    //   await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("inbox").doc("request").set({
+    //     "data": {
+    //       "id": FirebaseAuth.instance.currentUser!.uid,
+    //       'host': FirebaseAuth.instance.currentUser!.uid,
+    //       "image": USERIMAGE,
+    //       "name": USERNAME,
+    //       "status": 0
+    //     }
+    //   });
+    // }
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         "Friend Request Sent",
@@ -170,12 +171,19 @@ class _MyTripFriendsScreenState extends State<MyTripFriendsScreen> {
   Future rendTripRequest({required Map<String, dynamic> tripData, required String friendUid}) async {
     //---------------------------------------------- Send Trip Request ---------------------------------
 
+    dev.log("-----------${tripData}");
     DocumentSnapshot doc4 = await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("trip library").doc("invite").get();
     bool docExist4 = doc4.exists;
 
     if (docExist4) {
-      await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("trip library").doc("invite").update(tripData);
-    } else {}
+      await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("trip library").doc("invite").update({
+        "data": FieldValue.arrayUnion([tripData])
+      });
+    } else {
+      await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("trip library").doc("invite").set({
+        'data': [tripData]
+      });
+    }
   }
   //
   // Future<bool>? checkIfDocExists(String docId) async {
@@ -212,7 +220,7 @@ class _MyTripFriendsScreenState extends State<MyTripFriendsScreen> {
     title = widget.title;
 
     isFIV = title == 'Friends in vicinity' ? true : false;
-    getTripFriend();
+    //getTripFriend();
     super.initState();
   }
 
@@ -238,157 +246,170 @@ class _MyTripFriendsScreenState extends State<MyTripFriendsScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(children: [
-          Container(
-            height: 48,
-            margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            decoration:
-                BoxDecoration(color: white.withOpacity(0.7), borderRadius: BorderRadius.all(Radius.circular(50)), border: Border.all(color: primary)),
-            child: TextField(
-              controller: searchFriendController,
-              cursorColor: black,
-              onChanged: (txt) {
-                setState(() {});
-              },
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search, color: primary),
-                border: InputBorder.none,
-                // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(50)), borderSide: BorderSide(color: primary)),
-                // focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(50)), borderSide: BorderSide(color: primary))
-              ),
-            ),
-          ),
-          Container(
-              margin: const EdgeInsets.all(8),
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-              //height: height(context) * 0.95,
-              decoration: shadowDecoration(10, 1),
-              child: ListView.builder(
-                  itemCount: listo.length,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (ctx, i) {
-                    return listo[i]['fullName'].toString().toLowerCase().contains(searchFriendController.text.toLowerCase()) ||
-                            searchFriendController.text.isEmpty
-                        ? Column(
-                            children: [
-                              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                listo[i]['profileImg'] == null
-                                    ? const CircleAvatar(
-                                        backgroundImage: AssetImage('assets/images/nearbyfestivals.png'),
-                                        radius: 30,
-                                      )
-                                    : CircleAvatar(
-                                        backgroundImage: NetworkImage(listo[i]['profileImg']),
-                                        radius: 30,
-                                      ),
-                                addHorizontalySpace(10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: FutureBuilder(
+          future: getTripFriend(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Column(children: [
+                // Container(
+                //   height: 48,
+                //   margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                //   decoration: BoxDecoration(
+                //       color: white.withOpacity(0.7), borderRadius: BorderRadius.all(Radius.circular(50)), border: Border.all(color: primary)),
+                //   child: TextField(
+                //     controller: searchFriendController,
+                //     cursorColor: black,
+                //     onChanged: (txt) {
+                //       setState(() {});
+                //     },
+                //     decoration: InputDecoration(
+                //       prefixIcon: Icon(Icons.search, color: primary),
+                //       border: InputBorder.none,
+                //       // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(50)), borderSide: BorderSide(color: primary)),
+                //       // focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(50)), borderSide: BorderSide(color: primary))
+                //     ),
+                //   ),
+                // ),
+                Container(
+                    margin: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                    //height: height(context) * 0.95,
+                    decoration: shadowDecoration(10, 1),
+                    child: ListView.builder(
+                        itemCount: listo.length,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (ctx, i) {
+                          return listo[i]['name'].toString().toLowerCase().contains(searchFriendController.text.toLowerCase()) ||
+                                  searchFriendController.text.isEmpty
+                              ? Column(
                                   children: [
-                                    SizedBox(
-                                      width: width(context) * 0.5,
-                                      child: Text(
-                                        listo[i]['fullName'] ?? '',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: bodyText18w600(color: black),
-                                      ),
-                                    ),
-                                    addVerticalSpace(3),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.bar_chart_outlined,
-                                          size: 20,
-                                          color: primary,
-                                        ),
-                                        addHorizontalySpace(1),
-                                        Text(
-                                          'Tripometer',
-                                          style: bodyText12Small(color: black),
-                                        )
-                                      ],
-                                    ),
-                                    addVerticalSpace(4),
-                                    listo[i]['profession'] != null && listo[i]['profession'] != ""
-                                        ? Row(
-                                            children: [
-                                              Image.asset(
-                                                'assets/images/Vector (1).png',
-                                                color: primary,
-                                              ),
-                                              addHorizontalySpace(1),
-                                              Text(
-                                                listo[i]['profession'] ?? '',
-                                                style: bodyText12Small(color: black),
-                                              )
-                                            ],
-                                          )
-                                        : SizedBox(),
-                                    addVerticalSpace(4),
-                                    listo[i]['locality'] != null && listo[i]['locality'] != ""
-                                        ? Row(
+                                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                      listo[i]['image'] == ''
+                                          ? const CircleAvatar(
+                                              backgroundImage: AssetImage('assets/images/nearbyfestivals.png'),
+                                              radius: 30,
+                                            )
+                                          : CircleAvatar(
+                                              backgroundImage: NetworkImage(listo[i]['image']),
+                                              radius: 30,
+                                            ),
+                                      addHorizontalySpace(10),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: width(context) * 0.5,
+                                            child: Text(
+                                              listo[i]['name'] ?? '',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: bodyText18w600(color: black),
+                                            ),
+                                          ),
+                                          addVerticalSpace(3),
+                                          Row(
                                             children: [
                                               Icon(
-                                                Icons.location_on,
+                                                Icons.bar_chart_outlined,
+                                                size: 20,
                                                 color: primary,
                                               ),
                                               addHorizontalySpace(1),
                                               Text(
-                                                listo[i]['locality'],
+                                                'Tripometer',
                                                 style: bodyText12Small(color: black),
                                               )
                                             ],
-                                          )
-                                        : SizedBox(),
-                                  ],
-                                ),
-                                const Spacer(),
-                                PopupMenuButton<int>(
-                                  onSelected: (val) {
-                                    dev.log("${val}");
+                                          ),
+                                          addVerticalSpace(4),
+                                          listo[i]['profession'] != null && listo[i]['profession'] != ""
+                                              ? Row(
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/images/Vector (1).png',
+                                                      color: primary,
+                                                    ),
+                                                    addHorizontalySpace(1),
+                                                    Text(
+                                                      listo[i]['profession'] ?? '',
+                                                      style: bodyText12Small(color: black),
+                                                    )
+                                                  ],
+                                                )
+                                              : SizedBox(),
+                                          addVerticalSpace(4),
+                                          listo[i]['locality'] != null && listo[i]['locality'] != ""
+                                              ? Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.location_on,
+                                                      color: primary,
+                                                    ),
+                                                    addHorizontalySpace(1),
+                                                    Text(
+                                                      listo[i]['locality'],
+                                                      style: bodyText12Small(color: black),
+                                                    )
+                                                  ],
+                                                )
+                                              : SizedBox(),
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      PopupMenuButton<int>(
+                                        onSelected: (val) {
+                                          dev.log("${val}");
 
-                                    if (val == 2) {
-                                      print("object");
-                                    }
-                                  },
-                                  itemBuilder: (context) => [
-                                    const PopupMenuItem(
-                                      value: 1,
-                                      child: Text("Send a message"),
-                                    ),
-                                    PopupMenuItem(
-                                      onTap: () async {
-                                        print("-----");
-                                        await send_friendRequset(
-                                            friendUid: listo[i]['UID'], image: listo[i]['image'] ?? "", name: listo[i]['fullName'] ?? "");
-                                        if (widget.tripData.length != 0) await rendTripRequest(tripData: widget.tripData[0], friendUid: listo[i]['UID']);
-                                      },
-                                      value: 2,
-                                      child: Text('Add trip friend'),
-                                    ),
-                                    PopupMenuItem(
-                                      value: 3,
-                                      child: InkWell(
-                                          onTap: () {
-                                            Navigator.push(context, MaterialPageRoute(builder: (ctx) => ReportIncorrectUserScreen()));
-                                          },
-                                          child: Text("Report incorrect")),
-                                    ),
+                                          if (val == 2) {
+                                            print("object");
+                                          }
+                                        },
+                                        itemBuilder: (context) => [
+                                          const PopupMenuItem(
+                                            value: 1,
+                                            child: Text("Send a message"),
+                                          ),
+                                          PopupMenuItem(
+                                            onTap: () async {
+                                              await send_friendRequset(
+                                                  friendUid: listo[i]['id'], image: listo[i]['image'] ?? "", name: listo[i]['name'] ?? "");
+
+                                              print("-----");
+                                              if (widget.tripData.length != 0)
+                                                await rendTripRequest(tripData: widget.tripData[0], friendUid: listo[i]['id']);
+                                            },
+                                            value: 2,
+                                            child: Text('Add trip friend'),
+                                          ),
+                                          PopupMenuItem(
+                                            value: 3,
+                                            child: InkWell(
+                                                onTap: () {
+                                                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => ReportIncorrectUserScreen()));
+                                                },
+                                                child: Text("Report incorrect")),
+                                          ),
+                                        ],
+                                        color: white,
+                                        elevation: 2,
+                                      ),
+                                    ]),
+                                    const Divider(
+                                      height: 30,
+                                      thickness: 1,
+                                    )
                                   ],
-                                  color: white,
-                                  elevation: 2,
-                                ),
-                              ]),
-                              const Divider(
-                                height: 30,
-                                thickness: 1,
-                              )
-                            ],
-                          )
-                        : SizedBox();
-                  }))
-        ]),
+                                )
+                              : SizedBox();
+                        }))
+              ]);
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
       ),
     );
   }
@@ -580,12 +601,7 @@ class _MyTripFriendsScreenState extends State<MyTripFriendsScreen> {
     //     .snapshots()
     //     :
 
-    var x = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('friends')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
+    var x = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('friends').doc('data').get();
     // List tfUIDs = x.data()!['tripFriends'] ?? [];
     List _allUsers = [];
     _allUsers = x.data()!['data'];
@@ -599,10 +615,9 @@ class _MyTripFriendsScreenState extends State<MyTripFriendsScreen> {
     //     }
     //   }
     // }
-    setState(() {
-      listo = _allUsers;
-      // print(_allUsers);
-    });
+
+    listo = _allUsers;
+    // print(_allUsers);
   }
 }
 

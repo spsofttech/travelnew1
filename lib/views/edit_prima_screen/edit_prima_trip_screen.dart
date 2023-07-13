@@ -22,14 +22,14 @@ class _EditPrimaTripScreenState extends State<EditPrimaTripScreen> {
   // final TextEditingController startDate = TextEditingController();
   // final TextEditingController endDate = TextEditingController();
 
-  List imgList1 = [
-    'assets/images/tp1.png',
-    'assets/images/tp2.png',
-    'assets/images/tp3.png',
-    'assets/images/tp1.png',
-    'assets/images/tp2.png',
-    'assets/images/tp3.png'
-  ];
+  // List imgList1 = [
+  //   'assets/images/tp1.png',
+  //   'assets/images/tp2.png',
+  //   'assets/images/tp3.png',
+  //   'assets/images/tp1.png',
+  //   'assets/images/tp2.png',
+  //   'assets/images/tp3.png'
+  // ];
   final TextEditingController TripNameController = TextEditingController();
   final TextEditingController aboutTripController = TextEditingController();
   final TextEditingController StarDateController = TextEditingController();
@@ -62,9 +62,11 @@ class _EditPrimaTripScreenState extends State<EditPrimaTripScreen> {
   String MaxMembervalue = "Select";
   String spendvalue = "Select";
   String _string3 = "Bus";
+  String userCity = "";
   int tripTotalDays = 0;
   var firstDate;
   var secondDate;
+
   void getdata() async {
     if (FirebaseAuth.instance.currentUser != null) {
       var profile = await FirebaseFirestore.instance
@@ -79,6 +81,7 @@ class _EditPrimaTripScreenState extends State<EditPrimaTripScreen> {
       EndDateController.text = profile.data()?['End_date'];
       tripTotalDays = profile.data()?['totalDays'];
       tripImage = profile.data()?['Cover_Pic'];
+      userCity = profile.data()?['where_to'];
     }
     setState(() {});
   }
@@ -86,19 +89,20 @@ class _EditPrimaTripScreenState extends State<EditPrimaTripScreen> {
   String tripImage = "";
   List image = [];
   List touristSportName = [];
-  void getImageData() async {
-    if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance.collection('tripstate').doc('karnataka').collection('tripcity').doc('Bengaluru').get();
-      image = profile.data()?['TouristSportImage'];
-      touristSportName = profile.data()?['TouristSport'];
-    }
-    setState(() {});
-  }
+
+  // void getImageData() async {
+  //   if (FirebaseAuth.instance.currentUser != null) {
+  //     var profile = await FirebaseFirestore.instance.collection('tripstate').doc('karnataka').collection('tripcity').doc('Bengaluru').get();
+  //     image = profile.data()?['TouristSportImage'];
+  //     touristSportName = profile.data()?['TouristSport'];
+  //   }
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
     getdata();
-    getImageData();
+    // getImageData();
     super.initState();
   }
 
@@ -665,7 +669,19 @@ class _EditPrimaTripScreenState extends State<EditPrimaTripScreen> {
                           name: 'Save trip',
                           onPressed: () {
                             updatePrimaTripDetails();
-                            Navigator.push(context, MaterialPageRoute(builder: (ctx) => PrimaTrip1To4Screens()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (ctx) => PrimaTrip1To4Screens(
+                                          isHost: true,
+                                          hostUid: FirebaseAuth.instance.currentUser!.uid,
+                                          tripData: {
+                                            'host': FirebaseAuth.instance.currentUser!.uid,
+                                            'addres': userCity,
+                                            'tripImage': '${tripImage}',
+                                            'tripName': TripNameController.text,
+                                          },
+                                        )));
                           }),
                     ),
                   ),

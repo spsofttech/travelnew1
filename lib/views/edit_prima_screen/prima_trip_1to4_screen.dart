@@ -19,7 +19,13 @@ import '../humburger_flow/my_account/my_trip_friends.dart';
 import '../humburger_flow/my_account/report_incorrect_user_screen.dart';
 
 class PrimaTrip1To4Screens extends StatefulWidget {
-  const PrimaTrip1To4Screens({super.key});
+  final bool isHost;
+  final bool showRequestTo_Join;
+  final bool otherUser;
+  final Map<String, dynamic> tripData;
+  final String hostUid;
+  const PrimaTrip1To4Screens(
+      {super.key, this.isHost = true, this.showRequestTo_Join = false, this.otherUser = false, this.tripData = const {}, required this.hostUid});
 
   @override
   State<PrimaTrip1To4Screens> createState() => _PrimaTrip1To4ScreensState();
@@ -70,13 +76,22 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
 
   void getdata() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("Prima_Trip_Plan")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get();
-
+      var profile;
+      if (widget.isHost) {
+        profile = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection("Prima_Trip_Plan")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .get();
+      } else {
+        profile = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.tripData['host'])
+            .collection("Prima_Trip_Plan")
+            .doc(widget.tripData['host'])
+            .get();
+      }
       tripName = profile.data()?['Specify_trip_name'];
       tripAddress = profile.data()?['where_to'];
       aboutTrip = profile.data()?['Include in trip'];
@@ -198,37 +213,39 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
                         //       Icons.edit,
                         //       color: white,
                         //     ))
-                        PopupMenuButton(
-                            // add icon, by default "3 dot" icon,
-                            iconSize: 32,
-                            icon: Icon(Icons.more_vert_outlined, color: primary),
-                            color: Colors.white,
-                            itemBuilder: (context) {
-                              return [
-                                PopupMenuItem<int>(
-                                  value: 0,
-                                  child: Edit(),
-                                ),
-                                PopupMenuItem<int>(
-                                  value: 1,
-                                  child: Delete(),
-                                ),
-                                PopupMenuItem<int>(
-                                  value: 2,
-                                  child: OtherHost(),
-                                ),
-                              ];
-                            },
-                            onSelected: (value) {
-                              if (value == 0) {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditPrimaTripScreen()));
-                              } else if (value == 1) {
-                                deletetrip();
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => MyBottomBar()));
-                              } else if (value == 2) {
-                                hostDialog(context);
-                              }
-                            })
+                        widget.isHost
+                            ? PopupMenuButton(
+                                // add icon, by default "3 dot" icon,
+                                iconSize: 32,
+                                icon: Icon(Icons.more_vert_outlined, color: primary),
+                                color: Colors.white,
+                                itemBuilder: (context) {
+                                  return [
+                                    PopupMenuItem<int>(
+                                      value: 0,
+                                      child: Edit(),
+                                    ),
+                                    PopupMenuItem<int>(
+                                      value: 1,
+                                      child: Delete(),
+                                    ),
+                                    PopupMenuItem<int>(
+                                      value: 2,
+                                      child: OtherHost(),
+                                    ),
+                                  ];
+                                },
+                                onSelected: (value) {
+                                  if (value == 0) {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditPrimaTripScreen()));
+                                  } else if (value == 1) {
+                                    deletetrip();
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyBottomBar()));
+                                  } else if (value == 2) {
+                                    hostDialog(context);
+                                  }
+                                })
+                            : SizedBox()
                       ],
                     ),
                     addVerticalSpace(height(context) * 0.15),
@@ -319,14 +336,20 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
                       );
                     })),
             if (selectIndex == 0)
-              TripMembersTabPrimaProfile(tripData: {
-                'tripImage': tripImage,
-                'host': USER_UID,
-                'tripName': tripName,
-                'addres': tripAddress,
-              }, isHost: true, onlyFriends: true),
-            if (selectIndex == 1) PlaceVisitingScreen(),
-            if (selectIndex == 2) EntertainmentTab(hostId: USER_UID),
+              TripMembersTabPrimaProfile(
+                  hostUid: widget.hostUid,
+                  tripData: {
+                    'tripImage': tripImage,
+                    'host': FirebaseAuth.instance.currentUser!.uid,
+                    'tripName': tripName,
+                    'addres': tripAddress,
+                  },
+                  isHost: widget.isHost),
+            if (selectIndex == 1)
+              PlaceVisitingScreen(
+                hostUid: widget.hostUid,
+              ),
+            if (selectIndex == 2) EntertainmentTab(hostId: widget.hostUid),
             if (selectIndex == 3) const WhatToBringTab(),
           ],
         ),

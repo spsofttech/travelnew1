@@ -619,7 +619,13 @@ class _PublishYourTripScreenState extends State<PublishYourTripScreen> {
                           addHorizontalySpace(50),
                           InkWell(
                             onTap: () async {
-                              Navigator.push(context, MaterialPageRoute(builder: (ctx) => PrimaTrip1To4Screens()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (ctx) => PrimaTrip1To4Screens(
+                                            hostUid: FirebaseAuth.instance.currentUser!.uid,
+                                            isHost: true,
+                                          )));
                             },
                             child: Container(
                               height: 40,

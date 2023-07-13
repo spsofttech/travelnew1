@@ -8,6 +8,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -304,20 +306,22 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                     sharedPreferences.remove('email');
                     await FirebaseAuth.instance.signOut();
                     print('l1');
-                    final _googleSignIn = GoogleSignIn();
-
-                    final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
-
-                    print('l2');
-                    await googleSignInAccount!.clearAuthCache();
-                    print('l3');
+                    // final _googleSignIn = GoogleSignIn();
+                    //
+                    // final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
+                    //
+                    // print('l2');
+                    // await googleSignInAccount!.clearAuthCache();
+                    // print('l3');
 
                     // Navigator.push(context, MaterialPageRoute(builder: ((context) => SignupWithSocialMediaScreen())));
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: ((context) => SignupWithSocialMediaScreen())),
-                      (route) => false,
-                    );
+
+                    // Navigator.pushAndRemoveUntil(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => SignupWithSocialMediaScreen()),
+                    //   (route) => false,
+                    // );
+                    Get.offAll(() => SignupWithSocialMediaScreen());
                   }
                 }
               },

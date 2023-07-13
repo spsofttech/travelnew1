@@ -331,7 +331,6 @@ class _MyDrawerState extends State<MyDrawer> {
                         onTap: () {
                           if (USER_IS_PRIMA == false) {
                             if (FirebaseAuth.instance.currentUser != null) {
-                              printc("txt");
                               empatyprimaccout(context);
                             } else {
                               empatyprimaccout(context);
@@ -341,7 +340,13 @@ class _MyDrawerState extends State<MyDrawer> {
                           } else if (uid == "") {
                             Navigator.push(context, MaterialPageRoute(builder: (ctx) => PublishYourTripScreen()));
                           } else {
-                            Navigator.push(context, MaterialPageRoute(builder: (ctx) => PrimaTrip1To4Screens()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (ctx) => PrimaTrip1To4Screens(
+                                          isHost: true,
+                                          hostUid: FirebaseAuth.instance.currentUser!.uid,
+                                        )));
                           }
                         },
                         child: Row(
