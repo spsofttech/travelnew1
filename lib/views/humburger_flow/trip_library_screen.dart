@@ -33,12 +33,12 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
 
   @override
   void initState() {
-    getDummyTrip01();
-    getDummyTrip02();
-    getDummyTrip03();
-    getdata1();
+    // getDummyTrip01();
+    // getDummyTrip02();
+    // getDummyTrip03();
+    // getdata1();
     //getdata2();
-    getdata3();
+    //getdata3();
     _tabController = TabController(length: 3, vsync: this);
     super.initState();
   }
@@ -141,18 +141,18 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
   String _cartime3 = "";
   String _traintime3 = "";
 
-  void getdata3() async {
-    if (FirebaseAuth.instance.currentUser != null) {
-      var tirp1 = await FirebaseFirestore.instance.collection('dummyTrips').doc('fLNR63XQmrUNW9ng5yQ2').get();
-      _image3 = tirp1.data()?['image'];
-      _location3 = tirp1.data()?['location'];
-      _subtitle3 = tirp1.data()?['subtitle'];
-      _title3 = tirp1.data()?['title'];
-      _cartime3 = tirp1.data()?['carTime'];
-      _traintime3 = tirp1.data()?['trainTime'];
-    }
-    setState(() {});
-  }
+  // void getdata3() async {
+  //   if (FirebaseAuth.instance.currentUser != null) {
+  //     var tirp1 = await FirebaseFirestore.instance.collection('dummyTrips').doc('fLNR63XQmrUNW9ng5yQ2').get();
+  //     _image3 = tirp1.data()?['image'];
+  //     _location3 = tirp1.data()?['location'];
+  //     _subtitle3 = tirp1.data()?['subtitle'];
+  //     _title3 = tirp1.data()?['title'];
+  //     _cartime3 = tirp1.data()?['carTime'];
+  //     _traintime3 = tirp1.data()?['trainTime'];
+  //   }
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -460,6 +460,7 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
                                                       isHost: ReuestTripData[index]['host'] == FirebaseAuth.instance.currentUser!.uid,
                                                       hostUid: ReuestTripData[index]['host'],
                                                       tripData: ReuestTripData[index],
+                                                      showRequestTo_Join: "Accept Request",
                                                     )));
                                       },
                                       child: Container(
@@ -672,6 +673,7 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
                                                           isHost: ReuestTripData[index]['host'] == FirebaseAuth.instance.currentUser!.uid,
                                                           tripData: ReuestTripData[index],
                                                           hostUid: ReuestTripData[index]['host'],
+                                                          showRequestTo_Join: "Request To Join",
                                                         )));
                                           },
                                           child: Container(

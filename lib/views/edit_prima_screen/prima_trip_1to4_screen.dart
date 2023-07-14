@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +22,12 @@ import '../humburger_flow/my_account/report_incorrect_user_screen.dart';
 
 class PrimaTrip1To4Screens extends StatefulWidget {
   final bool isHost;
-  final bool showRequestTo_Join;
+  final String showRequestTo_Join;
   final bool otherUser;
   final Map<String, dynamic> tripData;
   final String hostUid;
   const PrimaTrip1To4Screens(
-      {super.key, this.isHost = true, this.showRequestTo_Join = false, this.otherUser = false, this.tripData = const {}, required this.hostUid});
+      {super.key, this.isHost = true, this.showRequestTo_Join = "", this.otherUser = false, this.tripData = const {}, required this.hostUid});
 
   @override
   State<PrimaTrip1To4Screens> createState() => _PrimaTrip1To4ScreensState();
@@ -116,6 +118,38 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
     }
   }
 
+  addFriendAsTripFriend() async {
+    // DocumentSnapshot<Map<String, dynamic>> doc3 =
+    //     await FirebaseFirestore.instance.collection('users').doc(addMap['id']).collection("Prima_Trip_Plan").doc(addMap['id']).get();
+    // bool docExist3 = doc3.exists;
+
+    await FirebaseFirestore.instance.collection('users').doc(widget.hostUid).collection("Prima_Trip_Plan").doc(widget.hostUid).update({
+      "friends": FieldValue.arrayRemove([
+        {'id': FirebaseAuth.instance.currentUser!.uid, 'image': USERIMAGE, 'name': USERNAME, 'status': 0, 'host': widget.hostUid}
+      ])
+    });
+
+    await FirebaseFirestore.instance.collection('users').doc(widget.hostUid).collection("Prima_Trip_Plan").doc(widget.hostUid).update({
+      "friends": FieldValue.arrayUnion([
+        {'id': FirebaseAuth.instance.currentUser!.uid, 'image': USERIMAGE, 'name': USERNAME, 'status': 1, 'host': widget.hostUid}
+      ])
+    });
+
+    showSimpleTost(context, txt: "Now You RAe Trip Freinds");
+  }
+
+  removeTripFromTripLibraryFriendSide() async {
+    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("trip library").doc('invite').update({
+      "data": FieldValue.arrayRemove([widget.tripData])
+    });
+
+    // await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("trip library").doc('invite').update({
+    //   "data": FieldValue.arrayUnion([
+    //     {'id': FirebaseAuth.instance.currentUser!.uid, 'image': USERIMAGE, 'name': USERNAME, 'status': 1, 'host': widget.hostUid}
+    //   ])
+    // });
+  }
+
   Widget Edit() {
     return Text.rich(TextSpan(children: [
       WidgetSpan(
@@ -172,187 +206,207 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: height(context) * 0.32,
-              width: double.infinity,
-              decoration: tripImage == ""
-                  ? BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/images/editprima2.png')))
-                  : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(tripImage))),
-              child: SafeArea(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: height(context) * 0.32,
+                  width: double.infinity,
+                  decoration: tripImage == ""
+                      ? BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/images/editprima2.png')))
+                      : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(tripImage))),
+                  child: SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: Icon(
-                              Icons.arrow_back_ios,
-                              color: white,
-                            )),
-                        const Spacer(),
-                        // Image.asset('assets/images/arrowforward.png',
-                        //     color: white),
-                        // addHorizontalySpace(15),
-                        // Image.asset('assets/images/msg.png', color: white),
-                        // IconButton(
-                        //     onPressed: () {
-                        //       Navigator.push(
-                        //           context,
-                        //           MaterialPageRoute(
-                        //               builder: (ctx) =>
-                        //                   const EditPrimaTripScreen()));
-                        //     },
-                        //     icon: Icon(
-                        //       Icons.edit,
-                        //       color: white,
-                        //     ))
-                        widget.isHost
-                            ? PopupMenuButton(
-                                // add icon, by default "3 dot" icon,
-                                iconSize: 32,
-                                icon: Icon(Icons.more_vert_outlined, color: primary),
-                                color: Colors.white,
-                                itemBuilder: (context) {
-                                  return [
-                                    PopupMenuItem<int>(
-                                      value: 0,
-                                      child: Edit(),
-                                    ),
-                                    PopupMenuItem<int>(
-                                      value: 1,
-                                      child: Delete(),
-                                    ),
-                                    PopupMenuItem<int>(
-                                      value: 2,
-                                      child: OtherHost(),
-                                    ),
-                                  ];
+                        Row(
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
                                 },
-                                onSelected: (value) {
-                                  if (value == 0) {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditPrimaTripScreen()));
-                                  } else if (value == 1) {
-                                    deletetrip();
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyBottomBar()));
-                                  } else if (value == 2) {
-                                    hostDialog(context);
-                                  }
-                                })
-                            : SizedBox()
-                      ],
-                    ),
-                    addVerticalSpace(height(context) * 0.15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 20, bottom: 20),
-                          height: 25,
-                          width: width(context) * 0.4,
-                          decoration: myFillBoxDecoration(0, primary, 50),
-                          child: Center(
-                            child: Text('$endDate'),
-                          ),
+                                icon: Icon(
+                                  Icons.arrow_back_ios,
+                                  color: white,
+                                )),
+                            const Spacer(),
+                            // Image.asset('assets/images/arrowforward.png',
+                            //     color: white),
+                            // addHorizontalySpace(15),
+                            // Image.asset('assets/images/msg.png', color: white),
+                            // IconButton(
+                            //     onPressed: () {
+                            //       Navigator.push(
+                            //           context,
+                            //           MaterialPageRoute(
+                            //               builder: (ctx) =>
+                            //                   const EditPrimaTripScreen()));
+                            //     },
+                            //     icon: Icon(
+                            //       Icons.edit,
+                            //       color: white,
+                            //     ))
+                            widget.isHost
+                                ? PopupMenuButton(
+                                    // add icon, by default "3 dot" icon,
+                                    iconSize: 32,
+                                    icon: Icon(Icons.more_vert_outlined, color: primary),
+                                    color: Colors.white,
+                                    itemBuilder: (context) {
+                                      return [
+                                        PopupMenuItem<int>(
+                                          value: 0,
+                                          child: Edit(),
+                                        ),
+                                        PopupMenuItem<int>(
+                                          value: 1,
+                                          child: Delete(),
+                                        ),
+                                        PopupMenuItem<int>(
+                                          value: 2,
+                                          child: OtherHost(),
+                                        ),
+                                      ];
+                                    },
+                                    onSelected: (value) {
+                                      if (value == 0) {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditPrimaTripScreen()));
+                                      } else if (value == 1) {
+                                        deletetrip();
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyBottomBar()));
+                                      } else if (value == 2) {
+                                        hostDialog(context);
+                                      }
+                                    })
+                                : SizedBox()
+                          ],
                         ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '$tripName',
-                    style: bodyText30W600(color: black),
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        color: primary,
-                      ),
-                      Text(
-                        '$tripAddress',
-                        style: bodyText16normal(color: black),
-                      )
-                    ],
-                  ),
-                  addVerticalSpace(10),
-                  DescriptionTextWidget(text: aboutTrip),
-                  RichText(
-                      text: TextSpan(children: [
-                    TextSpan(text: '$aboutTrip', style: TextStyle(fontSize: 16, height: 1.4, color: black)),
-                    // TextSpan(
-                    //     text: ' more',
-                    //     style: TextStyle(
-                    //         decoration: TextDecoration.underline,
-                    //         fontSize: 16,
-                    //         color: primary,
-                    //         fontWeight: FontWeight.w600))
-                  ])),
-                ],
-              ),
-            ),
-            SizedBox(
-                height: height(context) * 0.08,
-                child: ListView.builder(
-                    itemCount: mainIconTabbar.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (ctx, i) {
-                      return Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              selectIndex = i;
-                              setState(() {});
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.all(12),
-                              height: height(context) * 0.05,
-                              width: selectIndex == i ? width(context) * 0.35 : width(context) * 0.13,
-                              decoration: selectIndex == i ? myFillBoxDecoration(0, primary, 10) : shadowDecoration(10, 2),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  mainIconTabbar[i]['icon'],
-                                  addHorizontalySpace(5),
-                                  selectIndex == i ? Text(mainIconTabbar[i]['name']) : const SizedBox()
-                                ],
+                        addVerticalSpace(height(context) * 0.15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(right: 20, bottom: 20),
+                              height: 25,
+                              width: width(context) * 0.4,
+                              decoration: myFillBoxDecoration(0, primary, 50),
+                              child: Center(
+                                child: Text('$endDate'),
                               ),
                             ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$tripName',
+                        style: bodyText30W600(color: black),
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            color: primary,
                           ),
+                          Text(
+                            '$tripAddress',
+                            style: bodyText16normal(color: black),
+                          )
                         ],
-                      );
-                    })),
-            if (selectIndex == 0)
-              TripMembersTabPrimaProfile(
-                  hostUid: widget.hostUid,
-                  tripData: {
-                    'tripImage': tripImage,
-                    'host': FirebaseAuth.instance.currentUser!.uid,
-                    'tripName': tripName,
-                    'addres': tripAddress,
-                  },
-                  isHost: widget.isHost),
-            if (selectIndex == 1)
-              PlaceVisitingScreen(
-                hostUid: widget.hostUid,
-              ),
-            if (selectIndex == 2) EntertainmentTab(hostId: widget.hostUid),
-            if (selectIndex == 3) const WhatToBringTab(),
-          ],
-        ),
+                      ),
+                      addVerticalSpace(10),
+                      DescriptionTextWidget(text: aboutTrip),
+                      RichText(
+                          text: TextSpan(children: [
+                        TextSpan(text: '$aboutTrip', style: TextStyle(fontSize: 16, height: 1.4, color: black)),
+                        // TextSpan(
+                        //     text: ' more',
+                        //     style: TextStyle(
+                        //         decoration: TextDecoration.underline,
+                        //         fontSize: 16,
+                        //         color: primary,
+                        //         fontWeight: FontWeight.w600))
+                      ])),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                    height: height(context) * 0.08,
+                    child: ListView.builder(
+                        itemCount: mainIconTabbar.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (ctx, i) {
+                          return Column(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  selectIndex = i;
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(12),
+                                  height: height(context) * 0.05,
+                                  width: selectIndex == i ? width(context) * 0.35 : width(context) * 0.13,
+                                  decoration: selectIndex == i ? myFillBoxDecoration(0, primary, 10) : shadowDecoration(10, 2),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      mainIconTabbar[i]['icon'],
+                                      addHorizontalySpace(5),
+                                      selectIndex == i ? Text(mainIconTabbar[i]['name']) : const SizedBox()
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        })),
+                if (selectIndex == 0)
+                  TripMembersTabPrimaProfile(
+                      hostUid: widget.hostUid,
+                      tripData: {
+                        'tripImage': tripImage,
+                        'host': FirebaseAuth.instance.currentUser!.uid,
+                        'tripName': tripName,
+                        'addres': tripAddress,
+                      },
+                      isHost: widget.isHost),
+                if (selectIndex == 1)
+                  PlaceVisitingScreen(
+                    hostUid: widget.hostUid,
+                  ),
+                if (selectIndex == 2) EntertainmentTab(hostId: widget.hostUid),
+                if (selectIndex == 3) WhatToBringTab(hostUid: widget.hostUid),
+              ],
+            ),
+          ),
+          if (widget.showRequestTo_Join != "") ...[
+            Container(
+                padding: EdgeInsets.all(10),
+                alignment: Alignment.center,
+                height: 60,
+                width: width(context) * 0.35,
+                child: CustomButton(
+                    name: '${widget.showRequestTo_Join}',
+                    onPressed: () {
+                      if (widget.showRequestTo_Join == "Accept Request") {
+                        addFriendAsTripFriend();
+                        removeTripFromTripLibraryFriendSide();
+                      }
+                    }))
+          ]
+        ],
       ),
       // bottomNavigationBar:
       //     SizedBox(height: 60, child: CustomRequestToJoinButton()),
@@ -385,7 +439,8 @@ hostDialog(BuildContext context) {
 }
 
 class WhatToBringTab extends StatefulWidget {
-  const WhatToBringTab({super.key});
+  final String hostUid;
+  const WhatToBringTab({super.key, required this.hostUid});
 
   @override
   State<WhatToBringTab> createState() => _WhatToBringTabState();
@@ -413,7 +468,7 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
   //   //print(allData);
   // }
 
-  int sum = 0;
+  RxInt sum = 0.obs;
   //List allData = [];
 
   // String hostname = "";
@@ -473,18 +528,15 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
           ),
           addVerticalSpace(15),
           StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('users')
-                .doc(FirebaseAuth.instance.currentUser!.uid)
-                .collection("Prima_Trip_Plan")
-                .doc(FirebaseAuth.instance.currentUser!.uid)
-                .snapshots(),
+            stream: FirebaseFirestore.instance.collection('users').doc(widget.hostUid).collection("Prima_Trip_Plan").doc(widget.hostUid).snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List items = snapshot.data!.data()!['items'] ?? [];
-                sum = 0;
-                items.forEach((element) {
-                  sum = sum + int.parse(element['iteamAmout']);
+                Timer.periodic(Duration(milliseconds: 100), (timer) {
+                  sum.value = 0;
+                  items.forEach((element) {
+                    sum.value = sum.value + int.parse(element['iteamAmout']);
+                  });
                 });
                 // items.forEach((element) {sum=sum+})
                 print(items);
@@ -522,10 +574,12 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
                                 ),
                               ),
                               title: Text(
-                                '${items[i]['user']['name']}',
+                                items[i]['itemName'],
                                 style: bodyText16w600(color: black),
                               ),
-                              subtitle: Text(items[i]['itemName']),
+                              subtitle: Text(
+                                '${items[i]['user']['name']}',
+                              ),
                               trailing: Text('Rs. ${items[i]['iteamAmout']}'),
                             ),
                           ),
@@ -547,10 +601,10 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
           Row(
             children: [
               Spacer(),
-              Text(
-                'Total    Rs. $sum',
-                style: bodyText16w600(color: black),
-              )
+              Obx(() => Text(
+                    'Total    Rs. ${sum.value}',
+                    style: bodyText16w600(color: black),
+                  ))
             ],
           ),
           Text(
@@ -769,11 +823,7 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
 
     addIteamDetails() async {
       if (FirebaseAuth.instance.currentUser != null) {
-        DocumentReference profile = FirebaseFirestore.instance
-            .collection('users')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .collection("Prima_Trip_Plan")
-            .doc(FirebaseAuth.instance.currentUser!.uid);
+        DocumentReference profile = FirebaseFirestore.instance.collection('users').doc(widget.hostUid).collection("Prima_Trip_Plan").doc(widget.hostUid);
         await profile.update({
           'items': FieldValue.arrayUnion([
             {

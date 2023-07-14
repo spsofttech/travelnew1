@@ -336,22 +336,4 @@ class _InboxScreenState extends State<InboxScreen> with TickerProviderStateMixin
       duration: Duration(seconds: 3),
     ));
   }
-
-  addFriendAsTripFriend(addMap) async {
-    DocumentSnapshot<Map<String, dynamic>> doc3 =
-        await FirebaseFirestore.instance.collection('users').doc(addMap['id']).collection("Prima_Trip_Plan").doc(addMap['id']).get();
-    bool docExist3 = doc3.exists;
-
-    await FirebaseFirestore.instance.collection('users').doc(addMap['id']).collection("Prima_Trip_Plan").doc(addMap['id']).update({
-      "friends": FieldValue.arrayRemove([
-        {'id': FirebaseAuth.instance.currentUser!.uid, 'image': USERIMAGE, 'name': USERNAME, 'status': 0, 'host': addMap['host']}
-      ])
-    });
-
-    await FirebaseFirestore.instance.collection('users').doc(addMap['id']).collection("Prima_Trip_Plan").doc(addMap['id']).update({
-      "friends": FieldValue.arrayUnion([
-        {'id': FirebaseAuth.instance.currentUser!.uid, 'image': USERIMAGE, 'name': USERNAME, 'status': 1, 'host': addMap['host']}
-      ])
-    });
-  }
 }

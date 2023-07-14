@@ -69,19 +69,15 @@ class _PlaceVisitingScreenState extends State<PlaceVisitingScreen> {
     setState(() {});
   }
 
-  CollectionReference _collectionRef = FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
-      .collection('Prima_Trip_Plan')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
-      .collection('tourisprot');
   Future<void> getallData() async {
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection('users').doc(widget.hostUid).collection('Prima_Trip_Plan').doc(widget.hostUid).collection('tourisprot');
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await _collectionRef.get();
     // Get data from docs and convert map to List
     allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    setState(() {});
     print(allData);
+    setState(() {});
   }
 
   List allData = [];

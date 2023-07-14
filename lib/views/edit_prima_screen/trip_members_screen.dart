@@ -234,15 +234,20 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
               addVerticalSpace(10),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                width: width(context) * 0.95,
+                width: width(context) * 0.45,
                 height: height(context) * 0.13,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    SizedBox(
+                      height: 10,
+                      width: 10,
+                    ),
+
                     Container(
-                      height: height(context) * 0.13,
-                      width: width(context) * 0.27,
+                      height: height(context) * 0.1,
+                      width: width(context) * 0.2,
                       decoration: USERIMAGE == ""
                           ? BoxDecoration(
                               borderRadius: BorderRadius.circular(12), image: DecorationImage(image: NetworkImage(NoUserNetworkImage), fit: BoxFit.fill))
@@ -265,9 +270,13 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '${USERNAME}',
-                            style: TextStyle(fontSize: width(context) * 0.04),
+                          SizedBox(
+                            width: width(context) * 0.18,
+                            child: Text(
+                              '${USERNAME}',
+                              style: TextStyle(fontSize: width(context) * 0.04),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Text(
                             '${widget.isHost ? "Host" : "Member"}',
@@ -276,7 +285,7 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
                         ],
                       ),
                     ),
-                    Spacer(),
+
                     // Column(
                     //   mainAxisAlignment: MainAxisAlignment.start,
                     //   children: [
@@ -313,24 +322,62 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
                   ],
                 ),
               ),
-              ...List.generate(
-                  tripMember.length,
-                  (i) => Container(
+              Wrap(
+                children: [
+                  ...List.generate(tripMember.length, (i) {
+                    GlobalKey<PopupMenuButtonState> popupMenuButtonKey = GlobalKey<PopupMenuButtonState>();
+
+                    return InkWell(
+                      onTap: () {
+                        popupMenuButtonKey.currentState!.showButtonMenu();
+                        print("---");
+                      },
+                      child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                        width: width(context) * 0.95,
+                        width: width(context) * 0.45,
                         height: height(context) * 0.13,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            SizedBox(
+                              height: 10,
+                              width: 10,
+                              child: PopupMenuButton<int>(
+                                key: popupMenuButtonKey,
+                                itemBuilder: (context) => [
+                                  const PopupMenuItem(
+                                    value: 1,
+                                    child: Text("Send a message"),
+                                  ),
+                                  PopupMenuItem(
+                                    onTap: () {
+                                      removeFromFriend(tripMember[i]);
+                                    },
+                                    value: 2,
+                                    child: Text("Remove trip friend"),
+                                  ),
+                                  // PopupMenuItem(
+                                  //   // value: 3,
+                                  //   child: InkWell(
+                                  //       onTap: () {
+                                  //         Navigator.push(context, MaterialPageRoute(builder: (ctx) => ReportIncorrectTripScreen()));
+                                  //       },
+                                  //       child: Text("Report incorrect")),
+                                  // ),
+                                ],
+                                color: white,
+                                elevation: 2,
+                              ),
+                            ),
                             Container(
-                              height: height(context) * 0.13,
-                              width: width(context) * 0.27,
+                              height: height(context) * 0.1,
+                              width: width(context) * 0.2,
                               decoration: tripMember[i]['image'] != ""
                                   ? BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       image: DecorationImage(image: NetworkImage(tripMember[i]['image']), fit: BoxFit.fill))
-                                  : BoxDecoration(color: primary, image: DecorationImage(image: AssetImage('assets/images/prima3.png'))),
+                                  : BoxDecoration(image: DecorationImage(image: NetworkImage(NoUserNetworkImage))),
                               alignment: Alignment.topRight,
                               // child: InkWell(
                               //     onTap: () {
@@ -344,9 +391,9 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
                               //     child: Icon(Icons.more_vert))
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.only(left: 5),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -354,49 +401,20 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
                                     style: TextStyle(fontSize: width(context) * 0.04),
                                   ),
                                   Text(
-                                    '${USER_UID == tripMember[i]['id'] ? "Host" : "Member"}',
+                                    '${FirebaseAuth.instance.currentUser!.uid == tripMember[i]['id'] ? "Host" : "Member"}',
                                     style: bodytext12Bold(color: black),
                                   ),
                                 ],
                               ),
                             ),
-                            Spacer(),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 20.0),
-                                  child: PopupMenuButton<int>(
-                                    itemBuilder: (context) => [
-                                      const PopupMenuItem(
-                                        value: 1,
-                                        child: Text("Send a message"),
-                                      ),
-                                      PopupMenuItem(
-                                        onTap: () {
-                                          removeFromFriend(tripMember[i]);
-                                        },
-                                        value: 2,
-                                        child: Text("Remove trip friend"),
-                                      ),
-                                      // PopupMenuItem(
-                                      //   // value: 3,
-                                      //   child: InkWell(
-                                      //       onTap: () {
-                                      //         Navigator.push(context, MaterialPageRoute(builder: (ctx) => ReportIncorrectTripScreen()));
-                                      //       },
-                                      //       child: Text("Report incorrect")),
-                                      // ),
-                                    ],
-                                    color: white,
-                                    elevation: 2,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Spacer(),
                           ],
                         ),
-                      )),
+                      ),
+                    );
+                  }),
+                ],
+              ),
               // ListView.builder(
               //     scrollDirection: Axis.horizontal,
               //     shrinkWrap: true,
@@ -920,8 +938,9 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
                             style: TextStyle(fontSize: width(context) * 0.04),
                           ),
                           Text(
-                            '${widget.isHost ? "Host" : "Member"}',
+                            '${widget.hostUid == FirebaseAuth.instance.currentUser!.uid ? "Host" : "Member"}',
                             style: bodytext12Bold(color: black),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
@@ -947,7 +966,7 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
                                   ? BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       image: DecorationImage(image: NetworkImage(tripMember[i]['image']), fit: BoxFit.fill))
-                                  : BoxDecoration(color: primary, image: DecorationImage(image: AssetImage('assets/images/prima3.png'))),
+                                  : BoxDecoration(image: DecorationImage(image: NetworkImage(NoUserNetworkImage))),
                               alignment: Alignment.topRight,
                               // child: InkWell(
                               //     onTap: () {

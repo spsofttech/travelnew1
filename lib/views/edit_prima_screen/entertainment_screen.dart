@@ -32,6 +32,7 @@ class _EntertainmentTabState extends State<EntertainmentTab> {
   String meetTime = "";
   String meetPlace = "";
   List entertainment = [];
+
   void getdata() async {
     if (FirebaseAuth.instance.currentUser != null) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(widget.hostId).collection("Prima_Trip_Plan").doc(widget.hostId).get();
@@ -139,9 +140,23 @@ class _EntertainmentTabState extends State<EntertainmentTab> {
             ),
           ),
           addVerticalSpace(20),
-          Text(
-            'Meeting point & Time',
-            style: bodyText14w600(color: black),
+          Row(
+            children: [
+              Text(
+                'Meeting point & Time',
+                style: bodyText14w600(color: black),
+              ),
+              InkWell(
+                onTap: () {
+                  meetingDialog(context);
+                },
+                child: Icon(
+                  Icons.add_circle,
+                  color: primary,
+                  size: 30,
+                ),
+              )
+            ],
           ),
           Column(
             children: [
@@ -157,17 +172,6 @@ class _EntertainmentTabState extends State<EntertainmentTab> {
             ],
           ),
 
-          Center(
-            child: Container(
-                alignment: Alignment.center,
-                height: 40,
-                width: width(context) * 0.3,
-                child: CustomButton(
-                    name: 'Request to Join',
-                    onPressed: () {
-                      meetingDialog(context);
-                    })),
-          ),
           addVerticalSpace(50)
         ],
       ),
