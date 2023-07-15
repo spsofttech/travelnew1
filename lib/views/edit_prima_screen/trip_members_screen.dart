@@ -232,98 +232,101 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
                 ],
               ),
               addVerticalSpace(10),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                width: width(context) * 0.45,
-                height: height(context) * 0.13,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 10,
-                      width: 10,
-                    ),
 
-                    Container(
-                      height: height(context) * 0.1,
-                      width: width(context) * 0.2,
-                      decoration: USERIMAGE == ""
-                          ? BoxDecoration(
-                              borderRadius: BorderRadius.circular(12), image: DecorationImage(image: NetworkImage(NoUserNetworkImage), fit: BoxFit.fill))
-                          : BoxDecoration(image: DecorationImage(image: NetworkImage(USERIMAGE))),
-                      alignment: Alignment.topRight,
-                      // child: InkWell(
-                      //     onTap: () {
-                      //       Navigator.push(
-                      //           context,
-                      //           MaterialPageRoute(
-                      //               builder: (context) => MyTripFriendsScreen(
-                      //                     title: 'added',
-                      //                   )));
-                      //     },
-                      //     child: Icon(Icons.more_vert))
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: width(context) * 0.18,
-                            child: Text(
-                              '${USERNAME}',
-                              style: TextStyle(fontSize: width(context) * 0.04),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          Text(
-                            '${widget.isHost ? "Host" : "Member"}',
-                            style: bodytext12Bold(color: black),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Column(
-                    //   mainAxisAlignment: MainAxisAlignment.start,
-                    //   children: [
-                    //     Padding(
-                    //       padding: const EdgeInsets.only(top: 20.0),
-                    //       child: PopupMenuButton<int>(
-                    //         itemBuilder: (context) => [
-                    //           const PopupMenuItem(
-                    //             value: 1,
-                    //             child: Text("Send a message"),
-                    //           ),
-                    //           PopupMenuItem(
-                    //             onTap: () {
-                    //               removeFromFriend(tripMember[i]);
-                    //             },
-                    //             value: 2,
-                    //             child: Text("Remove trip friend"),
-                    //           ),
-                    //           // PopupMenuItem(
-                    //           //   // value: 3,
-                    //           //   child: InkWell(
-                    //           //       onTap: () {
-                    //           //         Navigator.push(context, MaterialPageRoute(builder: (ctx) => ReportIncorrectTripScreen()));
-                    //           //       },
-                    //           //       child: Text("Report incorrect")),
-                    //           // ),
-                    //         ],
-                    //         color: white,
-                    //         elevation: 2,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                  ],
-                ),
-              ),
               Wrap(
+                verticalDirection: VerticalDirection.up,
                 children: [
+                  Container(
+                    // margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    width: width(context) * 0.45,
+                    height: height(context) * 0.13,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 10,
+                          width: 10,
+                        ),
+
+                        Container(
+                          height: height(context) * 0.1,
+                          width: width(context) * 0.2,
+                          decoration: USERIMAGE == ""
+                              ? BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  image: DecorationImage(image: NetworkImage(NoUserNetworkImage), fit: BoxFit.fill))
+                              : BoxDecoration(image: DecorationImage(image: NetworkImage(USERIMAGE))),
+                          alignment: Alignment.topRight,
+                          // child: InkWell(
+                          //     onTap: () {
+                          //       Navigator.push(
+                          //           context,
+                          //           MaterialPageRoute(
+                          //               builder: (context) => MyTripFriendsScreen(
+                          //                     title: 'added',
+                          //                   )));
+                          //     },
+                          //     child: Icon(Icons.more_vert))
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: width(context) * 0.18,
+                                child: Text(
+                                  '${USERNAME}',
+                                  style: TextStyle(fontSize: width(context) * 0.04),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Text(
+                                '${widget.isHost ? "Host" : "Member"}',
+                                style: bodytext12Bold(color: black),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Column(
+                        //   mainAxisAlignment: MainAxisAlignment.start,
+                        //   children: [
+                        //     Padding(
+                        //       padding: const EdgeInsets.only(top: 20.0),
+                        //       child: PopupMenuButton<int>(
+                        //         itemBuilder: (context) => [
+                        //           const PopupMenuItem(
+                        //             value: 1,
+                        //             child: Text("Send a message"),
+                        //           ),
+                        //           PopupMenuItem(
+                        //             onTap: () {
+                        //               removeFromFriend(tripMember[i]);
+                        //             },
+                        //             value: 2,
+                        //             child: Text("Remove trip friend"),
+                        //           ),
+                        //           // PopupMenuItem(
+                        //           //   // value: 3,
+                        //           //   child: InkWell(
+                        //           //       onTap: () {
+                        //           //         Navigator.push(context, MaterialPageRoute(builder: (ctx) => ReportIncorrectTripScreen()));
+                        //           //       },
+                        //           //       child: Text("Report incorrect")),
+                        //           // ),
+                        //         ],
+                        //         color: white,
+                        //         elevation: 2,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                      ],
+                    ),
+                  ),
                   ...List.generate(tripMember.length, (i) {
                     GlobalKey<PopupMenuButtonState> popupMenuButtonKey = GlobalKey<PopupMenuButtonState>();
 
@@ -333,7 +336,7 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
                         print("---");
                       },
                       child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        //margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                         width: width(context) * 0.45,
                         height: height(context) * 0.13,
                         child: Row(
@@ -435,19 +438,52 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
                 ],
               ),
               addVerticalSpace(10),
-              ...List.generate(
-                  requestMember.length,
-                  (i) => Container(
-                        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                        width: width(context) * 0.95,
+              Wrap(
+                children: [
+                  ...List.generate(requestMember.length, (i) {
+                    GlobalKey<PopupMenuButtonState> popupMenuButtonKey = GlobalKey<PopupMenuButtonState>();
+                    return InkWell(
+                      child: Container(
+                        // margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        width: width(context) * 0.45,
                         height: height(context) * 0.13,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            SizedBox(
+                              height: 10,
+                              width: 10,
+                              child: PopupMenuButton<int>(
+                                key: popupMenuButtonKey,
+                                itemBuilder: (context) => [
+                                  const PopupMenuItem(
+                                    value: 1,
+                                    child: Text("Send a message"),
+                                  ),
+                                  PopupMenuItem(
+                                    onTap: () {
+                                      removeFromFriend(tripMember[i]);
+                                    },
+                                    value: 2,
+                                    child: Text("Remove trip friend"),
+                                  ),
+                                  // PopupMenuItem(
+                                  //   // value: 3,
+                                  //   child: InkWell(
+                                  //       onTap: () {
+                                  //         Navigator.push(context, MaterialPageRoute(builder: (ctx) => ReportIncorrectTripScreen()));
+                                  //       },
+                                  //       child: Text("Report incorrect")),
+                                  // ),
+                                ],
+                                color: white,
+                                elevation: 2,
+                              ),
+                            ),
                             Container(
-                              height: height(context) * 0.13,
-                              width: width(context) * 0.27,
+                              height: height(context) * 0.1,
+                              width: width(context) * 0.2,
                               decoration: requestMember[i]['image'] != ""
                                   ? BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
@@ -485,143 +521,117 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
                                 ],
                               ),
                             ),
-                            Spacer(),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 20.0),
-                                  child: PopupMenuButton<int>(
-                                    itemBuilder: (context) => [
-                                      const PopupMenuItem(
-                                        value: 1,
-                                        child: Text("Send a message"),
-                                      ),
-                                      PopupMenuItem(
-                                        onTap: () {
-                                          removeFromFriendReuest(requestMember[i]);
-                                        },
-                                        value: 2,
-                                        child: Text("Remove trip friend"),
-                                      ),
-                                      // PopupMenuItem(
-                                      //   // value: 3,
-                                      //   child: InkWell(
-                                      //       onTap: () {
-                                      //         Navigator.push(context, MaterialPageRoute(builder: (ctx) => ReportIncorrectTripScreen()));
-                                      //       },
-                                      //       child: Text("Report incorrect")),
-                                      // ),
-                                    ],
-                                    color: white,
-                                    elevation: 2,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
-                      )),
-
-              addVerticalSpace(20),
-              Row(
-                children: [
-                  Text(
-                    tripMembers[1]['title'],
-                    style: bodyText16w600(color: black),
-                  ),
-                  addHorizontalySpace(250),
+                      ),
+                    );
+                  }),
                 ],
               ),
 
-              addVerticalSpace(10),
-              ...List.generate(
-                  requestMember.length,
-                  (i) => Container(
-                        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                        width: width(context) * 0.95,
-                        height: height(context) * 0.13,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: height(context) * 0.13,
-                              width: width(context) * 0.27,
-                              decoration: requestMember[i]['image'] != ""
-                                  ? BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      image: DecorationImage(image: NetworkImage(requestMember[i]['image']), fit: BoxFit.fill))
-                                  : BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: white,
-                                      image: DecorationImage(image: NetworkImage('${NoUserNetworkImage}'), fit: BoxFit.fill)),
-                              alignment: Alignment.topRight,
-                              // child: InkWell(
-                              //     onTap: () {
-                              //       Navigator.push(
-                              //           context,
-                              //           MaterialPageRoute(
-                              //               builder: (context) => MyTripFriendsScreen(
-                              //                     title: 'added',
-                              //                   )));
-                              //     },
-                              //     child: Icon(Icons.more_vert))
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${requestMember[i]['name']}',
-                                    style: TextStyle(fontSize: width(context) * 0.04),
-                                  ),
-                                  Text(
-                                    '(Requested)',
-                                    style: bodytext12Bold(color: black),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Spacer(),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 20.0),
-                                  child: PopupMenuButton<int>(
-                                    itemBuilder: (context) => [
-                                      const PopupMenuItem(
-                                        value: 1,
-                                        child: Text("Send a message"),
-                                      ),
-                                      PopupMenuItem(
-                                        onTap: () {
-                                          removeFromFriendReuest(requestMember[i]);
-                                        },
-                                        value: 2,
-                                        child: Text("Remove trip friend"),
-                                      ),
-                                      // PopupMenuItem(
-                                      //   // value: 3,
-                                      //   child: InkWell(
-                                      //       onTap: () {
-                                      //         Navigator.push(context, MaterialPageRoute(builder: (ctx) => ReportIncorrectTripScreen()));
-                                      //       },
-                                      //       child: Text("Report incorrect")),
-                                      // ),
-                                    ],
-                                    color: white,
-                                    elevation: 2,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
+              ///-----------------------------------------
+              // addVerticalSpace(20),
+              // Row(
+              //   children: [
+              //     Text(
+              //       tripMembers[1]['title'],
+              //       style: bodyText16w600(color: black),
+              //     ),
+              //     addHorizontalySpace(250),
+              //   ],
+              // ),
+              //
+              // addVerticalSpace(10),
+              // ...List.generate(
+              //     requestMember.length,
+              //     (i) => Container(
+              //           margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              //           width: width(context) * 0.95,
+              //           height: height(context) * 0.13,
+              //           child: Row(
+              //             crossAxisAlignment: CrossAxisAlignment.center,
+              //             mainAxisAlignment: MainAxisAlignment.start,
+              //             children: [
+              //               Container(
+              //                 height: height(context) * 0.13,
+              //                 width: width(context) * 0.27,
+              //                 decoration: requestMember[i]['image'] != ""
+              //                     ? BoxDecoration(
+              //                         borderRadius: BorderRadius.circular(12),
+              //                         image: DecorationImage(image: NetworkImage(requestMember[i]['image']), fit: BoxFit.fill))
+              //                     : BoxDecoration(
+              //                         borderRadius: BorderRadius.circular(12),
+              //                         color: white,
+              //                         image: DecorationImage(image: NetworkImage('${NoUserNetworkImage}'), fit: BoxFit.fill)),
+              //                 alignment: Alignment.topRight,
+              //                 // child: InkWell(
+              //                 //     onTap: () {
+              //                 //       Navigator.push(
+              //                 //           context,
+              //                 //           MaterialPageRoute(
+              //                 //               builder: (context) => MyTripFriendsScreen(
+              //                 //                     title: 'added',
+              //                 //                   )));
+              //                 //     },
+              //                 //     child: Icon(Icons.more_vert))
+              //               ),
+              //               Padding(
+              //                 padding: const EdgeInsets.all(8.0),
+              //                 child: Column(
+              //                   mainAxisAlignment: MainAxisAlignment.start,
+              //                   crossAxisAlignment: CrossAxisAlignment.start,
+              //                   children: [
+              //                     Text(
+              //                       '${requestMember[i]['name']}',
+              //                       style: TextStyle(fontSize: width(context) * 0.04),
+              //                     ),
+              //                     Text(
+              //                       '(Requested)',
+              //                       style: bodytext12Bold(color: black),
+              //                     ),
+              //                   ],
+              //                 ),
+              //               ),
+              //               Spacer(),
+              //               Column(
+              //                 mainAxisAlignment: MainAxisAlignment.start,
+              //                 children: [
+              //                   Padding(
+              //                     padding: const EdgeInsets.only(top: 20.0),
+              //                     child: PopupMenuButton<int>(
+              //                       itemBuilder: (context) => [
+              //                         const PopupMenuItem(
+              //                           value: 1,
+              //                           child: Text("Send a message"),
+              //                         ),
+              //                         PopupMenuItem(
+              //                           onTap: () {
+              //                             removeFromFriendReuest(requestMember[i]);
+              //                           },
+              //                           value: 2,
+              //                           child: Text("Remove trip friend"),
+              //                         ),
+              //                         // PopupMenuItem(
+              //                         //   // value: 3,
+              //                         //   child: InkWell(
+              //                         //       onTap: () {
+              //                         //         Navigator.push(context, MaterialPageRoute(builder: (ctx) => ReportIncorrectTripScreen()));
+              //                         //       },
+              //                         //       child: Text("Report incorrect")),
+              //                         // ),
+              //                       ],
+              //                       color: white,
+              //                       elevation: 2,
+              //                     ),
+              //                   ),
+              //                 ],
+              //               ),
+              //             ],
+              //           ),
+              //         )),
+
+              /// ----------------------------------------
+
               // SizedBox(
               //   height: height(context) * 0.4,
               //   child: ListView.builder(

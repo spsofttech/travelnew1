@@ -107,7 +107,7 @@ addupcomingtrip() async {
       'address': place,
       'tirpname': "${place} Trip",
       'tripsport': trip_city_name.value,
-      "travelTrip": true,
+      "travelTrip": 1,
       "state": "${targetState}",
       'daysnumber': _totalday,
       "I'm Flexible with date": flexibledate,

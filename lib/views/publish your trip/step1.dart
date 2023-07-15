@@ -165,6 +165,7 @@ class _Step1State extends State<Step1> {
         : cat == 2
             ? "Fairs"
             : "Road";
+
     if (FirebaseAuth.instance.currentUser != null) {
       var cityData = await FirebaseFirestore.instance.collection('Trip_City').doc(col).get();
 

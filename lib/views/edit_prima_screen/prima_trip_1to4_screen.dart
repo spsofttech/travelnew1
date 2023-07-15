@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,6 +27,15 @@ class PrimaTrip1To4Screens extends StatefulWidget {
   final String showRequestTo_Join;
   final bool otherUser;
   final Map<String, dynamic> tripData;
+  /*
+  {
+  'addres' :"surat"
+   'host':"ixkzaSgoFeZBXjMXCBXL7QrjulI2"
+   'tripImage':"https://cdn.pixabay.com/photo/2020/02/13/22/36/landscape-4847020_1280.jpg"
+   'tripName':"Trip Travel"
+  }
+
+  */
   final String hostUid;
   const PrimaTrip1To4Screens(
       {super.key, this.isHost = true, this.showRequestTo_Join = "", this.otherUser = false, this.tripData = const {}, required this.hostUid});
@@ -135,7 +146,7 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
       ])
     });
 
-    showSimpleTost(context, txt: "Now You RAe Trip Freinds");
+    showSimpleTost(context, txt: "Now You Are Trip Freinds");
   }
 
   removeTripFromTripLibraryFriendSide() async {
@@ -148,6 +159,25 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
     //     {'id': FirebaseAuth.instance.currentUser!.uid, 'image': USERIMAGE, 'name': USERNAME, 'status': 1, 'host': widget.hostUid}
     //   ])
     // });
+  }
+
+  addTripToFriendUpCommingTrip() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("upcomingtrip")
+        .doc("${DateTime.now().microsecondsSinceEpoch}")
+        .set({
+      'travelTrip': false,
+      'id': FirebaseAuth.instance.currentUser!.uid,
+      'tripImg': widget.tripData['tripImage'],
+      'tirpname': widget.tripData['tripName'],
+      'address': widget.tripData['addres'],
+      'host': widget.hostUid,
+      'docId': '${DateTime.now().microsecondsSinceEpoch}',
+      'date': "",
+    });
+    Get.back();
   }
 
   Widget Edit() {
@@ -403,6 +433,23 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
                       if (widget.showRequestTo_Join == "Accept Request") {
                         addFriendAsTripFriend();
                         removeTripFromTripLibraryFriendSide();
+                        addTripToFriendUpCommingTrip();
+                      }
+                    }))
+          ],
+          if (widget.showRequestTo_Join != "") ...[
+            Container(
+                padding: EdgeInsets.all(10),
+                alignment: Alignment.center,
+                height: 60,
+                width: width(context) * 0.35,
+                child: CustomButton(
+                    name: '${widget.showRequestTo_Join}',
+                    onPressed: () {
+                      if (widget.showRequestTo_Join == "Send Request") {
+                        // addFriendAsTripFriend();
+                        // removeTripFromTripLibraryFriendSide();
+                        // addTripToFriendUpCommingTrip();
                       }
                     }))
           ]

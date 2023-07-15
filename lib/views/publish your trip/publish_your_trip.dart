@@ -464,8 +464,8 @@ class _PublishYourTripScreenState extends State<PublishYourTripScreen> {
                               .snapshots(),
                           builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
                             if (snapshot.hasData) {
-                              printc("${snapshot.data == null}", "y");
-                              printc(snapshot.data!.data()!['friends']);
+                              // printc("${snapshot.data == null}", "y");
+                              // printc(snapshot.data!.data()!['friends']);
                               List tripFriendsList = snapshot.data!.data()!['friends'] ?? [];
                               print(tripFriendsList);
                               return Wrap(
@@ -619,7 +619,7 @@ class _PublishYourTripScreenState extends State<PublishYourTripScreen> {
                           addHorizontalySpace(50),
                           InkWell(
                             onTap: () async {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (ctx) => PrimaTrip1To4Screens(

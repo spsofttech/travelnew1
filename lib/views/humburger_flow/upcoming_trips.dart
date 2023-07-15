@@ -177,21 +177,20 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                           InkWell(
                             onTap: () {
                               // getData();
-                              allData[index]['travelTrip'] == true
-                                  ? Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => TripLibraryDetailsScreen(
-                                                targetState1: allData[index]['state'],
-                                                targetType1: allData[index]['tripsport'],
-                                                docId: allData[index]['tripDocId'],
-                                                totalDay: allData[index]['daysnumber'],
-                                              )))
-                                  : SizedBox();
+                              if (allData[index]['travelTrip'] == 1)
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => TripLibraryDetailsScreen(
+                                              targetState1: allData[index]['state'],
+                                              targetType1: allData[index]['tripsport'],
+                                              docId: allData[index]['tripDocId'],
+                                              totalDay: allData[index]['daysnumber'],
+                                            )));
                             },
                             child: Container(
                               margin: EdgeInsets.only(top: 10, bottom: 5),
-                              height: height(context) * 0.35,
+                              height: height(context) * 0.32,
                               width: width(context) * 0.93,
                               decoration: shadowDecoration(15, 2),
                               child: Column(
@@ -200,22 +199,25 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                                   Stack(
                                     children: [
                                       SizedBox(
-                                        //height: height(context) * 0.35,
+                                        height: height(context) * 0.25,
                                         width: width(context) * 0.93,
                                         child: ClipRRect(
                                             borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-                                            child: Image.network(allData[index]['tripImg'])),
-                                      ),
-                                      Positioned(
-                                        top: 5,
-                                        right: 40,
-                                        child: ImageIcon(
-                                            color: white,
-                                            const AssetImage(
-                                              'assets/images/forward.png',
+                                            child: Image.network(
+                                              allData[index]['tripImg'],
+                                              fit: BoxFit.fill,
                                             )),
                                       ),
-                                      allData[index]['travelTrip'] == true
+                                      // Positioned(
+                                      //   top: 5,
+                                      //   right: 40,
+                                      //   child: ImageIcon(
+                                      //       color: white,
+                                      //       const AssetImage(
+                                      //         'assets/images/forward.png',
+                                      //       )),
+                                      // ),
+                                      allData[index]['travelTrip'] == 2
                                           ? SizedBox()
                                           : Positioned(
                                               top: -5,
@@ -286,11 +288,11 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                                           style: bodyText22w700(color: black),
                                         ),
                                         addVerticalSpace(2),
-                                        Text(
-                                          allData[index]['tripsport'],
-                                          style: bodyText14normal(color: black),
-                                        ),
-                                        addVerticalSpace(8),
+                                        // Text(
+                                        //   allData[index]['tripsport'],
+                                        //   style: bodyText14normal(color: black),
+                                        // ),
+                                        // addVerticalSpace(8),
                                       ],
                                     ),
                                   )

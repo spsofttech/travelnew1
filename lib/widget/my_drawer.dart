@@ -338,6 +338,7 @@ class _MyDrawerState extends State<MyDrawer> {
                               showSnackBar(context, "Please Login First!", Colors.red);
                             }
                           } else if (uid == "") {
+                            print(uid);
                             Navigator.push(context, MaterialPageRoute(builder: (ctx) => PublishYourTripScreen()));
                           } else {
                             Navigator.push(

@@ -66,6 +66,7 @@ class _SaveFestivalTripAndGetQuoteState extends State<SaveFestivalTripAndGetQuot
   String _include = "";
   String _cartime = "";
   String _traintime = "";
+
   addupcomingtrip() async {
     if (FirebaseAuth.instance.currentUser != null) {
       DocumentReference profile =
@@ -94,6 +95,7 @@ class _SaveFestivalTripAndGetQuoteState extends State<SaveFestivalTripAndGetQuot
         "AirIndia": airind,
         "Seat": _seats,
         "Endtrip": _endtrip,
+        'travelTrip': 3
       });
       setState(() {});
     }

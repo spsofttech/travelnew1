@@ -654,6 +654,8 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           List ReuestTripData = snapshot.data!;
+
+                          print(ReuestTripData);
                           return ReuestTripData.length == 0
                               ? Center(
                                   child: Text("No Data"),
@@ -670,10 +672,15 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) => PrimaTrip1To4Screens(
-                                                          isHost: ReuestTripData[index]['host'] == FirebaseAuth.instance.currentUser!.uid,
-                                                          tripData: ReuestTripData[index],
-                                                          hostUid: ReuestTripData[index]['host'],
-                                                          showRequestTo_Join: "Request To Join",
+                                                          isHost: ReuestTripData[index]['Uid'] == FirebaseAuth.instance.currentUser!.uid,
+                                                          tripData: {
+                                                            'addres': ReuestTripData[index]['where_to'],
+                                                            'host': ReuestTripData[index]['Uid'],
+                                                            'tripImage': ReuestTripData[index]['Cover_Pic'],
+                                                            'tripName': ReuestTripData[index]['Specify_trip_name']
+                                                          },
+                                                          hostUid: ReuestTripData[index]['Uid'],
+                                                          showRequestTo_Join: "Send Request",
                                                         )));
                                           },
                                           child: Container(
@@ -686,9 +693,16 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
                                               children: [
                                                 Stack(
                                                   children: [
-                                                    ClipRRect(
-                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-                                                        child: Image.network(ReuestTripData[index]['Cover_Pic'])),
+                                                    SizedBox(
+                                                      height: height(context) * 0.25,
+                                                      width: width(context) * 0.93,
+                                                      child: ClipRRect(
+                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                                                          child: Image.network(
+                                                            ReuestTripData[index]['Cover_Pic'],
+                                                            fit: BoxFit.fill,
+                                                          )),
+                                                    ),
                                                     // Positioned(
                                                     //   top: 5,
                                                     //   right: 40,
