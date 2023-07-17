@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,6 +22,8 @@ import '../../widget/custom_textfield.dart';
 import '../../widget/my_bottom_navbar.dart';
 import '../humburger_flow/my_account/my_trip_friends.dart';
 import '../humburger_flow/my_account/report_incorrect_user_screen.dart';
+
+List tripMember = [];
 
 class PrimaTrip1To4Screens extends StatefulWidget {
   final bool isHost;
@@ -88,6 +91,7 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
   String endDate = "";
 
   void getdata() async {
+    // print("this page call --------");
     if (FirebaseAuth.instance.currentUser != null) {
       var profile;
       if (widget.isHost) {
@@ -416,12 +420,16 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
                   PlaceVisitingScreen(
                     hostUid: widget.hostUid,
                   ),
-                if (selectIndex == 2) EntertainmentTab(hostId: widget.hostUid),
-                if (selectIndex == 3) WhatToBringTab(hostUid: widget.hostUid),
+                if (selectIndex == 2)
+                  EntertainmentTab(
+                      hostId: widget.hostUid, isFrd_or_host: widget.hostUid == FirebaseAuth.instance.currentUser!.uid || widget.showRequestTo_Join == ""),
+                if (selectIndex == 3)
+                  WhatToBringTab(
+                      hostUid: widget.hostUid, isFrd_or_host: widget.hostUid == FirebaseAuth.instance.currentUser!.uid || widget.showRequestTo_Join == ""),
               ],
             ),
           ),
-          if (widget.showRequestTo_Join != "") ...[
+          if (widget.showRequestTo_Join == "Accept Request") ...[
             Container(
                 padding: EdgeInsets.all(10),
                 alignment: Alignment.center,
@@ -430,14 +438,12 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
                 child: CustomButton(
                     name: '${widget.showRequestTo_Join}',
                     onPressed: () {
-                      if (widget.showRequestTo_Join == "Accept Request") {
-                        addFriendAsTripFriend();
-                        removeTripFromTripLibraryFriendSide();
-                        addTripToFriendUpCommingTrip();
-                      }
+                      addFriendAsTripFriend();
+                      removeTripFromTripLibraryFriendSide();
+                      addTripToFriendUpCommingTrip();
                     }))
           ],
-          if (widget.showRequestTo_Join != "") ...[
+          if (widget.showRequestTo_Join == "Send Request") ...[
             Container(
                 padding: EdgeInsets.all(10),
                 alignment: Alignment.center,
@@ -445,11 +451,15 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
                 width: width(context) * 0.35,
                 child: CustomButton(
                     name: '${widget.showRequestTo_Join}',
-                    onPressed: () {
+                    onPressed: () async {
                       if (widget.showRequestTo_Join == "Send Request") {
+                        await rendTripRequest(friendUid: FirebaseAuth.instance.currentUser!.uid, tripData: widget.tripData);
+
+                        Navigator.pop(context);
                         // addFriendAsTripFriend();
                         // removeTripFromTripLibraryFriendSide();
                         // addTripToFriendUpCommingTrip();
+
                       }
                     }))
           ]
@@ -458,6 +468,35 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
       // bottomNavigationBar:
       //     SizedBox(height: 60, child: CustomRequestToJoinButton()),
     );
+  }
+
+  Future rendTripRequest({required Map<String, dynamic> tripData, required String friendUid}) async {
+    //---------------------------------------------- Send Trip Request ---------------------------------
+
+    /// 0 = invite  1= friend 2= request
+
+    tripData.addEntries([MapEntry('type', 'request')]);
+    log("-----------${tripData}");
+    DocumentSnapshot doc4 = await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("trip library").doc("invite").get();
+    bool docExist4 = doc4.exists;
+
+    if (docExist4) {
+      await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("trip library").doc("invite").update({
+        "data": FieldValue.arrayUnion([tripData])
+      });
+    } else {
+      await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("trip library").doc("invite").set({
+        'data': [tripData]
+      });
+    }
+
+    await FirebaseFirestore.instance.collection('users').doc(widget.hostUid).collection("Prima_Trip_Plan").doc(widget.hostUid).update({
+      "friends": FieldValue.arrayUnion([
+        {'id': FirebaseAuth.instance.currentUser!.uid, 'image': USERIMAGE, 'name': USERNAME, 'status': 2, 'host': widget.hostUid}
+      ])
+    });
+
+    showSimpleTost(context, txt: "Request Sent");
   }
 }
 
@@ -487,7 +526,8 @@ hostDialog(BuildContext context) {
 
 class WhatToBringTab extends StatefulWidget {
   final String hostUid;
-  const WhatToBringTab({super.key, required this.hostUid});
+  final bool isFrd_or_host;
+  const WhatToBringTab({super.key, required this.hostUid, required this.isFrd_or_host});
 
   @override
   State<WhatToBringTab> createState() => _WhatToBringTabState();
@@ -562,15 +602,17 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
                 style: bodyText16w600(color: black),
               ),
               const Spacer(),
-              InkWell(
-                onTap: () {
-                  addItems(context);
-                  //saveItemforTravel(context);
-                },
-                child: Icon(
-                  Icons.edit,
-                ),
-              )
+              widget.isFrd_or_host
+                  ? InkWell(
+                      onTap: () {
+                        addItems(context);
+                        //saveItemforTravel(context);
+                      },
+                      child: Icon(
+                        Icons.edit,
+                      ),
+                    )
+                  : SizedBox()
             ],
           ),
           addVerticalSpace(15),

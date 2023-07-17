@@ -171,6 +171,7 @@ class _MyTripFriendsScreenState extends State<MyTripFriendsScreen> {
   Future rendTripRequest({required Map<String, dynamic> tripData, required String friendUid}) async {
     //---------------------------------------------- Send Trip Request ---------------------------------
 
+    tripData.addEntries([MapEntry('type', 'invite')]);
     dev.log("-----------${tripData}");
     DocumentSnapshot doc4 = await FirebaseFirestore.instance.collection('users').doc(friendUid).collection("trip library").doc("invite").get();
     bool docExist4 = doc4.exists;

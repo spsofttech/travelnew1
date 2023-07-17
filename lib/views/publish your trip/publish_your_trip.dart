@@ -767,7 +767,8 @@ class _PublishYourTripScreenState extends State<PublishYourTripScreen> {
   Future<void> getPrimaTripData() async {
     //log('---------');
     // Get docs from collection reference
-    CollectionReference tripCityRef = FirebaseFirestore.instance.collection("Trip_City").doc(selectedTypeOfPrimaTrip).collection(selectedCityOfPrimaTrip);
+    CollectionReference tripCityRef =
+        FirebaseFirestore.instance.collection("Prima Tourist Spot").doc(selectedTypeOfPrimaTrip).collection(selectedCityOfPrimaTrip);
 
     print("${selectedTypeOfPrimaTrip}  --- ${selectedCityOfPrimaTrip}");
 

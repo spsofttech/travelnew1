@@ -159,15 +159,15 @@ class _Step1State extends State<Step1> {
     }
   }
 
-  void getTripCities({required int cat}) async {
-    String col = cat == 1
-        ? "Adventure"
-        : cat == 2
-            ? "Fairs"
-            : "Road";
+  void getTripCities({required String cat}) async {
+    // String col = cat == 1
+    //     ? "Adventure"
+    //     : cat == 2
+    //         ? "Fairs"
+    //         : "Road";
 
     if (FirebaseAuth.instance.currentUser != null) {
-      var cityData = await FirebaseFirestore.instance.collection('Trip_City').doc(col).get();
+      var cityData = await FirebaseFirestore.instance.collection('Prima Tourist Spot').doc(cat).get();
 
       setState(() {
         List cityListData = cityData.data()?['data'] ?? [];
@@ -236,11 +236,7 @@ class _Step1State extends State<Step1> {
                   onChanged: (newValue) {
                     selectedTypeOfPrimaTrip = newValue!;
                     selectedCityOfPrimaTrip = "Select";
-                    int cat = selectedTypeOfPrimaTrip == "Adventure"
-                        ? 1
-                        : selectedTypeOfPrimaTrip == "Fairs and Festival"
-                            ? 2
-                            : 3;
+                    String cat = selectedTypeOfPrimaTrip;
                     getTripCities(cat: cat);
                   },
                   items: ['Adventure', 'Fairs and Festival', 'Road trip']

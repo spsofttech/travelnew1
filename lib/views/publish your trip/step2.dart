@@ -178,7 +178,7 @@ class _Step2State extends State<Step2> {
                                         MP: DayTripData(
                                             image: cityTripData[i]['image'],
                                             description: cityTripData[i]['description'],
-                                            touristSpot: cityTripData[i]['name'],
+                                            touristSpot: cityTripData[i]['tourist_spot'],
                                             rank: cityTripData[i]['rank'],
                                             type1: cityTripData[i]['type1']),
                                       );
@@ -206,7 +206,7 @@ class _Step2State extends State<Step2> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      '${cityTripData[i]['name']}',
+                                      '${cityTripData[i]['tourist_spot']}',
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     InkWell(

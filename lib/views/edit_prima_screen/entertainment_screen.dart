@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:travelnew_app/views/edit_prima_screen/prima_trip_1to4_screen.dart';
 import 'package:travelnew_app/views/edit_prima_screen/trip_members_screen.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
 
@@ -14,7 +15,8 @@ import 'entertainment_of_trip.dart';
 
 class EntertainmentTab extends StatefulWidget {
   String hostId;
-  EntertainmentTab({super.key, required this.hostId});
+  bool isFrd_or_host;
+  EntertainmentTab({super.key, required this.hostId, required this.isFrd_or_host});
 
   @override
   State<EntertainmentTab> createState() => _EntertainmentTabState();
@@ -37,9 +39,9 @@ class _EntertainmentTabState extends State<EntertainmentTab> {
     if (FirebaseAuth.instance.currentUser != null) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(widget.hostId).collection("Prima_Trip_Plan").doc(widget.hostId).get();
       tripName = profile.data()?['Specify_trip_name'];
-      meetTime = profile.data()?['meetingTime'];
-      meetPlace = profile.data()?['meetingPlace'];
-      entertainment = profile.data()?['Entertainment'];
+      meetTime = profile.data()?['meetingTime'] ?? "Select Time";
+      meetPlace = profile.data()?['meetingPlace'] ?? "";
+      entertainment = profile.data()?['Entertainment'] ?? [];
     }
     setState(() {});
   }
@@ -65,21 +67,23 @@ class _EntertainmentTabState extends State<EntertainmentTab> {
                 style: bodyText16w600(color: black),
               ),
               Spacer(),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (ctx) => EntertainmentOfTripScreen(
-                                tripHost: widget.hostId,
-                              )));
-                },
-                child: Icon(
-                  Icons.add_circle,
-                  color: primary,
-                  size: 30,
-                ),
-              )
+              widget.isFrd_or_host
+                  ? InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (ctx) => EntertainmentOfTripScreen(
+                                      tripHost: widget.hostId,
+                                    )));
+                      },
+                      child: Icon(
+                        Icons.add_circle,
+                        color: primary,
+                        size: 30,
+                      ),
+                    )
+                  : SizedBox()
             ],
           ),
           addVerticalSpace(15),
@@ -95,81 +99,92 @@ class _EntertainmentTabState extends State<EntertainmentTab> {
                 List EntertainmentList = [];
                 EntertainmentList = snapshot.data!.data()!['Entertainment'] ?? [];
                 print(EntertainmentList.length);
-                return SizedBox(
-                  height: height(context) * 0.18,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: EntertainmentList.length,
-                      itemBuilder: (ctx, i) {
-                        return Column(
-                          children: [
-                            Container(
-                              height: height(context) * 0.13,
-                              width: width(context) * 0.35,
-                              margin: EdgeInsets.symmetric(horizontal: 5),
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(image: NetworkImage(EntertainmentList[i]['image']), fit: BoxFit.fill),
-                                  borderRadius: BorderRadius.circular(20)),
-                            ),
-                            Text(
-                              "${EntertainmentList[i]['name']}",
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              "(${EntertainmentList[i]['userName']})",
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        );
-                      }),
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: height(context) * 0.18,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: EntertainmentList.length,
+                          itemBuilder: (ctx, i) {
+                            return Column(
+                              children: [
+                                Container(
+                                  height: height(context) * 0.13,
+                                  width: width(context) * 0.35,
+                                  margin: EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(image: NetworkImage(EntertainmentList[i]['image']), fit: BoxFit.fill),
+                                      borderRadius: BorderRadius.circular(20)),
+                                ),
+                                Text(
+                                  "${EntertainmentList[i]['name']}",
+                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                  "(${EntertainmentList[i]['userName']})",
+                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            );
+                          }),
+                    ),
+                    addVerticalSpace(15),
+                    Center(
+                      child: Container(
+                        height: height(context) * 0.3,
+                        width: width(context) * 0.65,
+                        decoration: myFillBoxDecoration(0, black.withOpacity(0.1), 10),
+                        child: const Center(
+                          child: Image(
+                              image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNabG4bZ3e6Dmklu69D73MX90DiEMEslRZoQ&usqp=CAU')),
+                        ),
+                      ),
+                    ),
+                    addVerticalSpace(20),
+                    widget.isFrd_or_host
+                        ? Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Meeting point & Time',
+                                    style: bodyText14w600(color: black),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      meetingDialog(context);
+                                    },
+                                    child: Icon(
+                                      Icons.add_circle,
+                                      color: primary,
+                                      size: 30,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: width(context) * 0.67,
+                                    child: Text('$meetPlace'),
+                                  ),
+                                  SizedBox(
+                                    width: width(context) * 0.67,
+                                    child: Text('$meetTime'),
+                                  ),
+                                  // addVerticalSpace(height(context) * 0.1)
+                                ],
+                              ),
+                            ],
+                          )
+                        : SizedBox(),
+                  ],
                 );
               } else {
                 return SizedBox();
               }
             },
-          ),
-          addVerticalSpace(15),
-          Center(
-            child: Container(
-              height: height(context) * 0.3,
-              width: width(context) * 0.65,
-              decoration: myFillBoxDecoration(0, black.withOpacity(0.1), 10),
-              child: const Center(
-                child: Image(image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNabG4bZ3e6Dmklu69D73MX90DiEMEslRZoQ&usqp=CAU')),
-              ),
-            ),
-          ),
-          addVerticalSpace(20),
-          Row(
-            children: [
-              Text(
-                'Meeting point & Time',
-                style: bodyText14w600(color: black),
-              ),
-              InkWell(
-                onTap: () {
-                  meetingDialog(context);
-                },
-                child: Icon(
-                  Icons.add_circle,
-                  color: primary,
-                  size: 30,
-                ),
-              )
-            ],
-          ),
-          Column(
-            children: [
-              SizedBox(
-                width: width(context) * 0.67,
-                child: Text('$meetPlace'),
-              ),
-              SizedBox(
-                width: width(context) * 0.67,
-                child: Text('$meetTime'),
-              ),
-              // addVerticalSpace(height(context) * 0.1)
-            ],
           ),
 
           addVerticalSpace(50)
@@ -216,7 +231,7 @@ class _EntertainmentTabState extends State<EntertainmentTab> {
                   var width = MediaQuery.of(context).size.width;
 
                   return Container(
-                      height: height * 0.38,
+                      height: height * 0.40,
                       padding: EdgeInsets.all(10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

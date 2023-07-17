@@ -677,7 +677,8 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
                                                             'addres': ReuestTripData[index]['where_to'],
                                                             'host': ReuestTripData[index]['Uid'],
                                                             'tripImage': ReuestTripData[index]['Cover_Pic'],
-                                                            'tripName': ReuestTripData[index]['Specify_trip_name']
+                                                            'tripName': ReuestTripData[index]['Specify_trip_name'],
+                                                            'type': 'request'
                                                           },
                                                           hostUid: ReuestTripData[index]['Uid'],
                                                           showRequestTo_Join: "Send Request",
@@ -898,21 +899,22 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
         //log("${userFriends[a]['id']}");
         try {
           if (ReuestTripData.where((element) => element['host'] == userFriends[a]['id']).toList().isEmpty) {
+            log("------test");
             DocumentSnapshot<Map<String, dynamic>> userFriendTrip = await FirebaseFirestore.instance
                 .collection('users')
                 .doc('${userFriends[a]['id']}')
                 .collection('Prima_Trip_Plan')
                 .doc('${userFriends[a]['id']}')
                 .get();
-            log("------${ReuestTripData.where((element) => element['host'] == userFriends[a]['id']).toList()}");
+
             UserFriendPrimaTrips.add(userFriendTrip.data()!);
           }
         } catch (e) {
-          printc("____Catch");
+          printc("__1__Catch");
         }
       }
     } catch (e) {
-      printc("____Catch");
+      printc("__2__Catch");
     }
 
     return UserFriendPrimaTrips;
