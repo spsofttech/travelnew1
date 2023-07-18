@@ -615,18 +615,21 @@ class _PlanATripState extends State<PlanATrip> {
                                 showSimpleTost(context, txt: "${msg}");
                                 allCodition = false;
                               }
+
                               if (_string2 == "Select") {
                                 msg = "";
                                 msg = "${msg} Please Select Travel State";
                                 showSimpleTost(context, txt: "${msg}");
                                 allCodition = false;
                               }
+
                               if (_string3 == "Select") {
                                 msg = "";
                                 msg = "${msg} Please Select Travel Mode";
                                 showSimpleTost(context, txt: "${msg}");
                                 allCodition = false;
                               }
+
                               if (totalDays == 0) {
                                 msg = "";
                                 msg = "${msg} Please Select Days";
@@ -636,6 +639,65 @@ class _PlanATripState extends State<PlanATrip> {
 
                               if (allCodition) {
                                 showAPICallPendingDialog(context);
+                                DocumentSnapshot<Map<String, dynamic>> unsavedPathDoc = await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                    .collection('trip library')
+                                    .doc('unsaved')
+                                    .get();
+
+                                if (unsavedPathDoc.exists) {
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                                      .collection('trip library')
+                                      .doc('unsaved')
+                                      .update({
+                                    'data': FieldValue.arrayUnion([
+                                      {
+                                        'type': 1,
+                                        'type_Of_Trip': _string1,
+                                        'plamTrip_at': _string2,
+                                        'trip_days': totalDays,
+                                        'interestList': usereTripIntrest,
+                                        'date': startDate.text,
+                                        "StartTrip": UserCity,
+                                        "StartDate": startDate.text,
+                                        "EndDate": endDate.text,
+                                        "tripmode": _string3,
+                                        "totalDays": totalDays,
+                                        "Flexible": flexible,
+                                        "BookingId": '',
+                                      }
+                                    ])
+                                  });
+                                } else {
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                                      .collection('trip library')
+                                      .doc('unsaved')
+                                      .set({
+                                    'data': FieldValue.arrayUnion([
+                                      {
+                                        'type': 1,
+                                        'type_Of_Trip': _string1,
+                                        'plamTrip_at': _string2,
+                                        'trip_days': totalDays,
+                                        'interestList': usereTripIntrest,
+                                        'date': startDate.text,
+                                        "StartTrip": UserCity,
+                                        "StartDate": startDate.text,
+                                        "EndDate": endDate.text,
+                                        "tripmode": _string3,
+                                        "totalDays": totalDays,
+                                        "Flexible": flexible,
+                                        "BookingId": '',
+                                      }
+                                    ])
+                                  });
+                                }
+
                                 await setTripPlan();
                                 Navigator.pop(context);
                                 Navigator.push(
@@ -646,6 +708,7 @@ class _PlanATripState extends State<PlanATrip> {
                               }
                             })),
                   ),
+
                   // Center(
                   //   child: SizedBox(
                   //       height: 40,

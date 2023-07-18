@@ -53,7 +53,7 @@ class _MyDrawerState extends State<MyDrawer> {
     if (FirebaseAuth.instance.currentUser != null) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       name = profile.data()?['fullName'] ?? "";
-      url = profile.data()?['profileuserImage'] ?? "";
+      url = profile.data()?['image'] ?? "";
       // USERIMAGE = profile.data()?['image'] ?? "";
       // USERNAME = name;
       setState(() {});

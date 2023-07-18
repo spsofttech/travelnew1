@@ -24,7 +24,8 @@ RxBool isThirdStepOn = false.obs;
 DateTime? firstDate;
 DateTime? secondDate;
 int totalDays = 0;
-final TextEditingController specitTripNameController = TextEditingController();
+String specitTripName = "";
+//final TextEditingController specitTripNameController = TextEditingController();
 final TextEditingController DoInTripController = TextEditingController();
 
 class PublishYourTripScreen extends StatefulWidget {
@@ -669,10 +670,10 @@ class _PublishYourTripScreenState extends State<PublishYourTripScreen> {
                                     allFill = false;
                                   }
 
-                                  if (specitTripNameController.text == "") {
-                                    showSimpleTost(context, txt: "Please Fill Trip name");
-                                    allFill = false;
-                                  }
+                                  // if (specitTripNameController.text == "") {
+                                  //   showSimpleTost(context, txt: "Please Fill Trip name");
+                                  //   allFill = false;
+                                  // }
 
                                   if (allFill) {
                                     print("object-000000");

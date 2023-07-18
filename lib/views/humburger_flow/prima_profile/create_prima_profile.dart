@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -122,7 +123,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
     if (FirebaseAuth.instance.currentUser != null) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("primaAccount").doc("profile").get();
-      _image = profile.data()!['image'] ?? "";
+      _image = profile.data()!['imageUrl'] ?? "";
       // url = profile.data()?['document'];
       firstnameController.text = profile.data()?['firstName'];
       firstname = profile.data()?['firstName'];
@@ -155,7 +156,13 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
 
     showAPICallPendingDialog(context);
     _image = await FireBaseImageUpload.fireBaseImageUpload.userUploadImage(fileImagePath: image!.path, folderPath: FirebaseFolderPath.userImageUpload);
-    final docRef = await FirebaseFirestore.instance.collection("users").doc(USER_UID).update({'image': _image});
+    final docRef = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({'image': _image});
+    final docRef2 = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('primaAccount')
+        .doc('profile')
+        .update({'imageUrl': _image});
     Navigator.pop(context);
     setState(() {});
     // Reference ref = FirebaseStorage.instance.ref().child('profileImg');
@@ -214,7 +221,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
       appBar: PreferredSize(preferredSize: const Size.fromHeight(50), child: CustomAppBar(title: 'Create Prima Profile')),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -324,6 +331,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                         onClick: () async {
                           var pickedDate =
                               await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2101));
+
                           if (pickedDate != null) {
                             print(pickedDate);
                             String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
@@ -347,7 +355,13 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                   )),
               addVerticalSpace(22),
               Row(
-                children: [Text('   Married status'), Text('                                         Gender')],
+                children: [
+                  Text('Married status'),
+                  SizedBox(
+                    width: width(context) * 0.28,
+                  ),
+                  Text('Gender')
+                ],
               ),
               Row(
                 children: [
@@ -646,7 +660,6 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
               const Divider(
                 thickness: 1,
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -673,7 +686,6 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                 thickness: 1,
               ),
               addVerticalSpace(10),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -685,7 +697,12 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                   ),
                   IconButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (ctx) => YourTripInterest()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (ctx) => YourTripInterest(
+                                      isPrima: true,
+                                    )));
                       },
                       icon: Icon(Icons.edit_note))
                 ],
@@ -696,7 +713,6 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
               ),
               UploadTravelsPhotos(),
               addVerticalSpace(10),
-
               addVerticalSpace(20),
               CustomButton(
                   name: 'Create my profile',
@@ -797,6 +813,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
   }
 
   bool _primacheck = false;
+
   void gerprimacheck() async {
     if (FirebaseAuth.instance.currentUser != null) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
@@ -842,18 +859,14 @@ class TripometerWidget extends StatefulWidget {
 }
 
 class _TripometerWidgetState extends State<TripometerWidget> {
-  List tripoMeterList = [
-    {'name': 'Adventure', 'value': 30.0},
-    {'name': 'City', 'value': 60.0},
-    {'name': 'Nature', 'value': 80.0},
-    {'name': 'Religlous', 'value': 30.0},
-  ];
+  List tripoMeterList = [];
 
-  double city = 0.0;
-  double nature = 0.0;
-  double adventure = 0.0;
-  double religlous = 0.0;
-  double _value = 50;
+  //
+  // double city = 0.0;
+  // double nature = 0.0;
+  // double adventure = 0.0;
+  // double religlous = 0.0;
+  //double _value = 50;
 
   // addTripometerDetails() async {
   //   // Call the user's CollectionReference to add a new user
@@ -870,36 +883,58 @@ class _TripometerWidgetState extends State<TripometerWidget> {
   updateTripometerDetails() async {
     // Call the user's CollectionReference to add a new user
 
+    Map<String, dynamic> newMap = {};
+
+    tripoMeterList.forEach((element) {
+      newMap['${element['name']}'] = element['value'].value;
+    });
     CollectionReference users = FirebaseFirestore.instance.collection('users');
-    users
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("tripoMeter")
-        .doc("profile")
-        .update({"Adventure": adventure, "City": city, "Nature": nature, "Religlous": religlous});
+    users.doc(FirebaseAuth.instance.currentUser!.uid).collection("tripoMeter").doc("profile").set(newMap);
+
+    showSimpleTost(context, txt: "Tripometer Updated");
   }
 
-  void getTripometerDetails() async {
+  Future<void> getTripometerDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile =
-          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("tripoMeter").doc("profile").get();
-      adventure = profile.data()?['Adventure'];
-      city = profile.data()?['City'];
-      nature = profile.data()?['Nature'];
-      religlous = profile.data()?['Religlous'];
-      setState(() {
-        tripoMeterList = [
-          {'name': 'Adventure', 'value': adventure},
-          {'name': 'City', 'value': city},
-          {'name': 'Nature', 'value': nature},
-          {'name': 'Religlous', 'value': religlous},
-        ];
-      });
+      tripoMeterList.clear();
+
+      CollectionReference users = FirebaseFirestore.instance.collection('users');
+      DocumentSnapshot<Map<String, dynamic>> alredyDefinDoc =
+          await users.doc(FirebaseAuth.instance.currentUser!.uid).collection("tripoMeter").doc('profile').get();
+      // var profile =
+      //     await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("tripoMeter").doc("profile").get();
+      if (alredyDefinDoc.exists) {
+        Map<String, dynamic> oldDataMap = alredyDefinDoc.data()!;
+        oldDataMap.forEach((key, value) {
+          double a = value.toDouble();
+          // printc("---${a}");
+          tripoMeterList.add({'name': '${key}', 'value': a.obs});
+        });
+      } else {
+        var tripometer = await FirebaseFirestore.instance.collection('Tripometer').get();
+        tripometer.docs.forEach((element) {
+          tripoMeterList.add({'name': '${element.id}', 'value': 30.0.obs});
+        });
+      }
+
+      // adventure = profile.data()?['Adventure'] ?? [];
+      // city = profile.data()?['City'];
+      // nature = profile.data()?['Nature'];
+      // religlous = profile.data()?['Religlous'];
+      // setState(() {
+      //   tripoMeterList = [
+      //     {'name': 'Adventure', 'value': adventure},
+      //     {'name': 'City', 'value': city},
+      //     {'name': 'Nature', 'value': nature},
+      //     {'name': 'Religlous', 'value': religlous},
+      //   ];
+      // });
     }
   }
 
   @override
   void initState() {
-    getTripometerDetails();
+    //getTripometerDetails();
     super.initState();
   }
 
@@ -908,57 +943,73 @@ class _TripometerWidgetState extends State<TripometerWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            SizedBox(
-              height: height(context) * 0.28,
-              width: width(context) * 0.95,
-              child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: tripoMeterList.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (ctx, i) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 23, left: 23),
-                      child: Column(
-                        children: [
-                          RotatedBox(
-                            quarterTurns: 3,
-                            child: Slider(
-                              value: tripoMeterList[i]['value'],
-                              onChanged: (value) {
-                                tripoMeterList[i]['value'] = value;
-                                print(tripoMeterList[i]['value']);
-                                setState(() {
-                                  adventure = tripoMeterList[0]['value'];
-                                  city = tripoMeterList[1]['value'];
-                                  nature = tripoMeterList[2]['value'];
-                                  religlous = tripoMeterList[3]['value'];
-                                });
-                                if (city != 0.0) {
-                                  //addTripometerDetails();
-                                } else {
-                                  updateTripometerDetails();
-                                }
+        SizedBox(
+          height: height(context) * 0.28,
+          width: width(context) * 0.95,
+          child: FutureBuilder(
+            future: getTripometerDetails(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return ListView.builder(
+                    //  physics: const NeverScrollableScrollPhysics(),
+                    itemCount: tripoMeterList.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (ctx, i) {
+                      printc(tripoMeterList.length);
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 23, left: 23),
+                        child: Column(
+                          children: [
+                            RotatedBox(
+                              quarterTurns: 3,
+                              child: Obx(() => Slider(
+                                    value: tripoMeterList[i]['value'].value,
+                                    onChanged: (value) {
+                                      tripoMeterList[i]['value'].value = value;
+                                      printc(tripoMeterList[i]['value'].value);
+                                      // setState(() {
+                                      //   adventure = tripoMeterList[0]['value'];
+                                      //   city = tripoMeterList[1]['value'];
+                                      //   nature = tripoMeterList[2]['value'];
+                                      //   religlous = tripoMeterList[3]['value'];
+                                      // });
+                                      // if (city != 0.0) {
+                                      //   //addTripometerDetails();
+                                      // } else {
+                                      //   updateTripometerDetails();
+                                      // }
 
-                                getTripometerDetails();
-                              },
-                              max: 100,
-                              min: 0,
-                              activeColor: primary,
+                                      //getTripometerDetails();
+                                    },
+                                    max: 100,
+                                    min: 0,
+                                    activeColor: primary,
+                                  )),
                             ),
-                          ),
-                          Text(
-                            tripoMeterList[i]['name'],
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: black),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-            ),
-          ],
+                            Text(
+                              tripoMeterList[i]['name'],
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: black),
+                            ),
+                          ],
+                        ),
+                      );
+                    });
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(color: primary),
+                );
+              }
+            },
+          ),
         ),
+        Center(
+            child: CustomButton(
+                ww: width(context) * 0.2,
+                hh: 30,
+                name: "Update",
+                onPressed: () {
+                  updateTripometerDetails();
+                }))
       ],
     );
   }

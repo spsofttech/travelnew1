@@ -8,6 +8,8 @@ import '../../../widget/custom_button.dart';
 import '../../home/plan_trip_screen.dart';
 
 class YourTripInterest extends StatefulWidget {
+  bool isPrima;
+  YourTripInterest({this.isPrima = false});
   @override
   _YourTripInterestState createState() => _YourTripInterestState();
 }
@@ -47,6 +49,7 @@ class _YourTripInterestState extends State<YourTripInterest> {
 
   List<List<Map<String, Object>>> trip_interest_data_list = [];
   List<String> trip_interest_catName = [];
+
   getIntrest() async {
     trip_interest_data_list.clear();
     trip_interest_catName.clear();
@@ -91,6 +94,50 @@ class _YourTripInterestState extends State<YourTripInterest> {
     print(usereTripIntrest);
   }
 
+  getIntrestPrima() async {
+    trip_interest_data_list.clear();
+    trip_interest_catName.clear();
+    QuerySnapshot<Map<String, dynamic>> trip_intrest_snapshot = await FirebaseFirestore.instance.collection('Tripometer').get();
+    print("${trip_intrest_snapshot.docs[0].data()['data']}");
+    print("${trip_intrest_snapshot.docs[0].id}");
+
+    int b = 0;
+    trip_intrest_snapshot.docs.forEach((element) {
+      trip_interest_data_list.add([]);
+      List c = element.data()['data'];
+      c.forEach((element2) {
+        trip_interest_data_list[b].add({'name': element2.toString(), 'isSelect': false});
+      });
+
+      trip_interest_catName.add("${element.id}");
+      b++;
+    });
+
+    //print(trip_interest_data);
+  }
+
+  putIntrestPrima() async {
+    usereTripIntrest.clear();
+    DocumentSnapshot<Map<String, dynamic>> profile =
+        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+
+    QuerySnapshot<Map<String, dynamic>> trip_intrest_snapshot = await FirebaseFirestore.instance.collection('Tripometer').get();
+    print("${trip_intrest_snapshot.docs[0].data()['data']}");
+    print("${trip_intrest_snapshot.docs[0].id}");
+
+    int b = 0;
+    trip_intrest_snapshot.docs.forEach((element) {
+      //trip_interest_data_list.add([]);
+      // List c = element.data()['data'];
+      // print(element.id);
+      usereTripIntrest.addAll(profile.data()!['${element.id}'] ?? []);
+      //trip_interest_catName.add("${element.id}");
+      b++;
+    });
+
+    print(usereTripIntrest);
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -100,7 +147,7 @@ class _YourTripInterestState extends State<YourTripInterest> {
         children: [
           SingleChildScrollView(
             child: FutureBuilder(
-              future: getIntrest(),
+              future: widget.isPrima ? getIntrestPrima() : getIntrest(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   return Column(
@@ -132,7 +179,7 @@ class _YourTripInterestState extends State<YourTripInterest> {
                                 ],
                               ),
                             ),
-                            AdventurefilterChipWidget(chipName: trip_interest_data_list[a], catName: trip_interest_catName[a]),
+                            AdventurefilterChipWidget(chipName: trip_interest_data_list[a], catName: trip_interest_catName[a], isPrima: widget.isPrima),
                           ],
                         ),
 
@@ -203,7 +250,10 @@ class _YourTripInterestState extends State<YourTripInterest> {
                     name: 'Save',
                     onPressed: () async {
                       showAPICallPendingDialog(context);
-                      await putIntrest();
+                      if (widget.isPrima)
+                        await putIntrestPrima();
+                      else
+                        await putIntrest();
                       Navigator.pop(context);
                       Navigator.pop(context);
                     }),
@@ -737,8 +787,9 @@ class _YourTripInterestState extends State<YourTripInterest> {
 class AdventurefilterChipWidget extends StatefulWidget {
   final List chipName;
   String catName;
+  bool isPrima;
 
-  AdventurefilterChipWidget({required this.chipName, required this.catName});
+  AdventurefilterChipWidget({required this.chipName, required this.catName, required this.isPrima});
 
   @override
   _AdventurefilterChipWidgetState createState() => _AdventurefilterChipWidgetState();
@@ -751,13 +802,15 @@ class _AdventurefilterChipWidgetState extends State<AdventurefilterChipWidget> {
   }
 
   var _isSelected = false;
+
   List NatureList = [];
+
   void getDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
       DocumentSnapshot<Map<String, dynamic>> profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
-      print("---- ${profile.data()!['${widget.catName}'] == null}   -------------");
-      NatureList = profile.data()![widget.catName] ?? [];
+      // print("---- ${profile.data()!['${widget.catName}'] == null}   -------------");
+      NatureList = profile.data()![widget.isPrima ? '${widget.catName} ' : widget.catName] ?? [];
       setState(() {});
     }
   }
@@ -772,22 +825,42 @@ class _AdventurefilterChipWidgetState extends State<AdventurefilterChipWidget> {
         itemBuilder: (ctx, i) {
           return GestureDetector(
             onTap: () {
-              if (NatureList.contains(widget.chipName[i]['name'])) {
-                NatureList.removeAt(NatureList.indexOf(widget.chipName[i]['name']));
-                CollectionReference users = FirebaseFirestore.instance.collection('users');
-                users.doc(FirebaseAuth.instance.currentUser!.uid).update({
-                  '${widget.catName}': FieldValue.arrayRemove([widget.chipName[i]['name']])
-                });
-                setState(() {});
-                getDetails();
+              if (!widget.isPrima) {
+                if (NatureList.contains(widget.chipName[i]['name'])) {
+                  NatureList.removeAt(NatureList.indexOf(widget.chipName[i]['name']));
+                  CollectionReference users = FirebaseFirestore.instance.collection('users');
+                  users.doc(FirebaseAuth.instance.currentUser!.uid).update({
+                    '${widget.catName}': FieldValue.arrayRemove([widget.chipName[i]['name']])
+                  });
+                  setState(() {});
+                  getDetails();
+                } else {
+                  NatureList.add(widget.chipName[i]['name']);
+                  CollectionReference users = FirebaseFirestore.instance.collection('users');
+                  users.doc(FirebaseAuth.instance.currentUser!.uid).update({
+                    '${widget.catName}': FieldValue.arrayUnion([widget.chipName[i]['name']])
+                  });
+                  setState(() {});
+                  getDetails();
+                }
               } else {
-                NatureList.add(widget.chipName[i]['name']);
-                CollectionReference users = FirebaseFirestore.instance.collection('users');
-                users.doc(FirebaseAuth.instance.currentUser!.uid).update({
-                  '${widget.catName}': FieldValue.arrayUnion([widget.chipName[i]['name']])
-                });
-                setState(() {});
-                getDetails();
+                if (NatureList.contains(widget.chipName[i]['name'])) {
+                  NatureList.removeAt(NatureList.indexOf(widget.chipName[i]['name']));
+                  CollectionReference users = FirebaseFirestore.instance.collection('users');
+                  users.doc(FirebaseAuth.instance.currentUser!.uid).update({
+                    '${widget.catName} ': FieldValue.arrayRemove([widget.chipName[i]['name']])
+                  });
+                  setState(() {});
+                  getDetails();
+                } else {
+                  NatureList.add(widget.chipName[i]['name']);
+                  CollectionReference users = FirebaseFirestore.instance.collection('users');
+                  users.doc(FirebaseAuth.instance.currentUser!.uid).update({
+                    '${widget.catName} ': FieldValue.arrayUnion([widget.chipName[i]['name']])
+                  });
+                  setState(() {});
+                  getDetails();
+                }
               }
             },
             child: Container(

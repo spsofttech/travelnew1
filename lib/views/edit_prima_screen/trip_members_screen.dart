@@ -1050,6 +1050,8 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
   }
 
   removeTripFromTripLibraryFriendSide({required Map friendSData}) async {
+    widget.tripData['type'] = 'request';
+    log("-- --- --- ${widget.tripData}");
     await FirebaseFirestore.instance.collection('users').doc(friendSData['id']).collection("trip library").doc('invite').update({
       "data": FieldValue.arrayRemove([widget.tripData])
     });
@@ -1068,7 +1070,7 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
         .collection("upcomingtrip")
         .doc("${DateTime.now().microsecondsSinceEpoch}")
         .set({
-      'travelTrip': false,
+      'travelTrip': 2,
       'id': friendSData['id'],
       'tripImg': widget.tripData['tripImage'],
       'tirpname': widget.tripData['tripName'],

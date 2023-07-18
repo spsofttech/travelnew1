@@ -245,188 +245,421 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
           ),
           Expanded(
             child: TabBarView(controller: _tabController, children: [
-              Column(
-                children: [
-                  Expanded(
-                      // height: height(context) * 0.79,
-                      child: ListView.builder(
-                          itemCount: 0,
-                          itemBuilder: (ctx, index) {
-                            return Column(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    // getData();
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => SaveYourTripsScreen()));
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.only(top: 10, bottom: 5),
-                                    height: height(context) * 0.420,
-                                    width: width(context) * 0.93,
-                                    decoration: shadowDecoration(15, 2),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Stack(
+              SizedBox(
+                height: height(context) * 0.87,
+                child: Column(
+                  children: [
+                    Expanded(
+                        // height: height(context) * 0.79,
+                        child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .collection('trip library')
+                          .doc('unsaved')
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          ReuestTripData.clear();
+                          ReuestTripData = snapshot.data!.data()!['data'];
+                          return ListView.builder(
+                              itemCount: ReuestTripData.length,
+                              itemBuilder: (ctx, index) {
+                                return Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        log("${ReuestTripData[index]}");
+
+                                        CollectionReference users = FirebaseFirestore.instance.collection('users');
+                                        await users
+                                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                                            .collection("Plan_trip")
+                                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                                            .set({
+                                          "StartTrip": ReuestTripData[index]['StartTrip'],
+                                          "tripPlan": ReuestTripData[index]['tripPlan'],
+                                          "endtrip": ReuestTripData[index]['endtrip'],
+                                          "StartDate": ReuestTripData[index]['StartDate'],
+                                          "EndDate": ReuestTripData[index]['EndDate'],
+                                          "tripmode": ReuestTripData[index]['tripmode'],
+                                          "totalDays": ReuestTripData[index]['totalDays'],
+                                          "Flexible": ReuestTripData[index]['Flexible'],
+                                          "BookingId": '',
+                                          // "cityImage": _cityImage,
+                                        });
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (ctx) => SaveYourTripsScreen(
+                                                    type_Of_Trip: ReuestTripData[index]['type_Of_Trip'],
+                                                    plamTrip_at: ReuestTripData[index]['plamTrip_at'],
+                                                    trip_days: ReuestTripData[index]['trip_days'],
+                                                    interestList: ReuestTripData[index]['interestList'])));
+                                        // getData();
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.only(top: 10, bottom: 5),
+                                        height: height(context) * 0.35,
+                                        width: width(context) * 0.93,
+                                        decoration: shadowDecoration(15, 2),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            ClipRRect(
-                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-                                                child: Image.network(_image1)),
-                                            Positioned(
-                                              top: 5,
-                                              right: 40,
-                                              child: IconButton(
-                                                  onPressed: () async {
-                                                    //  Navigator.push(context, MaterialPageRoute(builder: (context)=>TripLibraryScreen()));
-                                                    // bookmark();
-                                                    if (!isBookmarked) {
-                                                      List Bookmarklist = [];
-                                                      Bookmarklist.add(context);
-                                                      DocumentReference users = FirebaseFirestore.instance
-                                                          .collection('users')
-                                                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                                                          .collection("bookmarks")
-                                                          .doc();
-                                                      String _id = "";
-                                                      String _imagee = "";
-                                                      users.set({
-                                                        'id': _id,
-                                                        "postID": users.id,
-                                                        'image': _imagee,
-                                                        'location': _location,
-                                                        'subtitle': _subtitle,
-                                                        'title': _title,
-                                                      });
-                                                    } else {
-                                                      var trip = await FirebaseFirestore.instance
-                                                          .collection('users')
-                                                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                                                          .collection('bookmarks')
-                                                          .doc()
-                                                          .get();
-                                                      var docID = trip.data()?['docID'];
-                                                      FirebaseDB().removeBookmark(docID);
-                                                    }
-                                                    setState(() {
-                                                      isBookmarked = !isBookmarked;
-                                                    });
-                                                  },
-                                                  icon: !isBookmarked
-                                                      ? Icon(
-                                                          Icons.bookmark_border,
-                                                          color: white,
-                                                        )
-                                                      : const Icon(Icons.bookmark)),
-                                            ),
-                                            Positioned(
-                                              top: 5,
-                                              right: 5,
-                                              child: IconButton(onPressed: () async {}, icon: Icon(Icons.more_vert)),
-                                            ),
-                                            Positioned(
-                                                bottom: 0,
-                                                left: 0,
-                                                child: Container(
-                                                  height: height(context) * 0.06,
-                                                  width: width(context) * 0.95,
-                                                  padding: EdgeInsets.only(left: 5),
-                                                  color: black.withOpacity(0.5),
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Row(
+                                            Stack(
+                                              children: [
+                                                ClipRRect(
+                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                                                    child: Image.asset('assets/images/beach.png')),
+                                                // Positioned(
+                                                //   top: 5,
+                                                //   right: 40,
+                                                //   child: IconButton(
+                                                //       onPressed: () async {
+                                                //         // Navigator.push(context, MaterialPageRoute(builder: (context)=>TripLibraryScreen()));
+                                                //         //  bookmark();
+                                                //         if (!isBookmarked) {
+                                                //           List Bookmarklist = [];
+                                                //           Bookmarklist.add(context);
+                                                //           DocumentReference users = FirebaseFirestore.instance
+                                                //               .collection('users')
+                                                //               .doc(FirebaseAuth.instance.currentUser!.uid)
+                                                //               .collection("bookmarks")
+                                                //               .doc();
+                                                //           String _id = "";
+                                                //           String _imagee = "";
+                                                //           users.set({
+                                                //             'id': _id,
+                                                //             "postID": users.id,
+                                                //             'image': _imagee,
+                                                //             'location': _location,
+                                                //             'subtitle': _subtitle,
+                                                //             'title': _title,
+                                                //           });
+                                                //         } else {
+                                                //           var trip = await FirebaseFirestore.instance
+                                                //               .collection('users')
+                                                //               .doc(FirebaseAuth.instance.currentUser!.uid)
+                                                //               .collection('bookmarks')
+                                                //               .doc()
+                                                //               .get();
+                                                //           var docID = trip.data()?['docID'];
+                                                //           FirebaseDB().removeBookmark(docID);
+                                                //         }
+                                                //         setState(() {
+                                                //           isBookmarked = !isBookmarked;
+                                                //         });
+                                                //
+                                                //         setState(() {
+                                                //           isBookmarked = !isBookmarked;
+                                                //         });
+                                                //       },
+                                                //       icon: !isBookmarked
+                                                //           ? Icon(
+                                                //               Icons.bookmark_border,
+                                                //               color: Colors.black,
+                                                //             )
+                                                //           : const Icon(Icons.bookmark)),
+                                                // ),
+                                                // Positioned(
+                                                //   top: 5,
+                                                //   right: 5,
+                                                //   child: IconButton(onPressed: () async {}, icon: Icon(Icons.more_vert)),
+                                                // ),
+                                                Positioned(
+                                                    bottom: 0,
+                                                    left: 0,
+                                                    child: Container(
+                                                      height: height(context) * 0.06,
+                                                      width: width(context) * 0.95,
+                                                      padding: EdgeInsets.only(left: 5),
+                                                      color: black.withOpacity(0.5),
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
-                                                          Icon(
-                                                            Icons.location_on_rounded,
-                                                            color: primary,
-                                                            size: 20,
-                                                          ),
-                                                          addHorizontalySpace(5),
-                                                          Text(
-                                                            '$_location1',
-                                                            style: TextStyle(fontWeight: FontWeight.w500, color: white),
-                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons.location_on_rounded,
+                                                                color: primary,
+                                                                size: 20,
+                                                              ),
+                                                              addHorizontalySpace(5),
+                                                              Text(
+                                                                '${ReuestTripData[index]['plamTrip_at']}',
+                                                                style: TextStyle(fontWeight: FontWeight.w500, color: white),
+                                                              ),
+                                                            ],
+                                                          )
                                                         ],
+                                                      ),
+                                                    ))
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(10.0),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    '${ReuestTripData[index]['type_Of_Trip']}',
+                                                    style: bodyText22w700(color: black),
+                                                  ),
+                                                  addVerticalSpace(2),
+                                                  // Text(
+                                                  //   '$_subtitle2',
+                                                  //   style: bodyText14normal(color: black),
+                                                  // ),
+                                                  // addVerticalSpace(5),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                    children: [
+                                                      Image.asset(
+                                                        'assets/images/cardrive.png',
+                                                      ),
+                                                      addHorizontalySpace(5),
+                                                      SizedBox(
+                                                        width: width(context) * 0.15,
+                                                        child: Text(
+                                                          '$_cartime2 hours',
+                                                          style: bodytext12Bold(color: black),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '  |  ',
+                                                        style: bodyText16normal(color: black),
+                                                      ),
+                                                      Image.asset(
+                                                        'assets/images/train2.png',
+                                                      ),
+                                                      addHorizontalySpace(5),
+                                                      SizedBox(
+                                                        width: width(context) * 0.15,
+                                                        child: Text(
+                                                          '$_traintime2 hours',
+                                                          style: bodytext12Bold(color: black),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '  |  ',
+                                                        style: bodyText16normal(color: black),
+                                                      ),
+                                                      Image.asset(
+                                                        'assets/images/flight.png',
+                                                      ),
+                                                      addHorizontalySpace(5),
+                                                      SizedBox(
+                                                        width: width(context) * 0.15,
+                                                        child: Text(
+                                                          'No direct flights',
+                                                          style: bodytext12Bold(color: black),
+                                                        ),
                                                       )
                                                     ],
-                                                  ),
-                                                ))
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '$_title1',
-                                                style: bodyText22w700(color: black),
-                                              ),
-                                              addVerticalSpace(2),
-                                              Text(
-                                                '$_subtitle1',
-                                                style: bodyText14normal(color: black),
-                                              ),
-                                              addVerticalSpace(5),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/images/cardrive.png',
-                                                  ),
-                                                  addHorizontalySpace(5),
-                                                  SizedBox(
-                                                    width: width(context) * 0.15,
-                                                    child: Text(
-                                                      '$_cartime1 hours',
-                                                      style: bodytext12Bold(color: black),
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    '  |  ',
-                                                    style: bodyText16normal(color: black),
-                                                  ),
-                                                  Image.asset(
-                                                    'assets/images/train2.png',
-                                                  ),
-                                                  addHorizontalySpace(5),
-                                                  SizedBox(
-                                                    width: width(context) * 0.15,
-                                                    child: Text(
-                                                      '$_traintime1 hours',
-                                                      style: bodytext12Bold(color: black),
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    '  |  ',
-                                                    style: bodyText16normal(color: black),
-                                                  ),
-                                                  Image.asset(
-                                                    'assets/images/flight.png',
-                                                  ),
-                                                  addHorizontalySpace(5),
-                                                  SizedBox(
-                                                    width: width(context) * 0.15,
-                                                    child: Text(
-                                                      'No direct flights',
-                                                      style: bodytext12Bold(color: black),
-                                                    ),
                                                   )
                                                 ],
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          }))
-                ],
+                                  ],
+                                );
+                              });
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    ))
+                  ],
+                ),
               ),
+              // Column(
+              //   children: [
+              //     Expanded(
+              //         // height: height(context) * 0.79,
+              //         child: ListView.builder(
+              //             itemCount: 0,
+              //             itemBuilder: (ctx, index) {
+              //               return Column(
+              //                 children: [
+              //                   InkWell(
+              //                     onTap: () {
+              //                       // getData();
+              //                       Navigator.push(context, MaterialPageRoute(builder: (context) => SaveYourTripsScreen()));
+              //                     },
+              //                     child: Container(
+              //                       margin: EdgeInsets.only(top: 10, bottom: 5),
+              //                       height: height(context) * 0.420,
+              //                       width: width(context) * 0.93,
+              //                       decoration: shadowDecoration(15, 2),
+              //                       child: Column(
+              //                         crossAxisAlignment: CrossAxisAlignment.start,
+              //                         children: [
+              //                           Stack(
+              //                             children: [
+              //                               ClipRRect(
+              //                                   borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+              //                                   child: Image.network(_image1)),
+              //                               Positioned(
+              //                                 top: 5,
+              //                                 right: 40,
+              //                                 child: IconButton(
+              //                                     onPressed: () async {
+              //                                       //  Navigator.push(context, MaterialPageRoute(builder: (context)=>TripLibraryScreen()));
+              //                                       // bookmark();
+              //                                       if (!isBookmarked) {
+              //                                         List Bookmarklist = [];
+              //                                         Bookmarklist.add(context);
+              //                                         DocumentReference users = FirebaseFirestore.instance
+              //                                             .collection('users')
+              //                                             .doc(FirebaseAuth.instance.currentUser!.uid)
+              //                                             .collection("bookmarks")
+              //                                             .doc();
+              //                                         String _id = "";
+              //                                         String _imagee = "";
+              //                                         users.set({
+              //                                           'id': _id,
+              //                                           "postID": users.id,
+              //                                           'image': _imagee,
+              //                                           'location': _location,
+              //                                           'subtitle': _subtitle,
+              //                                           'title': _title,
+              //                                         });
+              //                                       } else {
+              //                                         var trip = await FirebaseFirestore.instance
+              //                                             .collection('users')
+              //                                             .doc(FirebaseAuth.instance.currentUser!.uid)
+              //                                             .collection('bookmarks')
+              //                                             .doc()
+              //                                             .get();
+              //                                         var docID = trip.data()?['docID'];
+              //                                         FirebaseDB().removeBookmark(docID);
+              //                                       }
+              //                                       setState(() {
+              //                                         isBookmarked = !isBookmarked;
+              //                                       });
+              //                                     },
+              //                                     icon: !isBookmarked
+              //                                         ? Icon(
+              //                                             Icons.bookmark_border,
+              //                                             color: white,
+              //                                           )
+              //                                         : const Icon(Icons.bookmark)),
+              //                               ),
+              //                               Positioned(
+              //                                 top: 5,
+              //                                 right: 5,
+              //                                 child: IconButton(onPressed: () async {}, icon: Icon(Icons.more_vert)),
+              //                               ),
+              //                               Positioned(
+              //                                   bottom: 0,
+              //                                   left: 0,
+              //                                   child: Container(
+              //                                     height: height(context) * 0.06,
+              //                                     width: width(context) * 0.95,
+              //                                     padding: EdgeInsets.only(left: 5),
+              //                                     color: black.withOpacity(0.5),
+              //                                     child: Column(
+              //                                       mainAxisAlignment: MainAxisAlignment.center,
+              //                                       crossAxisAlignment: CrossAxisAlignment.start,
+              //                                       children: [
+              //                                         Row(
+              //                                           children: [
+              //                                             Icon(
+              //                                               Icons.location_on_rounded,
+              //                                               color: primary,
+              //                                               size: 20,
+              //                                             ),
+              //                                             addHorizontalySpace(5),
+              //                                             Text(
+              //                                               '$_location1',
+              //                                               style: TextStyle(fontWeight: FontWeight.w500, color: white),
+              //                                             ),
+              //                                           ],
+              //                                         )
+              //                                       ],
+              //                                     ),
+              //                                   ))
+              //                             ],
+              //                           ),
+              //                           Padding(
+              //                             padding: const EdgeInsets.all(10.0),
+              //                             child: Column(
+              //                               crossAxisAlignment: CrossAxisAlignment.start,
+              //                               children: [
+              //                                 Text(
+              //                                   '$_title1',
+              //                                   style: bodyText22w700(color: black),
+              //                                 ),
+              //                                 addVerticalSpace(2),
+              //                                 Text(
+              //                                   '$_subtitle1',
+              //                                   style: bodyText14normal(color: black),
+              //                                 ),
+              //                                 addVerticalSpace(5),
+              //                                 Row(
+              //                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //                                   children: [
+              //                                     Image.asset(
+              //                                       'assets/images/cardrive.png',
+              //                                     ),
+              //                                     addHorizontalySpace(5),
+              //                                     SizedBox(
+              //                                       width: width(context) * 0.15,
+              //                                       child: Text(
+              //                                         '$_cartime1 hours',
+              //                                         style: bodytext12Bold(color: black),
+              //                                       ),
+              //                                     ),
+              //                                     Text(
+              //                                       '  |  ',
+              //                                       style: bodyText16normal(color: black),
+              //                                     ),
+              //                                     Image.asset(
+              //                                       'assets/images/train2.png',
+              //                                     ),
+              //                                     addHorizontalySpace(5),
+              //                                     SizedBox(
+              //                                       width: width(context) * 0.15,
+              //                                       child: Text(
+              //                                         '$_traintime1 hours',
+              //                                         style: bodytext12Bold(color: black),
+              //                                       ),
+              //                                     ),
+              //                                     Text(
+              //                                       '  |  ',
+              //                                       style: bodyText16normal(color: black),
+              //                                     ),
+              //                                     Image.asset(
+              //                                       'assets/images/flight.png',
+              //                                     ),
+              //                                     addHorizontalySpace(5),
+              //                                     SizedBox(
+              //                                       width: width(context) * 0.15,
+              //                                       child: Text(
+              //                                         'No direct flights',
+              //                                         style: bodytext12Bold(color: black),
+              //                                       ),
+              //                                     )
+              //                                   ],
+              //                                 )
+              //                               ],
+              //                             ),
+              //                           )
+              //                         ],
+              //                       ),
+              //                     ),
+              //                   ),
+              //                 ],
+              //               );
+              //             }))
+              //   ],
+              // ),
               SizedBox(
                 height: height(context) * 0.87,
                 child: Column(
@@ -460,7 +693,7 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
                                                       isHost: ReuestTripData[index]['host'] == FirebaseAuth.instance.currentUser!.uid,
                                                       hostUid: ReuestTripData[index]['host'],
                                                       tripData: ReuestTripData[index],
-                                                      showRequestTo_Join: "Accept Request",
+                                                      showRequestTo_Join: ReuestTripData[index]['type'] == 'request' ? "" : "Accept Request",
                                                     )));
                                       },
                                       child: Container(

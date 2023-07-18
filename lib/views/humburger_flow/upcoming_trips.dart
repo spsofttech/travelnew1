@@ -11,6 +11,7 @@ import 'package:travelnew_app/views/start/signup_with_social_media_screen.dart';
 import '../../utils/constant.dart';
 import '../../widget/custom_appbar.dart';
 import '../aspired_trip/travel_agency_details.dart';
+import '../edit_prima_screen/prima_trip_1to4_screen.dart';
 import '../publish your trip/publish_your_trip.dart';
 import '../publish your trip/step1.dart';
 import '../publish your trip/step2.dart';
@@ -187,6 +188,22 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                                               docId: allData[index]['tripDocId'],
                                               totalDay: allData[index]['daysnumber'],
                                             )));
+                              if (allData[index]['travelTrip'] == 2) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PrimaTrip1To4Screens(
+                                              isHost: allData[index]['host'] == FirebaseAuth.instance.currentUser!.uid,
+                                              hostUid: allData[index]['host'],
+                                              tripData: {
+                                                'addres': allData[index]['address'],
+                                                'host': allData[index]['host'],
+                                                'tripImage': allData[index]['tripImg'],
+                                                'tripName': allData[index]['tripname'],
+                                              },
+                                              showRequestTo_Join: "",
+                                            )));
+                              }
                             },
                             child: Container(
                               margin: EdgeInsets.only(top: 10, bottom: 5),

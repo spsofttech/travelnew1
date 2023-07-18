@@ -33,13 +33,13 @@ Future<void> addPublishTripDetails() async {
         "Mode_of_travel": selectedModeOfPrimaTrip,
         "start_date": startDateController.text,
         "End_date": endDateController.text,
-        "Specify_trip_name": specitTripNameController.text,
+        "Specify_trip_name": specitTripName,
         "totalDays": totalDays,
         "Cover_Pic": coverpicImage,
         "friends": [],
         "items": [],
         'tripHost': {
-          'uid': USER_UID,
+          'uid': FirebaseAuth.instance.currentUser!.uid,
           'image': USERIMAGE,
           'name': USERNAME,
         }
@@ -133,7 +133,7 @@ class _Step1State extends State<Step1> {
   // final List<String> tripLocation = ['Pune', 'Mumbai', 'chennai'];
 
   String coverPic = "";
-  List<String> cityDropDown = [];
+  List<Map<String, dynamic>> cityDropDown = [];
   void getDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
       var profile = await FirebaseFirestore.instance
@@ -178,8 +178,8 @@ class _Step1State extends State<Step1> {
           },
         );
         print(cityListData);
-        cityDropDown = cityListData.map((e) => e['name'].toString()).toList();
-        print(cityDropDown);
+        cityDropDown = cityListData.map((e) => e as Map<String, dynamic>).toList();
+        printc(cityDropDown);
       });
     }
   }
@@ -226,44 +226,55 @@ class _Step1State extends State<Step1> {
                       bottom: BorderSide(color: Colors.black26),
                       right: BorderSide(color: Colors.black26),
                       left: BorderSide(color: Colors.black26))),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DropdownButton<String>(
-                  hint: Text("${selectedTypeOfPrimaTrip}"),
-                  borderRadius: BorderRadius.circular(10),
-                  // value: selectedTypeOfPrimaTrip,
-                  isExpanded: true,
-                  onChanged: (newValue) {
-                    selectedTypeOfPrimaTrip = newValue!;
-                    selectedCityOfPrimaTrip = "Select";
-                    String cat = selectedTypeOfPrimaTrip;
-                    getTripCities(cat: cat);
-                  },
-                  items: ['Adventure', 'Fairs and Festival', 'Road trip']
-                      .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
-                            value: value,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 5),
-                              child: Text(
-                                value,
-                                style: const TextStyle(fontSize: 15, color: Colors.black),
-                              ),
-                            ),
-                          ))
-                      .toList(),
+              child: FutureBuilder(
+                future: FirebaseFirestore.instance.collection('Tripometer').get(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DropdownButton<String>(
+                        hint: Text("${selectedTypeOfPrimaTrip}"),
+                        borderRadius: BorderRadius.circular(10),
+                        // value: selectedTypeOfPrimaTrip,
+                        isExpanded: true,
+                        onChanged: (newValue) {
+                          selectedTypeOfPrimaTrip = newValue!;
+                          selectedCityOfPrimaTrip = "Select";
+                          String cat = selectedTypeOfPrimaTrip;
+                          getTripCities(cat: cat);
+                        },
+                        items: snapshot.data!.docs
+                            .map((e) => e.id)
+                            .toList()
+                            .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: Text(
+                                      value,
+                                      style: const TextStyle(fontSize: 15, color: Colors.black),
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
 
-                  // add extra sugar..
-                  icon: const Padding(
-                    padding: EdgeInsets.only(bottom: 8.0),
-                    child: Icon(
-                      Icons.arrow_drop_down,
-                    ),
-                  ),
-                  iconSize: 25,
-                  iconEnabledColor: primary,
-                  iconDisabledColor: black.withOpacity(0.7),
-                  underline: const SizedBox(),
-                ),
+                        // add extra sugar..
+                        icon: const Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
+                          child: Icon(
+                            Icons.arrow_drop_down,
+                          ),
+                        ),
+                        iconSize: 25,
+                        iconEnabledColor: primary,
+                        iconDisabledColor: black.withOpacity(0.7),
+                        underline: const SizedBox(),
+                      ),
+                    );
+                  } else {
+                    return SizedBox();
+                  }
+                },
               ),
             ),
           ),
@@ -271,7 +282,6 @@ class _Step1State extends State<Step1> {
         addVerticalSpace(20),
         Container(padding: EdgeInsets.only(left: 8), child: const Text('Plan trip at  ')),
         addVerticalSpace(5),
-
         Padding(
           padding: const EdgeInsets.only(left: 10),
           child: SizedBox(
@@ -289,24 +299,26 @@ class _Step1State extends State<Step1> {
                       left: BorderSide(color: Colors.black26))),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: DropdownButton<String>(
+                child: DropdownButton<Map>(
                   borderRadius: BorderRadius.circular(10),
                   hint: Text("${selectedCityOfPrimaTrip}"),
                   //value: slectedCityOfPrimaTrip,
                   isExpanded: true,
                   onChanged: (newValue) {
                     setState(() {
-                      selectedCityOfPrimaTrip = newValue!;
+                      selectedCityOfPrimaTrip = newValue!['name'];
+                      specitTripName = newValue['trip_name'];
                     });
                   },
+
                   items: cityDropDown
-                      .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
+                      .map<DropdownMenuItem<Map<String, dynamic>>>((value) => DropdownMenuItem<Map<String, dynamic>>(
                             value: value,
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 5),
+                              padding: EdgeInsets.only(left: 5),
                               child: Text(
-                                value,
-                                style: const TextStyle(fontSize: 15, color: Colors.black),
+                                value['name'],
+                                style: TextStyle(fontSize: 15, color: Colors.black),
                               ),
                             ),
                           ))
@@ -534,37 +546,37 @@ class _Step1State extends State<Step1> {
           ],
         ),
         addVerticalSpace(20),
-        SizedBox(
-          height: height(context) * 0.06,
-          width: width(context) * 0.95,
-          child: Theme(
-            data: ThemeData(
-              colorScheme: Theme.of(context).colorScheme.copyWith(
-                    primary: primary,
-                  ),
-            ),
-            child: TextField(
-              // minLines: 2,
-              // maxLines: 2,
-              controller: specitTripNameController,
-              // onChanged:(String){ onChanged},
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                labelText: 'Specify a trip name',
-                // labelStyle: bodyText14w600(color: primarhy),
-                focusColor: primary,
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black26, width: 1.0), borderRadius: BorderRadius.circular(10)),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: primary, width: 1.5),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                // contentPadding:
-                //     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              ),
-            ),
-          ),
-        ),
-        addVerticalSpace(20),
+        // SizedBox(
+        //   height: height(context) * 0.06,
+        //   width: width(context) * 0.95,
+        //   child: Theme(
+        //     data: ThemeData(
+        //       colorScheme: Theme.of(context).colorScheme.copyWith(
+        //             primary: primary,
+        //           ),
+        //     ),
+        //     child: TextField(
+        //       // minLines: 2,
+        //       // maxLines: 2,
+        //       controller: specitTripNameController,
+        //       // onChanged:(String){ onChanged},
+        //       keyboardType: TextInputType.text,
+        //       decoration: InputDecoration(
+        //         labelText: 'Specify a trip name',
+        //         // labelStyle: bodyText14w600(color: primarhy),
+        //         focusColor: primary,
+        //         enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black26, width: 1.0), borderRadius: BorderRadius.circular(10)),
+        //         focusedBorder: OutlineInputBorder(
+        //           borderSide: BorderSide(color: primary, width: 1.5),
+        //           borderRadius: BorderRadius.circular(10),
+        //         ),
+        //         // contentPadding:
+        //         //     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // addVerticalSpace(20),
       ],
     );
   }
