@@ -16,6 +16,7 @@ import 'package:travelnew_app/widget/custom_button.dart';
 import 'package:travelnew_app/widget/custom_dropdown_button.dart';
 
 import '../../../utils/constant.dart';
+import '../my_account/my_trip_friends.dart';
 
 class PrimaProfileScreen extends StatefulWidget {
   const PrimaProfileScreen({super.key});
@@ -39,6 +40,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
     'assets/images/Rectangle 111 (2).png',
     'assets/images/Rectangle 111 (3).png',
   ];
+
   String Name = "";
   String image = "";
   String _profession = "";
@@ -62,6 +64,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
   }
 
   String _address = "";
+
   void getlocationDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
@@ -210,7 +213,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                             },
                             onSelected: (value) {
                               if (value == 0) {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => PrimaMyAccount()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => CreatePrimaProfile()));
                               } else if (value == 1) {
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => GoPrimaSubscriptionScreen()));
                               } else if (value == 2) {
@@ -395,7 +398,14 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                             style: bodyText20w700(color: black),
                           ),
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (ctx) => MyTripFriendsScreen(
+                                              title: 'My Trip Friends',
+                                            )));
+                              },
                               child: Text(
                                 'View all',
                                 style: bodyText14w600(color: black),
@@ -772,37 +782,31 @@ class TripFriendsAndMutualFriendsWidget extends StatefulWidget {
   State<TripFriendsAndMutualFriendsWidget> createState() => _TripFriendsAndMutualFriendsWidgetState();
 }
 
-class _TripFriendsAndMutualFriendsWidgetState extends State<TripFriendsAndMutualFriendsWidget> with TickerProviderStateMixin {
-  TabController? controller;
+class _TripFriendsAndMutualFriendsWidgetState extends State<TripFriendsAndMutualFriendsWidget> {
+  // TabController? controller;
+
   @override
   void initState() {
-    controller = TabController(length: 2, vsync: this);
-    getTripFriends();
+    // controller = TabController(length: 2, vsync: this);
+    //getTripFriends();
     super.initState();
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    controller!.dispose();
-    super.dispose();
-  }
-
-  getTripFriends() async {
-    tripAndMutualfrnds.clear();
-    var x = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
-    List abc = x.data()!['tripFriends'];
-    print(abc);
-    for (var element in abc) {
-      var y = await FirebaseFirestore.instance.collection('users').doc(element).get();
-      tripAndMutualfrnds.add(y.data());
-    }
-    print(tripAndMutualfrnds);
-    print('|||||||||||||||||||||||||||||||');
-    setState(() {});
-  }
-
-  getMutualFriends() async {}
+  //
+  // getTripFriends() async {
+  //   // tripAndMutualfrnds.clear();
+  //   // var x = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+  //   // List abc = x.data()!['tripFriends'];
+  //   // print(abc);
+  //   // for (var element in abc) {
+  //   //   var y = await FirebaseFirestore.instance.collection('users').doc(element).get();
+  //   //   tripAndMutualfrnds.add(y.data());
+  //   // }
+  //   // print(tripAndMutualfrnds);
+  //   // print('|||||||||||||||||||||||||||||||');
+  //   // setState(() {});
+  // }
+  // getMutualFriends() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -811,132 +815,102 @@ class _TripFriendsAndMutualFriendsWidgetState extends State<TripFriendsAndMutual
       height: height(context) * 0.28,
       width: width(context) * 0.95,
       decoration: myFillBoxDecoration(0, black.withOpacity(0.08), 15),
-      child: Column(
-        children: [
-          Text(
-            'Trip Friend',
-            style: TextStyle(fontFamily: GoogleFonts.roboto().fontFamily, fontSize: 20),
-          ),
-          // TabBar(
-          //   indicatorSize: TabBarIndicatorSize.tab,
-          //   unselectedLabelColor: Colors.grey,
-          //   controller: controller,
-          //   // onTap: (value) {},
-          //   isScrollable: false,
-          //   indicator: BoxDecoration(
-          //       shape: BoxShape.rectangle,
-          //       borderRadius: BorderRadius.circular(10),
-          //       color: primary),
-          //   indicatorColor: primary,
-          //   labelColor: black,
-          //   labelStyle:
-          //       const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-          //   unselectedLabelStyle:
-          //       const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-          //   tabs: const [
-          //     Tab(
-          //       text: 'Trip Friends',
-          //     ),
-          //     // Tab(
-          //     //   text: 'Mutual Friends',
-          //     // ),
-          //   ],
-          // ),
-          Expanded(
-            child: TabBarView(controller: controller, children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  addVerticalSpace(10),
-                  if (tripAndMutualfrnds.length != null)
-                    SizedBox(
-                      height: height(context) * 0.14,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: tripAndMutualfrnds.length,
-                          itemBuilder: (ctx, i) {
-                            return InkWell(
-                              onTap: (() {
-                                // Navigator.push(context, MaterialPageRoute(builder: (_)=>UserPrimaProfileScreen(userDetails: tripAndMutualfrnds[i])));
-                              }),
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      child: SizedBox(
-                                        height: height(context) * 0.11,
-                                        width: width(context) * 0.23,
-                                        child: Image.asset(
-                                          tripAndMutualfrnds[i]['profileImg'],
-                                          fit: BoxFit.fill,
+      child: FutureBuilder(
+        future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('friends').doc('data').get(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List _allUsers = snapshot.data!.data()!['data'];
+            return Column(
+              children: [
+                Text(
+                  'Trip Friend',
+                  style: TextStyle(fontFamily: GoogleFonts.roboto().fontFamily, fontSize: 20),
+                ),
+                // TabBar(
+                //   indicatorSize: TabBarIndicatorSize.tab,
+                //   unselectedLabelColor: Colors.grey,
+                //   controller: controller,
+                //   // onTap: (value) {},
+                //   isScrollable: false,
+                //   indicator: BoxDecoration(
+                //       shape: BoxShape.rectangle,
+                //       borderRadius: BorderRadius.circular(10),
+                //       color: primary),
+                //   indicatorColor: primary,
+                //   labelColor: black,
+                //   labelStyle:
+                //       const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                //   unselectedLabelStyle:
+                //       const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                //   tabs: const [
+                //     Tab(
+                //       text: 'Trip Friends',
+                //     ),
+                //     // Tab(
+                //     //   text: 'Mutual Friends',
+                //     // ),
+                //   ],
+                // ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      addVerticalSpace(10),
+                      if (_allUsers.length != null)
+                        SizedBox(
+                          height: height(context) * 0.14,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _allUsers.length,
+                              itemBuilder: (ctx, i) {
+                                return InkWell(
+                                  onTap: (() {
+                                    // Navigator.push(context, MaterialPageRoute(builder: (_)=>UserPrimaProfileScreen(userDetails: tripAndMutualfrnds[i])));
+                                  }),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          child: SizedBox(
+                                            height: height(context) * 0.11,
+                                            width: width(context) * 0.23,
+                                            child: Image.network(
+                                              _allUsers[i]['image'] == "" ? NoUserNetworkImage : _allUsers[i]['image'],
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        addVerticalSpace(5),
+                                        Text(_allUsers[i]['name']),
+                                      ],
                                     ),
-                                    addVerticalSpace(5),
-                                    Text(tripAndMutualfrnds[i]['fullName']),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }),
-                    ),
-                  addVerticalSpace(18),
-                  InkWell(
-                    onTap: () {},
-                    child: const Text(
-                      'You have trip friend request >',
-                      style: TextStyle(decoration: TextDecoration.underline, fontSize: 12, fontWeight: FontWeight.w600),
-                    ),
-                  )
-                ],
+                                  ),
+                                );
+                              }),
+                        ),
+                      addVerticalSpace(18),
+                      InkWell(
+                        onTap: () {},
+                        child: const Text(
+                          'You have trip friend request >',
+                          style: TextStyle(decoration: TextDecoration.underline, fontSize: 12, fontWeight: FontWeight.w600),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(
+                color: primary,
               ),
-              // Column(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: [
-              //     addVerticalSpace(10),
-              //     SizedBox(
-              //       height: height(context) * 0.14,
-              //       child: ListView.builder(
-              //           scrollDirection: Axis.horizontal,
-              //           itemCount: tripAndMutualfrnds.length,
-              //           itemBuilder: (ctx, i) {
-              //             return Padding(
-              //               padding: const EdgeInsets.only(right: 8.0),
-              //               child: Column(
-              //                 crossAxisAlignment: CrossAxisAlignment.center,
-              //                 children: [
-              //                   SizedBox(
-              //                     height: height(context) * 0.11,
-              //                     width: width(context) * 0.23,
-              //                     child: Image.asset(
-              //                       tripAndMutualfrnds[i]['img'],
-              //                       fit: BoxFit.fill,
-              //                     ),
-              //                   ),
-              //                   Text(tripAndMutualfrnds[i]['name']),
-              //                 ],
-              //               ),
-              //             );
-              //           }),
-              //     ),
-              //     addVerticalSpace(8),
-              //     InkWell(
-              //       onTap: () {},
-              //       child: const Text(
-              //         'You have trip friend request >',
-              //         style: TextStyle(
-              //             decoration: TextDecoration.underline,
-              //             fontSize: 12,
-              //             fontWeight: FontWeight.w600),
-              //       ),
-              //     )
-              //   ],
-              // ),
-            ]),
-          )
-        ],
+            );
+          }
+        },
       ),
     );
   }
@@ -952,127 +926,169 @@ class TripometerCircleWidget extends StatefulWidget {
 }
 
 class _TripometerCircleWidgetState extends State<TripometerCircleWidget> {
-  final List tripoMeter = ['Adventure', 'City', 'Nature', 'Religious'];
-  List tripoMeterValue = [12.0, 32.1, 78.4, 90.6];
+  // final List tripoMeter = ['Adventure', 'City', 'Nature', 'Religious'];
+  // List tripoMeterValue = [12.0, 32.1, 78.4, 90.6];
+  //
+  // double city = 0.0;
+  // double nature = 0.0;
+  // double adventure = 0.0;
+  // double religlous = 0.0;
 
-  double city = 0.0;
-  double nature = 0.0;
-  double adventure = 0.0;
-  double religlous = 0.0;
-
+  List tripoMeterList = [];
   @override
   void initState() {
     getTripometerDetails();
     super.initState();
   }
 
-  void getTripometerDetails() async {
+  Future<void> getTripometerDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile =
-          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("tripoMeter").doc("profile").get();
-      adventure = profile.data()?['Adventure'];
-      city = profile.data()?['City'];
-      nature = profile.data()?['Nature'];
-      religlous = profile.data()?['Religlous'];
-      setState(() {
-        tripoMeterValue = [
-          adventure.round().toInt().roundToDouble(),
-          city.round().toInt().roundToDouble(),
-          nature.round().toInt().roundToDouble(),
-          religlous.round().toInt().roundToDouble()
-        ];
-      });
+      tripoMeterList.clear();
+
+      CollectionReference users = FirebaseFirestore.instance.collection('users');
+      DocumentSnapshot<Map<String, dynamic>> alredyDefinDoc =
+          await users.doc(FirebaseAuth.instance.currentUser!.uid).collection("tripoMeter").doc('profile').get();
+      // var profile =
+      //     await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("tripoMeter").doc("profile").get();
+      if (alredyDefinDoc.exists) {
+        Map<String, dynamic> oldDataMap = alredyDefinDoc.data()!;
+        oldDataMap.forEach((key, value) {
+          double a = value.toDouble();
+          // printc("---${a}");
+          tripoMeterList.add({'name': '${key}', 'value': a});
+        });
+      } else {
+        var tripometer = await FirebaseFirestore.instance.collection('Tripometer').get();
+        tripometer.docs.forEach((element) {
+          tripoMeterList.add({'name': '${element.id}', 'value': 10.0});
+        });
+      }
+
+      // adventure = profile.data()?['Adventure'] ?? [];
+      // city = profile.data()?['City'];
+      // nature = profile.data()?['Nature'];
+      // religlous = profile.data()?['Religlous'];
+      // setState(() {
+      //   tripoMeterList = [
+      //     {'name': 'Adventure', 'value': adventure},
+      //     {'name': 'City', 'value': city},
+      //     {'name': 'Nature', 'value': nature},
+      //     {'name': 'Religlous', 'value': religlous},
+      //   ];
+      // });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 10,
-      runSpacing: 10,
-      children: List.generate(tripoMeter.length, (i) {
-        return Stack(
-          children: [
-            Container(
-              height: height(context) * 0.12,
-              width: width(context) * 0.45,
-              padding: EdgeInsets.all(10),
-              decoration: myFillBoxDecoration(0, black.withOpacity(0.1), 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: height(context) * 0.09,
-                    child: SfRadialGauge(
-                      axes: <RadialAxis>[
-                        RadialAxis(
-                          centerX: 0.2,
-                          centerY: 0.6,
-                          canScaleToFit: false,
-                          canRotateLabels: false,
-                          showAxisLine: false,
-                          showLabels: false,
-                          showTicks: false,
-                          minimum: 0,
-                          maximum: 100,
-                          interval: 10,
-                          ranges: <GaugeRange>[
-                            GaugeRange(
-                              startValue: 0,
-                              endValue: tripoMeterValue[i],
-                              color: primary,
-                              startWidth: 8,
-                              endWidth: 8,
-                            ),
-                          ],
-                          annotations: <GaugeAnnotation>[
-                            GaugeAnnotation(
-                                widget: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "${tripoMeterValue[i]}%",
-                                  style: bodytext12Bold(color: Colors.black),
-                                ),
-                              ],
-                            ))
-                          ],
-                        ) // RadialAxis
-                      ], // < RadialAxis > [ ]
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-                top: 10,
-                right: 10,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return FutureBuilder(
+      future: getTripometerDetails(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: List.generate(tripoMeterList.length, (i) {
+              return SizedBox(
+                width: width(context) * 0.45,
+                child: Stack(
                   children: [
-                    Text(
-                      tripoMeter[i],
-                      style: bodyText16w600(color: black),
+                    Container(
+                      height: height(context) * 0.12,
+                      width: width(context) * 0.45,
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.all(10),
+                      decoration: myFillBoxDecoration(0, black.withOpacity(0.1), 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Align(
+                            alignment: Alignment(-0.5, 0),
+                            child: SizedBox(
+                              width: width(context) * 0.17,
+                              height: height(context) * 0.09,
+                              child: SfRadialGauge(
+                                axes: <RadialAxis>[
+                                  RadialAxis(
+                                    centerX: 0.2,
+                                    centerY: 0.6,
+                                    canScaleToFit: false,
+                                    canRotateLabels: false,
+                                    showAxisLine: false,
+                                    showLabels: false,
+                                    showTicks: false,
+                                    minimum: 0,
+                                    maximum: 100,
+                                    interval: 10,
+                                    ranges: <GaugeRange>[
+                                      GaugeRange(
+                                        startValue: 0,
+                                        endValue: tripoMeterList[i]['value'],
+                                        color: primary,
+                                        startWidth: 8,
+                                        endWidth: 8,
+                                      ),
+                                    ],
+                                    annotations: <GaugeAnnotation>[
+                                      GaugeAnnotation(
+                                          widget: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "${tripoMeterList[i]['value'].round()}%",
+                                            style: bodytext12Bold(color: Colors.black),
+                                          ),
+                                        ],
+                                      ))
+                                    ],
+                                  ) // RadialAxis
+                                ], // < RadialAxis > [ ]
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    addVerticalSpace(7),
-                    Text(
-                      'Road Trip',
-                      style: bodyText12Small(color: black),
-                    ),
-                    Text(
-                      'Paragliding',
-                      style: bodyText12Small(color: black),
-                    ),
-                    addVerticalSpace(5),
-                    Text(
-                      'View all',
-                      style: bodytext12Bold(color: black),
-                    )
+                    Positioned(
+                        top: 10,
+                        right: 10,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: width(context) * 0.2,
+                              child: Text(
+                                tripoMeterList[i]['name'],
+                                style: bodyText16w600(color: black),
+                              ),
+                            ),
+                            // addVerticalSpace(7),
+                            // Text(
+                            //   'Road Trip',
+                            //   style: bodyText12Small(color: black),
+                            // ),
+                            // Text(
+                            //   'Paragliding',
+                            //   style: bodyText12Small(color: black),
+                            // ),
+                            addVerticalSpace(5),
+                            Text(
+                              'View all',
+                              style: bodytext12Bold(color: black),
+                            )
+                          ],
+                        ))
                   ],
-                ))
-          ],
-        );
-      }),
+                ),
+              );
+            }),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(color: primary),
+          );
+        }
+      },
     );
   }
 }

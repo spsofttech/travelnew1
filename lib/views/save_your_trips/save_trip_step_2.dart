@@ -353,8 +353,8 @@ class _SaveTripStep2State extends State<SaveTripStep2> {
             ),
           ),
         addVerticalSpace(15),
-        Text('It will take ${distant_in_km / 20} hours to reach'),
-        Text('It is on ${distant_in_km} KM Far'),
+        Text('It will take ${(distant_in_km / 20).round()} hours to reach'),
+        Text('It is on ${distant_in_km.round()} KM Far'),
       ],
     );
   }

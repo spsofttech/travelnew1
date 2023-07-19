@@ -27,6 +27,17 @@ class PlanATrip extends StatefulWidget {
 
 List usereTripIntrest = [];
 
+String type_of_trip1 = "Select";
+String planTrip_at_ = "Select";
+String trip_mode = "Select";
+var firstDate;
+var secondDate;
+int totalDays = 0;
+bool dateEnable = true;
+bool? flexible;
+final TextEditingController startDate = TextEditingController();
+final TextEditingController endDate = TextEditingController();
+
 class _PlanATripState extends State<PlanATrip> {
   var Trip_type_vise;
   List<Map<String, dynamic>> trip_interest_catName = [
@@ -37,8 +48,7 @@ class _PlanATripState extends State<PlanATrip> {
   // final items3 = ['Mumbai', 'Pune', 'indore', 'Jaipur', 'Baroda'];
   // final items2 = ['Trip to the Beach', 'Camping Trip', 'Road Trip', 'Group Tour', 'Trip to the city'];
   String? selectedValue;
-  final TextEditingController startDate = TextEditingController();
-  final TextEditingController endDate = TextEditingController();
+
   final TextEditingController enterdate = TextEditingController();
 
   getIntrest() async {
@@ -134,11 +144,11 @@ class _PlanATripState extends State<PlanATrip> {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     users.doc(FirebaseAuth.instance.currentUser!.uid).collection("Plan_trip").doc(FirebaseAuth.instance.currentUser!.uid).set({
       "StartTrip": UserCity,
-      "tripPlan": _string1,
-      "endtrip": _string2,
+      "tripPlan": type_of_trip1,
+      "endtrip": planTrip_at_,
       "StartDate": startDate.text,
       "EndDate": endDate.text,
-      "tripmode": _string3,
+      "tripmode": trip_mode,
       "totalDays": totalDays,
       "Flexible": flexible,
       "BookingId": '',
@@ -150,18 +160,10 @@ class _PlanATripState extends State<PlanATrip> {
   @override
   void initState() {
     getData();
+
     // getCityImageData();
     super.initState();
   }
-
-  String _string1 = "Select";
-  String _string2 = "Select";
-  String _string3 = "Select";
-  var firstDate;
-  var secondDate;
-  int totalDays = 0;
-  bool dateEnable = true;
-  bool? flexible;
 
   @override
   Widget build(BuildContext context) {
@@ -228,11 +230,11 @@ class _PlanATripState extends State<PlanATrip> {
                                 child: DropdownButton<Map<String, dynamic>>(
                                   borderRadius: BorderRadius.circular(10),
                                   // value: null,
-                                  hint: Text("${_string1}"),
+                                  hint: Text("${type_of_trip1}"),
                                   isExpanded: true,
                                   onChanged: (newValue) {
                                     setState(() {
-                                      _string1 = newValue!['val'];
+                                      type_of_trip1 = newValue!['val'];
                                     });
                                   },
                                   items: trip_interest_catName.map<DropdownMenuItem<Map<String, dynamic>>>((Map<String, dynamic> value) {
@@ -313,10 +315,10 @@ class _PlanATripState extends State<PlanATrip> {
                                   borderRadius: BorderRadius.circular(10),
                                   // value: _string2,
                                   isExpanded: true,
-                                  hint: Text("${_string2}"),
+                                  hint: Text("${planTrip_at_}"),
                                   onChanged: (newValue) {
                                     setState(() {
-                                      _string2 = newValue!;
+                                      planTrip_at_ = newValue!;
                                     });
                                   },
                                   items: travelNewTripState
@@ -549,11 +551,11 @@ class _PlanATripState extends State<PlanATrip> {
                           padding: const EdgeInsets.all(8.0),
                           child: DropdownButton<String>(
                             borderRadius: BorderRadius.circular(10),
-                            value: _string3,
+                            value: trip_mode,
                             isExpanded: true,
                             onChanged: (newValue) {
                               setState(() {
-                                _string3 = newValue!;
+                                trip_mode = newValue!;
                               });
                             },
                             items: ['Select', 'Bus', 'Train', 'Flight']
@@ -610,20 +612,20 @@ class _PlanATripState extends State<PlanATrip> {
                               bool allCodition = true;
                               String msg = "";
 
-                              if (_string1 == "Select") {
+                              if (type_of_trip1 == "Select") {
                                 msg = "${msg} Please Select Travel Type";
                                 showSimpleTost(context, txt: "${msg}");
                                 allCodition = false;
                               }
 
-                              if (_string2 == "Select") {
+                              if (planTrip_at_ == "Select") {
                                 msg = "";
                                 msg = "${msg} Please Select Travel State";
                                 showSimpleTost(context, txt: "${msg}");
                                 allCodition = false;
                               }
 
-                              if (_string3 == "Select") {
+                              if (trip_mode == "Select") {
                                 msg = "";
                                 msg = "${msg} Please Select Travel Mode";
                                 showSimpleTost(context, txt: "${msg}");
@@ -656,15 +658,15 @@ class _PlanATripState extends State<PlanATrip> {
                                     'data': FieldValue.arrayUnion([
                                       {
                                         'type': 1,
-                                        'type_Of_Trip': _string1,
-                                        'plamTrip_at': _string2,
+                                        'type_Of_Trip': type_of_trip1,
+                                        'plamTrip_at': planTrip_at_,
                                         'trip_days': totalDays,
                                         'interestList': usereTripIntrest,
                                         'date': startDate.text,
                                         "StartTrip": UserCity,
                                         "StartDate": startDate.text,
                                         "EndDate": endDate.text,
-                                        "tripmode": _string3,
+                                        "tripmode": trip_mode,
                                         "totalDays": totalDays,
                                         "Flexible": flexible,
                                         "BookingId": '',
@@ -681,15 +683,15 @@ class _PlanATripState extends State<PlanATrip> {
                                     'data': FieldValue.arrayUnion([
                                       {
                                         'type': 1,
-                                        'type_Of_Trip': _string1,
-                                        'plamTrip_at': _string2,
+                                        'type_Of_Trip': type_of_trip1,
+                                        'plamTrip_at': planTrip_at_,
                                         'trip_days': totalDays,
                                         'interestList': usereTripIntrest,
                                         'date': startDate.text,
                                         "StartTrip": UserCity,
                                         "StartDate": startDate.text,
                                         "EndDate": endDate.text,
-                                        "tripmode": _string3,
+                                        "tripmode": trip_mode,
                                         "totalDays": totalDays,
                                         "Flexible": flexible,
                                         "BookingId": '',
@@ -704,7 +706,10 @@ class _PlanATripState extends State<PlanATrip> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (ctx) => SaveYourTripsScreen(
-                                            type_Of_Trip: _string1, plamTrip_at: _string2, trip_days: totalDays, interestList: usereTripIntrest)));
+                                            type_Of_Trip: type_of_trip1,
+                                            plamTrip_at: planTrip_at_,
+                                            trip_days: totalDays,
+                                            interestList: usereTripIntrest)));
                               }
                             })),
                   ),

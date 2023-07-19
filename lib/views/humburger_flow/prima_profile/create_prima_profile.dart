@@ -54,6 +54,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
         .collection("primaAccount")
         .doc("profile")
         .set({
+          'Travelar Type': travelar_type,
           "imageUrl": _image,
           "fullName": firstnameController.text + " " + lastnameController.text,
           "firstName": firstnameController.text,
@@ -83,6 +84,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
         .collection("primaAccount")
         .doc("profile")
         .update({
+          'Travelar Type': travelar_type,
           "imageUrl": _image ?? "",
           "fullName": firstnameController.text + "" + lastnameController.text,
           "firstName": firstnameController.text,
@@ -115,6 +117,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
   }
 
   String _string = "Single";
+  String travelar_type = "Backpaker";
   String _string1 = "Male";
   String _image = "";
   String firstname = "";
@@ -276,7 +279,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                       height: 37,
                       width: width(context) * 0.45,
                       child: CustomTextFieldWidget(
-                        labelText: 'First Name',
+                        labelText: 'First Name*',
                         controller: firstnameController,
                       )),
                   addHorizontalySpace(10),
@@ -284,7 +287,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                       height: 37,
                       width: width(context) * 0.45,
                       child: CustomTextFieldWidget(
-                        labelText: 'Last Name',
+                        labelText: 'Last Name*',
                         controller: lastnameController,
                       ))
                 ],
@@ -297,7 +300,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                       width: width(context) * 0.45,
                       child: CustomTextFieldWidget(
                         controller: dateOfBirth,
-                        labelText: 'Date Of Birth',
+                        labelText: 'Date Of Birth*',
                         icon: Icon(
                           Icons.calendar_month_outlined,
                           color: primary,
@@ -466,6 +469,59 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                   ),
                 ],
               ),
+              addVerticalSpace(10),
+              Text('Travelar Type'),
+
+              SizedBox(
+                height: 37,
+                width: width(context) * 0.45,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border(
+                          top: BorderSide(
+                            color: Colors.black26,
+                          ),
+                          bottom: BorderSide(color: Colors.black26),
+                          right: BorderSide(color: Colors.black26),
+                          left: BorderSide(color: Colors.black26))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DropdownButton<String>(
+                      borderRadius: BorderRadius.circular(10),
+                      value: travelar_type,
+                      isExpanded: true,
+                      onChanged: (newValue) {
+                        setState(() {
+                          travelar_type = newValue!;
+                        });
+                      },
+                      items: ['Backpaker', 'Solo traveler', 'Photographer', "Long term Traveler", 'Road Traveler']
+                          .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: bodytext12Bold(color: black),
+                                ),
+                              ))
+                          .toList(),
+
+                      // add extra sugar..
+                      icon: const Padding(
+                        padding: EdgeInsets.only(bottom: 8.0),
+                        child: Icon(
+                          Icons.arrow_drop_down,
+                        ),
+                      ),
+                      iconSize: 25,
+                      iconEnabledColor: primary,
+                      iconDisabledColor: black.withOpacity(0.7),
+                      underline: const SizedBox(),
+                    ),
+                  ),
+                ),
+              ),
+
               SizedBox(
                 height: 30,
                 child: TextButton(
@@ -475,26 +531,33 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                       style: TextStyle(fontWeight: FontWeight.w600, color: primary, decoration: TextDecoration.underline),
                     )),
               ),
+
               const Divider(
                 // height: ,
                 thickness: 1,
               ),
+
               addVerticalSpace(7),
+
               const Text(
                 'Contact details',
                 style: TextStyle(
                   fontSize: 20,
                 ),
               ),
+
               addVerticalSpace(10),
+
               SizedBox(
                 height: 37,
                 child: CustomTextFieldWidget(
-                  labelText: 'Email Id',
+                  labelText: 'Email Id*',
                   controller: emailId,
                 ),
               ),
+
               addVerticalSpace(10),
+
               Row(
                 children: [
                   SizedBox(
@@ -621,45 +684,48 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                         hintText: 'Example: Loves to cook, workout, books etc')),
               ),
               addVerticalSpace(10),
-              Text(
-                'Show my other interest to',
-                style: bodyText14w600(color: black),
-              ),
-              SizedBox(
-                  height: height(context) * 0.06,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: selectOtherInterestList.length,
-                      padding: EdgeInsets.zero,
-                      itemBuilder: (ctx, i) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 15.0),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 30,
-                                child: Checkbox(
-                                  activeColor: primary,
-                                  checkColor: black,
-                                  value: selectOtherInterestList[i].isSelected,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      for (var element in selectOtherInterestList) {
-                                        element.isSelected = false;
-                                      }
-                                      selectOtherInterestList[i].isSelected = value!;
-                                    });
-                                  },
-                                ),
-                              ),
-                              Text(selectOtherInterestList[i].name)
-                            ],
-                          ),
-                        );
-                      })),
-              const Divider(
-                thickness: 1,
-              ),
+
+              // Text(
+              //   'Show my other interest to',
+              //   style: bodyText14w600(color: black),
+              // ),
+              // SizedBox(
+              //     height: height(context) * 0.06,
+              //     child: ListView.builder(
+              //         scrollDirection: Axis.horizontal,
+              //         itemCount: selectOtherInterestList.length,
+              //         padding: EdgeInsets.zero,
+              //         itemBuilder: (ctx, i) {
+              //           return Padding(
+              //             padding: const EdgeInsets.only(right: 15.0),
+              //             child: Row(
+              //               children: [
+              //                 SizedBox(
+              //                   width: 30,
+              //                   child: Checkbox(
+              //                     activeColor: primary,
+              //                     checkColor: black,
+              //                     value: selectOtherInterestList[i].isSelected,
+              //                     onChanged: (value) {
+              //                       setState(() {
+              //
+              //                         for (var element in selectOtherInterestList) {
+              //                           element.isSelected = false;
+              //                         }
+              //                         selectOtherInterestList[i].isSelected = value!;
+              //
+              //                       });
+              //                     },
+              //                   ),
+              //                 ),
+              //                 Text(selectOtherInterestList[i].name)
+              //               ],
+              //             ),
+              //           );
+              //         })),
+
+              const Divider(thickness: 1),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -672,42 +738,15 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                   IconButton(onPressed: () {}, icon: Icon(Icons.help))
                 ],
               ),
+
               TripometerWidget(),
-              InkWell(
-                  onTap: () {
-                    tripomererequaried(context);
-                  },
-                  child: Text(
-                    'Why is this required',
-                    style: TextStyle(fontWeight: FontWeight.w600, color: primary, decoration: TextDecoration.underline),
-                  )),
+
               addVerticalSpace(10),
               Divider(
                 thickness: 1,
               ),
               addVerticalSpace(10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'What excites you?',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (ctx) => YourTripInterest(
-                                      isPrima: true,
-                                    )));
-                      },
-                      icon: Icon(Icons.edit_note))
-                ],
-              ),
-              WhatExcitesYouWidget(),
+
               const Divider(
                 thickness: 1,
               ),
@@ -729,8 +768,8 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                               updateprima();
                               if (firstname != "") {
                                 yesprimprofile(context);
-
                                 updatePrimaAccountDetails();
+
                                 //   Navigator.push(
                                 //       context,
                                 //       MaterialPageRoute(
@@ -739,6 +778,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
                               } else {
                                 notprimamember(context);
                                 addPrimaAccountDetails();
+
                                 // Navigator.push(
                                 //     context,
                                 //     MaterialPageRoute(
@@ -821,34 +861,6 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
     }
     setState(() {});
   }
-
-  tripomererequaried(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              contentPadding: const EdgeInsets.all(6),
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              content: Builder(
-                builder: (context) {
-                  var height = MediaQuery.of(context).size.height;
-                  var width = MediaQuery.of(context).size.width;
-
-                  return Container(
-                    height: 200,
-                    width: 100,
-                    child: Center(
-                        child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text(
-                        'As you like type of trips, adjust the trip-type bar to highlight it in your profile. This helps to know what kind of trips you like and how much’. Remove the ? ',
-                        style: TextStyle(fontFamily: GoogleFonts.roboto().fontFamily),
-                      ),
-                    )),
-                  );
-                },
-              ),
-            ));
-  }
 }
 
 class TripometerWidget extends StatefulWidget {
@@ -879,6 +891,34 @@ class _TripometerWidgetState extends State<TripometerWidget> {
   //       .doc("profile")
   //       .set({"Adventure": adventure, "City": city, "Nature": nature, "Religlous": religlous});
   // }
+
+  tripomererequaried(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              contentPadding: const EdgeInsets.all(6),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              content: Builder(
+                builder: (context) {
+                  var height = MediaQuery.of(context).size.height;
+                  var width = MediaQuery.of(context).size.width;
+
+                  return Container(
+                    height: 200,
+                    width: 100,
+                    child: Center(
+                        child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Text(
+                        'As you like type of trips, adjust the trip-type bar to highlight it in your profile. This helps to know what kind of trips you like and how much’. Remove the ? ',
+                        style: TextStyle(fontFamily: GoogleFonts.roboto().fontFamily),
+                      ),
+                    )),
+                  );
+                },
+              ),
+            ));
+  }
 
   updateTripometerDetails() async {
     // Call the user's CollectionReference to add a new user
@@ -944,56 +984,84 @@ class _TripometerWidgetState extends State<TripometerWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: height(context) * 0.28,
+          height: height(context) * 0.5,
           width: width(context) * 0.95,
           child: FutureBuilder(
             future: getTripometerDetails(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return ListView.builder(
-                    //  physics: const NeverScrollableScrollPhysics(),
-                    itemCount: tripoMeterList.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (ctx, i) {
-                      printc(tripoMeterList.length);
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 23, left: 23),
-                        child: Column(
-                          children: [
-                            RotatedBox(
-                              quarterTurns: 3,
-                              child: Obx(() => Slider(
-                                    value: tripoMeterList[i]['value'].value,
-                                    onChanged: (value) {
-                                      tripoMeterList[i]['value'].value = value;
-                                      printc(tripoMeterList[i]['value'].value);
-                                      // setState(() {
-                                      //   adventure = tripoMeterList[0]['value'];
-                                      //   city = tripoMeterList[1]['value'];
-                                      //   nature = tripoMeterList[2]['value'];
-                                      //   religlous = tripoMeterList[3]['value'];
-                                      // });
-                                      // if (city != 0.0) {
-                                      //   //addTripometerDetails();
-                                      // } else {
-                                      //   updateTripometerDetails();
-                                      // }
+                return Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                          //  physics: const NeverScrollableScrollPhysics(),
+                          itemCount: tripoMeterList.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (ctx, i) {
+                            printc(tripoMeterList.length);
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 23, left: 23),
+                              child: Column(
+                                children: [
+                                  RotatedBox(
+                                    quarterTurns: 3,
+                                    child: Obx(() => Slider(
+                                          value: tripoMeterList[i]['value'].value,
+                                          onChanged: (value) {
+                                            tripoMeterList[i]['value'].value = value;
+                                            printc(tripoMeterList[i]['value'].value);
+                                            // setState(() {
+                                            //   adventure = tripoMeterList[0]['value'];
+                                            //   city = tripoMeterList[1]['value'];
+                                            //   nature = tripoMeterList[2]['value'];
+                                            //   religlous = tripoMeterList[3]['value'];
+                                            // });
+                                            // if (city != 0.0) {
+                                            //   //addTripometerDetails();
+                                            // } else {
+                                            //   updateTripometerDetails();
+                                            // }
 
-                                      //getTripometerDetails();
-                                    },
-                                    max: 100,
-                                    min: 0,
-                                    activeColor: primary,
-                                  )),
-                            ),
-                            Text(
-                              tripoMeterList[i]['name'],
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: black),
-                            ),
-                          ],
+                                            //getTripometerDetails();
+                                          },
+                                          max: 100,
+                                          min: 0,
+                                          activeColor: primary,
+                                        )),
+                                  ),
+                                  Text(
+                                    tripoMeterList[i]['name'],
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: black),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'What excites you?',
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
                         ),
-                      );
-                    });
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (ctx) => YourTripInterest(
+                                            isPrima: true,
+                                          )));
+                            },
+                            icon: Icon(Icons.edit_note))
+                      ],
+                    ),
+                    WhatExcitesYouWidget(intrestList: tripoMeterList),
+                  ],
+                );
               } else {
                 return Center(
                   child: CircularProgressIndicator(color: primary),
@@ -1002,14 +1070,28 @@ class _TripometerWidgetState extends State<TripometerWidget> {
             },
           ),
         ),
-        Center(
-            child: CustomButton(
+        Row(
+          children: [
+            InkWell(
+                onTap: () {
+                  tripomererequaried(context);
+                },
+                child: Text(
+                  'Why is this required',
+                  style: TextStyle(fontWeight: FontWeight.w600, color: primary, decoration: TextDecoration.underline),
+                )),
+            SizedBox(
+              width: width(context) * 0.1,
+            ),
+            CustomButton(
                 ww: width(context) * 0.2,
                 hh: 30,
                 name: "Update",
                 onPressed: () {
                   updateTripometerDetails();
-                }))
+                }),
+          ],
+        )
       ],
     );
   }
@@ -1019,6 +1101,7 @@ String _image1 = "";
 String _image2 = "";
 String _image3 = "";
 String _image4 = "";
+
 updatetravelphoto() async {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   users
@@ -1155,96 +1238,97 @@ class _UploadTravelsPhotosState extends State<UploadTravelsPhotos> {
           style: bodyText12Small(color: black),
         ),
         addVerticalSpace(15),
-        Padding(
-          padding: const EdgeInsets.only(left: 50),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: InkWell(
-                      onTap: () {
-                        pickUploadImage1();
-                      },
-                      child: Container(
-                        height: height(context) * 0.15,
-                        width: width(context) * 0.3,
-                        decoration: _image1 == ""
-                            ? BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                        'https://creazilla-store.fra1.digitaloceanspaces.com/icons/3175753/ic-fluent-add-square-24-regular-icon-sm.png')))
-                            : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(_image1))),
-                      ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: InkWell(
+                    onTap: () {
+                      pickUploadImage1();
+                    },
+                    child: Container(
+                      height: height(context) * 0.15,
+                      width: width(context) * 0.3,
+                      decoration: _image1 == ""
+                          ? BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                      'https://creazilla-store.fra1.digitaloceanspaces.com/icons/3175753/ic-fluent-add-square-24-regular-icon-sm.png')))
+                          : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(_image1))),
                     ),
                   ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: InkWell(
-                      onTap: () {
-                        pickUploadImage2();
-                      },
-                      child: Container(
-                        height: height(context) * 0.15,
-                        width: width(context) * 0.3,
-                        decoration: _image2 == ""
-                            ? BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                        'https://creazilla-store.fra1.digitaloceanspaces.com/icons/3175753/ic-fluent-add-square-24-regular-icon-sm.png')))
-                            : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(_image2))),
-                      ),
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: InkWell(
+                    onTap: () {
+                      pickUploadImage2();
+                    },
+                    child: Container(
+                      height: height(context) * 0.15,
+                      width: width(context) * 0.3,
+                      decoration: _image2 == ""
+                          ? BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                      'https://creazilla-store.fra1.digitaloceanspaces.com/icons/3175753/ic-fluent-add-square-24-regular-icon-sm.png')))
+                          : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(_image2))),
                     ),
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: InkWell(
-                      onTap: () {
-                        pickUploadImage3();
-                      },
-                      child: Container(
-                        height: height(context) * 0.15,
-                        width: width(context) * 0.3,
-                        decoration: _image3 == ""
-                            ? BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                        'https://creazilla-store.fra1.digitaloceanspaces.com/icons/3175753/ic-fluent-add-square-24-regular-icon-sm.png')))
-                            : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(_image3))),
-                      ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: InkWell(
+                    onTap: () {
+                      pickUploadImage3();
+                    },
+                    child: Container(
+                      height: height(context) * 0.15,
+                      width: width(context) * 0.3,
+                      decoration: _image3 == ""
+                          ? BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                      'https://creazilla-store.fra1.digitaloceanspaces.com/icons/3175753/ic-fluent-add-square-24-regular-icon-sm.png')))
+                          : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(_image3))),
                     ),
                   ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: InkWell(
-                      onTap: () {
-                        pickUploadImage4();
-                      },
-                      child: Container(
-                        height: height(context) * 0.15,
-                        width: width(context) * 0.3,
-                        decoration: _image4 == ""
-                            ? BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                        'https://creazilla-store.fra1.digitaloceanspaces.com/icons/3175753/ic-fluent-add-square-24-regular-icon-sm.png')))
-                            : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(_image4))),
-                      ),
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: InkWell(
+                    onTap: () {
+                      pickUploadImage4();
+                    },
+                    child: Container(
+                      height: height(context) * 0.15,
+                      width: width(context) * 0.3,
+                      decoration: _image4 == ""
+                          ? BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                      'https://creazilla-store.fra1.digitaloceanspaces.com/icons/3175753/ic-fluent-add-square-24-regular-icon-sm.png')))
+                          : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(_image4))),
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
         // Center(
         //   child: Wrap(
@@ -1317,14 +1401,15 @@ class _UploadTravelsPhotosState extends State<UploadTravelsPhotos> {
 }
 
 class WhatExcitesYouWidget extends StatelessWidget {
-  WhatExcitesYouWidget({super.key});
+  List intrestList;
+  WhatExcitesYouWidget({super.key, required this.intrestList});
 
-  final List whatExcitesYou = [
-    {'title': 'Adventure', 'subTitle': 'Camping Waterfalls Hills and Trek'},
-    {'title': 'Nature', 'subTitle': 'Hill area Safari Wildlife Sa'},
-    {'title': 'City', 'subTitle': 'Shopping Nightlife Water sports'},
-    {'title': 'Religlous', 'subTitle': 'A religion is a set of beliefs regarding the purpose of existence'}
-  ];
+  // final List whatExcitesYou = [
+  //   {'title': 'Adventure', 'subTitle': 'Camping Waterfalls Hills and Trek'},
+  //   {'title': 'Nature', 'subTitle': 'Hill area Safari Wildlife Sa'},
+  //   {'title': 'City', 'subTitle': 'Shopping Nightlife Water sports'},
+  //   {'title': 'Religlous', 'subTitle': 'A religion is a set of beliefs regarding the purpose of existence'}
+  // ];
   // final List ViewFunction = [
   //   {'function': YourAdventureInterest()},
   //   {'function': YourNatureInterest()},
@@ -1338,7 +1423,7 @@ class WhatExcitesYouWidget extends StatelessWidget {
         height: height(context) * 0.15,
         child: CarouselSlider(
           options: CarouselOptions(height: 400.0),
-          items: [0, 1, 2, 3].map((i) {
+          items: intrestList.map((i) {
             return Builder(
               builder: (BuildContext context) {
                 return Column(
@@ -1346,7 +1431,7 @@ class WhatExcitesYouWidget extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.all(10),
                       margin: EdgeInsets.only(right: 10),
-                      height: height(context) * 0.13,
+                      height: height(context) * 0.07,
                       width: width(context) * 1.32,
                       decoration: myFillBoxDecoration(0, black.withOpacity(0.1), 10),
                       child: Column(
@@ -1354,29 +1439,29 @@ class WhatExcitesYouWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            whatExcitesYou[i]['title'],
+                            i['name'],
                             style: bodyText16w600(color: black),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: SizedBox(
-                                    width: width(context) * 0.3,
-                                    child: Text(
-                                      whatExcitesYou[i]['subTitle'],
-                                    )),
-                              ),
-                              TextButton(
-                                  onPressed: () {
-                                    //  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewFunction[i]['function']));
-                                  },
-                                  child: Text(
-                                    'View all',
-                                    style: bodyText14w600(color: black),
-                                  ))
-                            ],
-                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Expanded(
+                          //       child: SizedBox(
+                          //           width: width(context) * 0.3,
+                          //           child: Text(
+                          //             whatExcitesYou[i]['subTitle'],
+                          //           )),
+                          //     ),
+                          //     TextButton(
+                          //         onPressed: () {
+                          //           //  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewFunction[i]['function']));
+                          //         },
+                          //         child: Text(
+                          //           'View all',
+                          //           style: bodyText14w600(color: black),
+                          //         ))
+                          //   ],
+                          // ),
                           // TextButton(
                           //     onPressed: () {},
                           //     child: Text(
@@ -1459,6 +1544,7 @@ class _StepperWidgetState extends State<StepperWidget> {
       isActive: true,
     ),
   ];
+
   List<Step> stepList() => [
         Step(
             state: _activeCurrentStep <= 1 ? StepState.editing : StepState.complete,
@@ -1475,6 +1561,7 @@ class _StepperWidgetState extends State<StepperWidget> {
         Step(state: StepState.complete, isActive: _activeCurrentStep >= 2, label: const Text('About'), title: const SizedBox(), content: SizedBox()),
         Step(state: StepState.complete, isActive: _activeCurrentStep >= 3, label: const Text('Tripometer'), title: const SizedBox(), content: SizedBox())
       ];
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(

@@ -144,7 +144,7 @@ class TripoMeterManage extends StatelessWidget {
                             ],
                           ),
                           addVerticalSpace(10),
-                          WhatExcitesYouWidget(),
+                          // WhatExcitesYouWidget(),
                           addVerticalSpace(20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

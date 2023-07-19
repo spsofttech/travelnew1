@@ -269,6 +269,7 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
                                   children: [
                                     InkWell(
                                       onTap: () async {
+                                        showAPICallPendingDialog(context);
                                         log("${ReuestTripData[index]}");
 
                                         CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -288,14 +289,31 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
                                           "BookingId": '',
                                           // "cityImage": _cityImage,
                                         });
+
+                                        Navigator.pop(context);
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (ctx) => SaveYourTripsScreen(
-                                                    type_Of_Trip: ReuestTripData[index]['type_Of_Trip'],
-                                                    plamTrip_at: ReuestTripData[index]['plamTrip_at'],
-                                                    trip_days: ReuestTripData[index]['trip_days'],
-                                                    interestList: ReuestTripData[index]['interestList'])));
+                                                        storedDataMap: {
+                                                          'type_Of_Trip': ReuestTripData[index]['type_Of_Trip'],
+                                                          'plamTrip_at': ReuestTripData[index]['plamTrip_at'],
+                                                          'trip_days': ReuestTripData[index]['trip_days'],
+                                                          'interestList': ReuestTripData[index]['interestList'],
+                                                          'date': ReuestTripData[index]['date'],
+                                                          "StartTrip": ReuestTripData[index]['StartTrip'],
+                                                          "StartDate": ReuestTripData[index]['StartDate'],
+                                                          "EndDate": ReuestTripData[index]['EndDate'],
+                                                          "tripmode": ReuestTripData[index]['tripmode'],
+                                                          "totalDays": ReuestTripData[index]['totalDays'],
+                                                          "Flexible": ReuestTripData[index]['Flexible'],
+                                                          // "cityImage": _cityImage,
+                                                        },
+                                                        type_Of_Trip: ReuestTripData[index]['type_Of_Trip'],
+                                                        plamTrip_at: ReuestTripData[index]['plamTrip_at'],
+                                                        trip_days: ReuestTripData[index]['trip_days'],
+                                                        interestList: ReuestTripData[index]['interestList'])));
+
                                         // getData();
                                       },
                                       child: Container(

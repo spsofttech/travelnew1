@@ -23,6 +23,7 @@ import 'package:travelnew_app/views/start/on_boarding_screen.dart';
 import 'package:travelnew_app/views/start/signup_with_social_media_screen.dart';
 
 import '../views/edit_prima_screen/prima_trip_1to4_screen.dart';
+import '../views/humburger_flow/prima_profile/prima_profile_screen.dart';
 import '../views/publish your trip/selecteTripFriendPage.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -309,9 +310,23 @@ class _MyDrawerState extends State<MyDrawer> {
                     Padding(
                       padding: EdgeInsets.only(left: width(context) * 0.195),
                       child: InkWell(
-                          onTap: () {
+                          onTap: () async {
                             if (FirebaseAuth.instance.currentUser != null) {
-                              Navigator.push(context, MaterialPageRoute(builder: (ctx) => CreatePrimaProfile()));
+                              if (USER_IS_PRIMA) {
+                                bool isAlredyUpdated = await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                    .collection('primaAccount')
+                                    .doc('profile')
+                                    .get()
+                                    .then((value) => value.exists);
+                                print("--- --- --- --${isAlredyUpdated}");
+                                if (isAlredyUpdated) {
+                                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => PrimaProfileScreen()));
+                                } else {
+                                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => CreatePrimaProfile()));
+                                }
+                              } else {}
                             } else {
                               Navigator.pop(context);
                               showSnackBar(context, "Please Login First!", Colors.red);

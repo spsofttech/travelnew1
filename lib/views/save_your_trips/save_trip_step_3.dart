@@ -14,14 +14,15 @@ import 'package:travelnew_app/widget/custom_textfield.dart';
 
 import '../../model/save_trip_model.dart';
 import '../../utils/constant.dart';
+import '../home/plan_trip_screen.dart';
 
 enum includes { one, two, three, four }
 
 includes _value = includes.one;
 final TextEditingController DepatureDateController = TextEditingController();
 
-String _string1 = "Select";
-String _string2 = "Select";
+String adults_cnt = "Select";
+String children_cnt = "Select";
 String hotaltype = "";
 String incl1 = "";
 
@@ -29,8 +30,8 @@ updatePlanTrip() async {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   users.doc(FirebaseAuth.instance.currentUser!.uid).collection("Plan_trip").doc(FirebaseAuth.instance.currentUser!.uid).update({
     "DepatureDate": DepatureDateController.text,
-    "Adults": _string1,
-    "Children": _string2,
+    "Adults": adults_cnt,
+    "Children": children_cnt,
     "HotelType": hotaltype,
     "Includes": incl1,
     "tripDocId": "${tripdataForStore[0]['id']}"
@@ -47,6 +48,7 @@ String _tripType = "";
 String _startDate = "";
 bool? flexibledate;
 int _bookingId = 0;
+
 void getData() async {
   if (FirebaseAuth.instance.currentUser != null) {
     var profile = await FirebaseFirestore.instance
@@ -55,7 +57,7 @@ void getData() async {
         .collection('Plan_trip')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
-    place = profile.data()?['endtrip'];
+    place = profile.data()?['endtrip'] ?? "";
     days1 = profile.data()?['totalDays'];
     //days2 = profile.data()?['mainualyEnterDays'];
     flexibledate = profile.data()?['Flexible'];
@@ -98,6 +100,25 @@ int _totalday = 0;
 
 addupcomingtrip() async {
   if (FirebaseAuth.instance.currentUser != null) {
+    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('trip library').doc('unsaved').update({
+      'data': FieldValue.arrayRemove([
+        {
+          'type': 1,
+          'type_Of_Trip': type_of_trip1,
+          'plamTrip_at': planTrip_at_,
+          'trip_days': totalDays,
+          'interestList': usereTripIntrest,
+          'date': startDate.text,
+          "StartTrip": UserCity,
+          "StartDate": startDate.text,
+          "EndDate": endDate.text,
+          "tripmode": trip_mode,
+          "totalDays": totalDays,
+          "Flexible": flexible,
+          "BookingId": '',
+        }
+      ])
+    });
     // DocumentReference profile =
     await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("upcomingtrip").add({
       'image': _image,
@@ -115,8 +136,8 @@ addupcomingtrip() async {
       'departuredate': DepatureDateController.text,
       "Hoteltype": hotaltype,
       "TripDays": _totalday,
-      "childer": _string1,
-      "Adults": _string2,
+      "childer": adults_cnt,
+      "Adults": children_cnt,
       "bookingId": _bookingId,
       "Includes": _value.name,
       "bookingeresponse": 'bookingres',
@@ -273,11 +294,11 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
                     padding: const EdgeInsets.all(8.0),
                     child: DropdownButton<String>(
                       borderRadius: BorderRadius.circular(10),
-                      value: _string1,
+                      value: adults_cnt,
                       isExpanded: true,
                       onChanged: (newValue) {
                         setState(() {
-                          _string1 = newValue!;
+                          adults_cnt = newValue!;
                         });
                       },
                       items: ['Select', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -335,11 +356,11 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
                     padding: const EdgeInsets.all(8.0),
                     child: DropdownButton<String>(
                       borderRadius: BorderRadius.circular(10),
-                      value: _string2,
+                      value: children_cnt,
                       isExpanded: true,
                       onChanged: (newValue) {
                         setState(() {
-                          _string2 = newValue!;
+                          children_cnt = newValue!;
                         });
                       },
                       items: ['Select', '1', '2', '3', '4', '5', '6', '7', '8', '9']

@@ -370,18 +370,19 @@ class _MyTripFriendsScreenState extends State<MyTripFriendsScreen> {
                                             value: 1,
                                             child: Text("Send a message"),
                                           ),
-                                          PopupMenuItem(
-                                            onTap: () async {
-                                              await send_friendRequset(
-                                                  friendUid: listo[i]['id'], image: listo[i]['image'] ?? "", name: listo[i]['name'] ?? "");
+                                          if (widget.title == 'My Trip Friends')
+                                            PopupMenuItem(
+                                              onTap: () async {
+                                                await send_friendRequset(
+                                                    friendUid: listo[i]['id'], image: listo[i]['image'] ?? "", name: listo[i]['name'] ?? "");
 
-                                              print("-----");
-                                              if (widget.tripData.length != 0)
-                                                await rendTripRequest(tripData: widget.tripData[0], friendUid: listo[i]['id']);
-                                            },
-                                            value: 2,
-                                            child: Text('Add trip friend'),
-                                          ),
+                                                print("-----");
+                                                if (widget.tripData.length != 0)
+                                                  await rendTripRequest(tripData: widget.tripData[0], friendUid: listo[i]['id']);
+                                              },
+                                              value: 2,
+                                              child: Text('Add trip friend'),
+                                            ),
                                           PopupMenuItem(
                                             value: 3,
                                             child: InkWell(

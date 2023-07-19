@@ -98,14 +98,12 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await _collectionRef.get();
     // Get data from docs and convert map to List
-
-    allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-
+    upcomingTripData = querySnapshot.docs.map((doc) => doc.data()).toList();
     setState(() {});
-    print(allData);
+    print(upcomingTripData);
   }
 
-  List allData = [];
+  List upcomingTripData = [];
 
   @override
   Widget build(BuildContext context) {
@@ -171,35 +169,35 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
             Expanded(
                 // height: height(context) * 0.79,
                 child: ListView.builder(
-                    itemCount: allData.length,
+                    itemCount: upcomingTripData.length,
                     itemBuilder: (ctx, index) {
                       return Column(
                         children: [
                           InkWell(
                             onTap: () {
                               // getData();
-                              if (allData[index]['travelTrip'] == 1)
+                              if (upcomingTripData[index]['travelTrip'] == 1)
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => TripLibraryDetailsScreen(
-                                              targetState1: allData[index]['state'],
-                                              targetType1: allData[index]['tripsport'],
-                                              docId: allData[index]['tripDocId'],
-                                              totalDay: allData[index]['daysnumber'],
+                                              targetState1: upcomingTripData[index]['state'],
+                                              targetType1: upcomingTripData[index]['tripsport'],
+                                              docId: upcomingTripData[index]['tripDocId'],
+                                              totalDay: upcomingTripData[index]['daysnumber'],
                                             )));
-                              if (allData[index]['travelTrip'] == 2) {
+                              if (upcomingTripData[index]['travelTrip'] == 2) {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => PrimaTrip1To4Screens(
-                                              isHost: allData[index]['host'] == FirebaseAuth.instance.currentUser!.uid,
-                                              hostUid: allData[index]['host'],
+                                              isHost: upcomingTripData[index]['host'] == FirebaseAuth.instance.currentUser!.uid,
+                                              hostUid: upcomingTripData[index]['host'],
                                               tripData: {
-                                                'addres': allData[index]['address'],
-                                                'host': allData[index]['host'],
-                                                'tripImage': allData[index]['tripImg'],
-                                                'tripName': allData[index]['tripname'],
+                                                'addres': upcomingTripData[index]['address'],
+                                                'host': upcomingTripData[index]['host'],
+                                                'tripImage': upcomingTripData[index]['tripImg'],
+                                                'tripName': upcomingTripData[index]['tripname'],
                                               },
                                               showRequestTo_Join: "",
                                             )));
@@ -221,7 +219,7 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                                         child: ClipRRect(
                                             borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
                                             child: Image.network(
-                                              allData[index]['tripImg'],
+                                              upcomingTripData[index]['tripImg'],
                                               fit: BoxFit.fill,
                                             )),
                                       ),
@@ -234,7 +232,7 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                                       //         'assets/images/forward.png',
                                       //       )),
                                       // ),
-                                      allData[index]['travelTrip'] == 2
+                                      upcomingTripData[index]['travelTrip'] == 2
                                           ? SizedBox()
                                           : Positioned(
                                               top: -5,
@@ -245,7 +243,7 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) => TravelAgencyDetailsScreen(
-                                                                  MP: allData[index],
+                                                                  MP: upcomingTripData[index],
                                                                 )));
                                                   },
                                                   icon: Icon(Icons.more_vert)),
@@ -271,7 +269,7 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                                                     ),
                                                     addHorizontalySpace(5),
                                                     Text(
-                                                      allData[index]['date'],
+                                                      upcomingTripData[index]['date'],
                                                       style: TextStyle(fontWeight: FontWeight.w500, color: white),
                                                     )
                                                   ],
@@ -285,7 +283,7 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                                                     ),
                                                     addHorizontalySpace(5),
                                                     Text(
-                                                      allData[index]['address'],
+                                                      upcomingTripData[index]['address'],
                                                       style: TextStyle(fontWeight: FontWeight.w500, color: white),
                                                     ),
                                                   ],
@@ -301,7 +299,7 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          allData[index]['tirpname'],
+                                          upcomingTripData[index]['tirpname'],
                                           style: bodyText22w700(color: black),
                                         ),
                                         addVerticalSpace(2),

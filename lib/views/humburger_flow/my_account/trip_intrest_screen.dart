@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:travelnew_app/utils/constant.dart';
 
 import '../../../widget/custom_appbar.dart';
@@ -48,7 +50,7 @@ class _YourTripInterestState extends State<YourTripInterest> {
   }
 
   List<List<Map<String, Object>>> trip_interest_data_list = [];
-  List<String> trip_interest_catName = [];
+  RxList trip_interest_catName = [].obs;
 
   getIntrest() async {
     trip_interest_data_list.clear();
@@ -96,7 +98,7 @@ class _YourTripInterestState extends State<YourTripInterest> {
 
   getIntrestPrima() async {
     trip_interest_data_list.clear();
-    trip_interest_catName.clear();
+    trip_interest_catName.value.clear();
     QuerySnapshot<Map<String, dynamic>> trip_intrest_snapshot = await FirebaseFirestore.instance.collection('Tripometer').get();
     print("${trip_intrest_snapshot.docs[0].data()['data']}");
     print("${trip_intrest_snapshot.docs[0].id}");
@@ -163,25 +165,28 @@ class _YourTripInterestState extends State<YourTripInterest> {
                         ),
                       ),
 
-                      for (int a = 0; a < trip_interest_catName.length; a++)
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '${trip_interest_catName[a]}',
-                                    style: bodyText18w600(color: black),
-                                  ),
-                                  // InkWell(onTap: () {}, child: Text('Select all'))
-                                ],
-                              ),
-                            ),
-                            AdventurefilterChipWidget(chipName: trip_interest_data_list[a], catName: trip_interest_catName[a], isPrima: widget.isPrima),
-                          ],
-                        ),
+                      Obx(() => Column(
+                          children: List.generate(
+                              trip_interest_catName.value.length,
+                              (a) => Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '${trip_interest_catName[a]}',
+                                              style: bodyText18w600(color: black),
+                                            ),
+                                            // InkWell(onTap: () {}, child: Text('Select all'))
+                                          ],
+                                        ),
+                                      ),
+                                      AdventurefilterChipWidget(
+                                          chipName: trip_interest_data_list[a], catName: trip_interest_catName[a], isPrima: widget.isPrima),
+                                    ],
+                                  )).toList())),
 
                       // Padding(
                       //   padding: const EdgeInsets.all(10.0),

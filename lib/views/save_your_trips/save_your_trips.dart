@@ -18,6 +18,7 @@ import 'package:travelnew_app/widget/custom_textfield.dart';
 
 import '../../model/DayWiseTripModel.dart';
 import '../../model/prima_profile_model.dart';
+import '../home/plan_trip_screen.dart';
 
 List<Map<String, String>> tripdataForStore = [];
 String targetState = '';
@@ -33,9 +34,15 @@ class SaveYourTripsScreen extends StatefulWidget {
   final String plamTrip_at;
   final int trip_days;
   final List interestList;
+  final Map storedDataMap;
 
   const SaveYourTripsScreen(
-      {Key? key, this.type_Of_Trip = 'Friends Trip', this.plamTrip_at = "Karnataka", this.trip_days = -1, this.interestList = const [""]})
+      {Key? key,
+      this.type_Of_Trip = 'Friends Trip',
+      this.plamTrip_at = "Karnataka",
+      this.trip_days = -1,
+      this.interestList = const [""],
+      this.storedDataMap = const {}})
       : super(key: key);
 
   @override
@@ -76,6 +83,19 @@ class _SaveYourTripsScreenState extends State<SaveYourTripsScreen> {
 
   @override
   void initState() {
+    Map map = widget.storedDataMap;
+    if (map.isNotEmpty) {
+      type_of_trip1 = map['type_Of_Trip'];
+      planTrip_at_ = map['plamTrip_at'];
+      totalDays = map['trip_days'];
+      usereTripIntrest = map['interestList'];
+      startDate.text = map['date'];
+      startDate.text = map['StartDate'];
+      endDate.text = map['EndDate'];
+      trip_mode = map['tripmode'];
+      totalDays = map['totalDays'];
+      flexible = map['Flexible'];
+    }
     // TODO: implement initState
     super.initState();
   }

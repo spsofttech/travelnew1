@@ -68,6 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
     USERNAME = UserDataMap['fullName'] ?? "User";
     USER_UID = FirebaseAuth.instance.currentUser!.uid;
     USER_IS_PRIMA = UserDataMap['isPrima'] ?? false;
+
+    print("--- --- --- --${USER_IS_PRIMA}");
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await _collectionRef.get();
     // allHomeData = querySnapshot.docs.map((doc) => doc.data()).toList();

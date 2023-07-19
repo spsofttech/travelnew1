@@ -62,7 +62,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       'gender': Gendervalue,
       'maritalStatus': statusvalue,
       'UID': FirebaseAuth.instance.currentUser!.uid,
-      "profileuserImage": img ?? "",
+      "image": img ?? "",
       "document": url ?? "",
     });
   }
@@ -77,18 +77,18 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   void getData() async {
     if (FirebaseAuth.instance.currentUser != null) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
-      img = profile.data()?['profileuserImage'];
-      url = profile.data()?['document'];
+      img = profile.data()?['image'];
+      url = profile.data()?['document'] ?? "";
       firstName.text = profile.data()?['firstName'];
       // firstName.text = profile.data()?['fullName'];
-      dateOfBirth.text = profile.data()?['dob'];
-      anniversaryDate.text = profile.data()?['anniversary'];
-      profession.text = profile.data()?['profession'];
-      emergencyNum.text = profile.data()?['emergencyNum'];
-      lastName.text = profile.data()?['LastName'];
-      mobNum.text = profile.data()?['mobNum'];
-      Gendervalue = profile.data()?['gender'];
-      statusvalue = profile.data()?['maritalStatus'];
+      dateOfBirth.text = profile.data()?['dob'] ?? "";
+      anniversaryDate.text = profile.data()?['anniversary'] ?? "";
+      profession.text = profile.data()?['profession'] ?? "";
+      emergencyNum.text = profile.data()?['emergencyNum'] ?? "";
+      lastName.text = profile.data()?['LastName'] ?? "";
+      mobNum.text = profile.data()?['mobNum'] ?? "";
+      Gendervalue = profile.data()?['gender'] ?? "";
+      statusvalue = profile.data()?['maritalStatus'] ?? "";
 
       setState(() {});
     }
@@ -355,8 +355,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                             ),
                             addVerticalSpace(5),
                             InkWell(
-                              onTap: () {
-                                selectUploadDocument(context);
+                              onTap: () async {
+                                showAPICallPendingDialog(context);
+                                await selectUploadDocument(context);
+                                Navigator.pop(context);
                               },
                               child: Container(
                                 margin: const EdgeInsets.only(top: 8, left: 8),
