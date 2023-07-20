@@ -228,9 +228,9 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
         if (snapshot.hasData) {
           String friendDocList = 'friends';
           tripMember.clear();
-          tripMember = snapshot.data!.data()![friendDocList];
-          List requestedMember = snapshot.data!.data()![friendDocList];
-          List invitedMember = snapshot.data!.data()![friendDocList];
+          tripMember = snapshot.data!.data()![friendDocList] ?? [];
+          List requestedMember = snapshot.data!.data()![friendDocList] ?? [];
+          List invitedMember = snapshot.data!.data()![friendDocList] ?? [];
           tripMember = tripMember.where((element) => element['status'] == 1).toList();
 
           requestedMember = requestedMember.where((element) => element['status'] == 2).toList();

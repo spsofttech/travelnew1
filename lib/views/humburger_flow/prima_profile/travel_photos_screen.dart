@@ -32,30 +32,25 @@ class _TravelPhotosScreenState extends State<TravelPhotosScreen> {
   @override
   void initState() {
     getDetails();
-    getDatatravephoto();
+    //getDatatravephoto();
     super.initState();
   }
 
-  final List travelPhoto = [
-    'assets/images/Rectangle 111.png',
-    'assets/images/Rectangle 111 (1).png',
-    'assets/images/Rectangle 111 (2).png',
-    'assets/images/Rectangle 111 (3).png',
-  ];
-  CollectionReference _collectionRef = FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
-      .collection("primaAccount")
-      .doc('profile')
-      .collection('travel_photo');
-  Future<void> getDatatravephoto() async {
-    // Get docs from collection reference
-    QuerySnapshot querySnapshot = await _collectionRef.get();
-    // Get data from docs and convert map to List
-    allEditTravelPhotoData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    setState(() {});
-    print(allEditTravelPhotoData);
-  }
+  // final List travelPhoto = [
+  //   'assets/images/Rectangle 111.png',
+  //   'assets/images/Rectangle 111 (1).png',
+  //   'assets/images/Rectangle 111 (2).png',
+  //   'assets/images/Rectangle 111 (3).png',
+  // ];
+
+  // Future<void> getDatatravephoto() async {
+  //   // Get docs from collection reference
+  //  // QuerySnapshot querySnapshot = await _collectionRef.get();
+  //   // Get data from docs and convert map to List
+  //
+  //   setState(() {});
+  //   print(allEditTravelPhotoData);
+  // }
 
   List allEditTravelPhotoData = [];
 
@@ -66,79 +61,103 @@ class _TravelPhotosScreenState extends State<TravelPhotosScreen> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            child: SizedBox(
-                height: height(context),
-                child: ListView.builder(
-                    itemCount: allEditTravelPhotoData.length,
-                    itemBuilder: (ctx, i) {
-                      return Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            margin: EdgeInsets.all(10),
-                            height: height(context) * 0.40,
-                            width: width(context) * 0.95,
-                            decoration: myFillBoxDecoration(0, black.withOpacity(0.08), 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .collection("primaAccount")
+                  .doc('profile')
+                  .collection('travel_photo')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  allEditTravelPhotoData = snapshot.data!.docs.map((doc) => doc.data()).toList();
+                  return SizedBox(
+                      height: height(context),
+                      child: ListView.builder(
+                          itemCount: allEditTravelPhotoData.length,
+                          itemBuilder: (ctx, i) {
+                            return Column(
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Trip to destination',
-                                      style: bodyText16w600(color: black),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (ctx) => EditTravelPhotos()));
-                                      },
-                                      child: const Icon(
-                                        Icons.edit,
-                                        size: 20,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Text(
-                                  allEditTravelPhotoData[i]['Date'],
-                                  style: bodyText12Small(color: black),
-                                ),
-                                addVerticalSpace(8),
-                                SizedBox(
-                                  height: height(context) * 0.300,
-                                  child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: allEditTravelPhotoData.length,
-                                      itemBuilder: (ctx, i) {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(right: 8.0),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                height: height(context) * 0.290,
-                                                width: width(context) * 1,
-                                                child: Image.network(
-                                                  allEditTravelPhotoData[i]['travelphotoUrl'],
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                            ],
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  margin: EdgeInsets.all(10),
+                                  height: height(context) * 0.40,
+                                  width: width(context) * 0.95,
+                                  decoration: myFillBoxDecoration(0, black.withOpacity(0.08), 15),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Trip to destination',
+                                            style: bodyText16w600(color: black),
                                           ),
-                                        );
-                                      }),
-                                ),
-                                SizedBox(
-                                  width: width(context) * 0.5,
-                                  child: Text(allEditTravelPhotoData[i]['Describe']),
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.push(context, MaterialPageRoute(builder: (ctx) => EditTravelPhotos()));
+                                            },
+                                            child: const Icon(
+                                              Icons.edit,
+                                              size: 20,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      Text(
+                                        allEditTravelPhotoData[i]['Date'],
+                                        style: bodyText12Small(color: black),
+                                      ),
+                                      addVerticalSpace(8),
+                                      SizedBox(
+                                        height: height(context) * 0.300,
+                                        child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: allEditTravelPhotoData.length,
+                                            itemBuilder: (ctx, i) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(right: 8.0),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: height(context) * 0.290,
+                                                      width: width(context) * 1,
+                                                      child: Image.network(
+                                                        allEditTravelPhotoData[i]['travelphotoUrl'],
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }),
+                                      ),
+                                      SizedBox(
+                                        width: width(context) * 0.5,
+                                        child: Text(allEditTravelPhotoData[i]['Describe']),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
-                            ),
-                          ),
-                        ],
-                      );
-                    })),
+                            );
+                          }));
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text("No Photo"),
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: primary,
+                    ),
+                  );
+                }
+              },
+            ),
           ),
           Positioned(
             left: 30,
@@ -247,7 +266,7 @@ class _UploadTravelsPhotosScreenState extends State<UploadTravelsPhotosScreen> {
                       height: height(context) * 0.15,
                       width: width(context) * 0.3,
                       decoration: _image == ""
-                          ? BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/images/prima3.png')))
+                          ? BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/images/icons8-add-new-50.png')))
                           : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(_image))),
                     ),
                   ),
@@ -266,7 +285,7 @@ class _UploadTravelsPhotosScreenState extends State<UploadTravelsPhotosScreen> {
                                 onPressed: () {
                                   pickUploadImage();
                                 })),
-                        Text('Upload upto 10 Photos')
+                        // Text('Upload upto 10 Photos')
                       ],
                     ),
                   )

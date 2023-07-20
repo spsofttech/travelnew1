@@ -127,7 +127,14 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                   if (USER_IS_PRIMA == false) {
                     empatyprimaccout(context);
                   } else {
-                    Navigator.push(context, MaterialPageRoute(builder: (ctx) => const PrimaProfileScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) => PrimaProfileScreen(
+                                  userType: 1,
+                                  userUid: FirebaseAuth.instance.currentUser!.uid,
+                                  isPrimaUser: USER_IS_PRIMA,
+                                )));
                   }
                 } else {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SignupWithSocialMediaScreen()));

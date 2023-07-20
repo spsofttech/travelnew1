@@ -24,17 +24,19 @@ import 'package:travelnew_app/providers/image_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../utils/constant.dart';
 import '../../../widget/custom_dropdown_button.dart';
-import '../my_account/my_account.dart';
-import 'create_prima_profile.dart';
+
 import 'package:path/path.dart' as j;
 
-class PersonalInformationScreen extends StatefulWidget {
-  const PersonalInformationScreen({super.key});
+import '../humburger_flow/my_account/my_account.dart';
+
+class noPrimaUserProfile extends StatefulWidget {
+  final String userUid;
+  const noPrimaUserProfile({super.key, required this.userUid});
   @override
-  State<PersonalInformationScreen> createState() => _PersonalInformationScreenState();
+  State<noPrimaUserProfile> createState() => _noPrimaUserProfileState();
 }
 
-class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
+class _noPrimaUserProfileState extends State<noPrimaUserProfile> {
   final TextEditingController dateOfBirth = TextEditingController();
   final TextEditingController anniversaryDate = TextEditingController();
   final TextEditingController firstName = new TextEditingController();
@@ -48,7 +50,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   bool _prima = false;
   detailUser() async {
     final _fireStore = FirebaseFirestore.instance;
-    await _fireStore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+    await _fireStore.collection("users").doc(widget.userUid).update({
       'fullName': firstName.text + " " + lastName.text,
       'firstName': firstName.text,
       'LastName': lastName.text,
@@ -61,7 +63,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       'mobNum': mobNum.text,
       'gender': Gendervalue,
       'maritalStatus': statusvalue,
-      'UID': FirebaseAuth.instance.currentUser!.uid,
+      'UID': widget.userUid,
       "image": img ?? "",
       "document": url ?? "",
     });
@@ -76,7 +78,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
 
   void getData() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+      var profile = await FirebaseFirestore.instance.collection('users').doc(widget.userUid).get();
       img = profile.data()?['image'];
       url = profile.data()?['document'] ?? "";
       firstName.text = profile.data()?['firstName'];
@@ -149,23 +151,25 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 12.0),
                             child: Text(
-                              'Edit Personal info',
+                              'User Info',
                               style: bodyText20w700(color: white),
                             ),
                           ),
-                          Padding(
-                              padding: EdgeInsets.only(right: 12.0, top: 10),
-                              child: IconButton(
-                                onPressed: () {
-                                  showModalBottomSheet(context: context, builder: ((builder) => bottomSheet()));
-                                },
-                                icon: ImageIcon(
-                                  color: white,
-                                  const AssetImage(
-                                    'assets/images/editicon.png',
-                                  ),
-                                ),
-                              ))
+                          widget.userUid == FirebaseAuth.instance.currentUser!.uid
+                              ? Padding(
+                                  padding: EdgeInsets.only(right: 12.0, top: 10),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      showModalBottomSheet(context: context, builder: ((builder) => bottomSheet()));
+                                    },
+                                    icon: ImageIcon(
+                                      color: white,
+                                      const AssetImage(
+                                        'assets/images/editicon.png',
+                                      ),
+                                    ),
+                                  ))
+                              : SizedBox()
                         ],
                       ),
                     ),
@@ -194,6 +198,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 SizedBox(
                                   width: width(context) * 0.45,
                                   child: CustomTextFieldWidget(
+                                    Enable: false,
                                     labelText: 'First Name',
                                     controller: firstName,
                                   ),
@@ -202,6 +207,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 SizedBox(
                                     width: width(context) * 0.45,
                                     child: CustomTextFieldWidget(
+                                      Enable: false,
                                       labelText: 'Last Name',
                                       controller: lastName,
                                     ))
@@ -213,6 +219,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 SizedBox(
                                     width: width(context) * 0.45,
                                     child: CustomTextFieldWidget(
+                                      Enable: false,
                                       controller: dateOfBirth,
                                       labelText: 'Date of Birth',
                                       icon: Icon(
@@ -227,6 +234,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 SizedBox(
                                     width: width(context) * 0.45,
                                     child: CustomTextFieldWidget(
+                                      Enable: false,
                                       controller: anniversaryDate,
                                       labelText: 'Anniversary dates',
                                       icon: Icon(
@@ -244,44 +252,45 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               child: CustomTextFieldWidget(
                                 labelText: 'Profession',
                                 controller: profession,
+                                Enable: false,
                               ),
                             ),
                             addVerticalSpace(22),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  height: 37,
-                                  width: width(context) * 0.45,
-                                  child: CustomDropDownButton(
-                                    itemList: const [
-                                      'Single',
-                                      'Married',
-                                      'Divorced',
-                                      'Separated',
-                                      'Widowed',
-                                    ],
-                                    value: statusvalue,
-                                    lableText: 'Marital Status',
-                                    controller: statusController,
-                                  ),
-                                ),
-                                addHorizontalySpace(10),
-                                SizedBox(
-                                  height: 37,
-                                  width: width(context) * 0.45,
-                                  child: CustomDropDownButton(
-                                    itemList: const [
-                                      'Male',
-                                      'Female',
-                                      'Prefer not to say',
-                                    ],
-                                    value: Gendervalue,
-                                    lableText: 'Gender',
-                                    controller: genderController,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Row(
+                            //   children: [
+                            //     SizedBox(
+                            //       height: 37,
+                            //       width: width(context) * 0.45,
+                            //       child: CustomDropDownButton(
+                            //         itemList: const [
+                            //           'Single',
+                            //           'Married',
+                            //           'Divorced',
+                            //           'Separated',
+                            //           'Widowed',
+                            //         ],
+                            //         value: statusvalue,
+                            //         lableText: 'Marital Status',
+                            //         controller: statusController,
+                            //       ),
+                            //     ),
+                            //     addHorizontalySpace(10),
+                            //     SizedBox(
+                            //       height: 37,
+                            //       width: width(context) * 0.45,
+                            //       child: CustomDropDownButton(
+                            //         itemList: const [
+                            //           'Male',
+                            //           'Female',
+                            //           'Prefer not to say',
+                            //         ],
+                            //         value: Gendervalue,
+                            //         lableText: 'Gender',
+                            //         controller: genderController,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                             addVerticalSpace(10),
                             InkWell(
                                 onTap: () {
@@ -320,6 +329,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 SizedBox(
                                     width: width(context) * 0.45,
                                     child: CustomTextFieldWidget(
+                                      Enable: false,
                                       labelText: 'Mobile number',
                                       controller: mobNum,
                                     )),
@@ -328,6 +338,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   // height: 37,
                                   width: width(context) * 0.45,
                                   child: CustomTextFieldWidget(
+                                    Enable: false,
                                     labelText: 'Emergency number',
                                     controller: emergencyNum,
                                   ),
@@ -347,49 +358,49 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               color: black.withOpacity(0.05),
                             ),
                             addVerticalSpace(7),
-                            const Text(
-                              'Government IDs',
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
-                            addVerticalSpace(5),
-                            InkWell(
-                              onTap: () async {
-                                showAPICallPendingDialog(context);
-                                await selectUploadDocument(context);
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(top: 8, left: 8),
-                                height: 40,
-                                width: width(context) * 0.9,
-                                decoration: shadowDecoration(10, 3),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '+ Upload your ID',
-                                      style: bodyText16w600(color: black.withOpacity(0.5)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                            // const Text(
+                            //   'Government IDs',
+                            //   style: TextStyle(
+                            //     fontSize: 20,
+                            //   ),
+                            // ),
+                            // addVerticalSpace(5),
+                            // InkWell(
+                            //   onTap: () async {
+                            //     showAPICallPendingDialog(context);
+                            //     await selectUploadDocument(context);
+                            //     Navigator.pop(context);
+                            //   },
+                            //   child: Container(
+                            //     margin: const EdgeInsets.only(top: 8, left: 8),
+                            //     height: 40,
+                            //     width: width(context) * 0.9,
+                            //     decoration: shadowDecoration(10, 3),
+                            //     child: Row(
+                            //       mainAxisAlignment: MainAxisAlignment.center,
+                            //       children: [
+                            //         Text(
+                            //           '+ Upload your ID',
+                            //           style: bodyText16w600(color: black.withOpacity(0.5)),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
                             Divider(
                               thickness: 5,
                               color: black.withOpacity(0.05),
                             ),
                             addVerticalSpace(20),
-                            addHorizontalySpace(20),
-                            CustomButton(
-                                name: 'Save',
-                                onPressed: () {
-                                  detailUser();
-                                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => MyAccountScreen()));
-                                  showSnackBar(context, "Added", Colors.green);
-                                }),
-                            addHorizontalySpace(20),
+                            // addHorizontalySpace(20),
+                            // CustomButton(
+                            //     name: 'Save',
+                            //     onPressed: () {
+                            //       detailUser();
+                            //       Navigator.push(context, MaterialPageRoute(builder: (ctx) => MyAccountScreen()));
+                            //       showSnackBar(context, "Added", Colors.green);
+                            //     }),
+                            // addHorizontalySpace(20),
                           ],
                         )))
               ]),
@@ -411,7 +422,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                 button: TextStyle(color: Colors.black),
               ),
               accentColor: Colors.black,
-              colorScheme: ColorScheme.light(
+              colorScheme: const ColorScheme.light(
                   primary: Color(0xffffbc00),
                   primaryVariant: Colors.black,
                   secondaryVariant: Colors.black,

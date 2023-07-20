@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:travelnew_app/views/humburger_flow/my_account/my_following_trip_friends.dart';
 import 'package:travelnew_app/views/humburger_flow/my_account/report_incorrect_user_screen.dart';
 import 'package:travelnew_app/views/start/sign_in_screen.dart';
@@ -17,6 +19,8 @@ import 'package:age_calculator/age_calculator.dart';
 
 import '../../../utils/constant.dart';
 import '../../../widget/custom_button.dart';
+import '../home/noPrimaUserProfile.dart';
+import '../humburger_flow/prima_profile/prima_profile_screen.dart';
 
 class selectTripFriendPage extends StatefulWidget {
   selectTripFriendPage({required this.title});
@@ -210,117 +214,133 @@ class _selectTripFriendPageState extends State<selectTripFriendPage> {
                   itemBuilder: (ctx, i) {
                     return listo[i]['fullName'].toString().toLowerCase().contains(searchFriendController.text.toLowerCase()) ||
                             searchFriendController.text.isEmpty
-                        ? Column(
-                            children: [
-                              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                listo[i]['profileImg'] == null
-                                    ? const CircleAvatar(
-                                        backgroundImage: AssetImage('assets/images/nearbyfestivals.png'),
-                                        radius: 30,
-                                      )
-                                    : CircleAvatar(
-                                        backgroundImage: NetworkImage(listo[i]['profileImg']),
-                                        radius: 30,
-                                      ),
-                                addHorizontalySpace(10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: width(context) * 0.5,
-                                      child: Text(
-                                        listo[i]['fullName'] ?? '',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: bodyText18w600(color: black),
-                                      ),
-                                    ),
-                                    addVerticalSpace(3),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.bar_chart_outlined,
-                                          size: 20,
-                                          color: primary,
-                                        ),
-                                        addHorizontalySpace(1),
-                                        Text(
-                                          'Tripometer',
-                                          style: bodyText12Small(color: black),
+                        ? InkWell(
+                            onTap: () {
+                              bool userisprima = listo[i]['isPrima'];
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => userisprima
+                                        ? PrimaProfileScreen(
+                                            userType: 2,
+                                            userUid: listo[i]['UID'],
+                                            isPrimaUser: listo[i]['isPrima'],
+                                          )
+                                        : noPrimaUserProfile(userUid: listo[i]['UID']),
+                                  ));
+                            },
+                            child: Column(
+                              children: [
+                                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                  listo[i]['image'] == null || listo[i]['image'] == ""
+                                      ? CircleAvatar(
+                                          backgroundImage: NetworkImage(NoUserNetworkImage),
+                                          radius: 30,
                                         )
-                                      ],
-                                    ),
-                                    addVerticalSpace(4),
-                                    listo[i]['profession'] != null && listo[i]['profession'] != ""
-                                        ? Row(
-                                            children: [
-                                              Image.asset(
-                                                'assets/images/Vector (1).png',
-                                                color: primary,
-                                              ),
-                                              addHorizontalySpace(1),
-                                              Text(
-                                                listo[i]['profession'] ?? '',
-                                                style: bodyText12Small(color: black),
-                                              )
-                                            ],
+                                      : CircleAvatar(
+                                          backgroundImage: NetworkImage(listo[i]['image']),
+                                          radius: 30,
+                                        ),
+                                  addHorizontalySpace(10),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: width(context) * 0.5,
+                                        child: Text(
+                                          listo[i]['fullName'] ?? '',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: bodyText18w600(color: black),
+                                        ),
+                                      ),
+                                      addVerticalSpace(3),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.bar_chart_outlined,
+                                            size: 20,
+                                            color: primary,
+                                          ),
+                                          addHorizontalySpace(1),
+                                          Text(
+                                            'Tripometer',
+                                            style: bodyText12Small(color: black),
                                           )
-                                        : SizedBox(),
-                                    addVerticalSpace(4),
-                                    listo[i]['locality'] != null && listo[i]['locality'] != ""
-                                        ? Row(
-                                            children: [
-                                              Icon(
-                                                Icons.location_on,
-                                                color: primary,
-                                              ),
-                                              addHorizontalySpace(1),
-                                              Text(
-                                                listo[i]['locality'],
-                                                style: bodyText12Small(color: black),
-                                              )
-                                            ],
-                                          )
-                                        : SizedBox(),
-                                  ],
-                                ),
-                                const Spacer(),
-                                PopupMenuButton<int>(
-                                  onSelected: (val) {
-                                    dev.log("${val}");
+                                        ],
+                                      ),
+                                      addVerticalSpace(4),
+                                      listo[i]['profession'] != null && listo[i]['profession'] != ""
+                                          ? Row(
+                                              children: [
+                                                Image.asset(
+                                                  'assets/images/Vector (1).png',
+                                                  color: primary,
+                                                ),
+                                                addHorizontalySpace(1),
+                                                Text(
+                                                  listo[i]['profession'] ?? '',
+                                                  style: bodyText12Small(color: black),
+                                                )
+                                              ],
+                                            )
+                                          : SizedBox(),
+                                      addVerticalSpace(4),
+                                      listo[i]['locality'] != null && listo[i]['locality'] != ""
+                                          ? Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.location_on,
+                                                  color: primary,
+                                                ),
+                                                addHorizontalySpace(1),
+                                                Text(
+                                                  listo[i]['locality'],
+                                                  style: bodyText12Small(color: black),
+                                                )
+                                              ],
+                                            )
+                                          : SizedBox(),
+                                    ],
+                                  ),
+                                  const Spacer(),
+                                  PopupMenuButton<int>(
+                                    onSelected: (val) {
+                                      dev.log("${val}");
 
-                                    if (val == 2) {
-                                      print("object");
-                                      send_friendRequset(friendUid: listo[i]['UID']);
-                                    }
-                                  },
-                                  itemBuilder: (context) => [
-                                    const PopupMenuItem(
-                                      value: 1,
-                                      child: Text("Send a message"),
-                                    ),
-                                    PopupMenuItem(
-                                      onTap: () {},
-                                      value: 2,
-                                      child: Text('Add trip friend'),
-                                    ),
-                                    PopupMenuItem(
-                                      value: 3,
-                                      child: InkWell(
-                                          onTap: () {
-                                            Navigator.push(context, MaterialPageRoute(builder: (ctx) => ReportIncorrectUserScreen()));
-                                          },
-                                          child: Text("Report incorrect")),
-                                    ),
-                                  ],
-                                  color: white,
-                                  elevation: 2,
-                                ),
-                              ]),
-                              const Divider(
-                                height: 30,
-                                thickness: 1,
-                              )
-                            ],
+                                      if (val == 2) {
+                                        print("object");
+                                        send_friendRequset(friendUid: listo[i]['UID']);
+                                      }
+                                    },
+                                    itemBuilder: (context) => [
+                                      const PopupMenuItem(
+                                        value: 1,
+                                        child: Text("Send a message"),
+                                      ),
+                                      PopupMenuItem(
+                                        onTap: () {},
+                                        value: 2,
+                                        child: Text('Add trip friend'),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 3,
+                                        child: InkWell(
+                                            onTap: () {
+                                              Navigator.push(context, MaterialPageRoute(builder: (ctx) => ReportIncorrectUserScreen()));
+                                            },
+                                            child: Text("Report incorrect")),
+                                      ),
+                                    ],
+                                    color: white,
+                                    elevation: 2,
+                                  ),
+                                ]),
+                                const Divider(
+                                  height: 30,
+                                  thickness: 1,
+                                )
+                              ],
+                            ),
                           )
                         : SizedBox();
                   }))
@@ -507,19 +527,21 @@ class _selectTripFriendPageState extends State<selectTripFriendPage> {
     //   }
 
     //}
-    var x = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
-    List tfUIDs = x.data()!['tripFriends'] ?? [];
+
+    // var x = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+    // List tfUIDs = x.data()!['tripFriends'] ?? [];
     List _allUsers = [];
     var y = await FirebaseFirestore.instance.collection('users').get();
 
     for (var element in y.docs) {
       _allUsers.add(element.data());
-      for (var tf in tfUIDs) {
-        if (element.data()['UID'] == tf) {
-          tripFriend.add(element.data());
-        }
-      }
+      // for (var tf in tfUIDs) {
+      //   if (element.data()['UID'] == tf) {
+      //     tripFriend.add(element.data());
+      //   }
+      // }
     }
+
     setState(() {
       listo = _allUsers;
       // print(_allUsers);

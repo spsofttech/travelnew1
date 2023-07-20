@@ -23,6 +23,8 @@ import 'package:travelnew_app/views/start/on_boarding_screen.dart';
 import 'package:travelnew_app/views/start/signup_with_social_media_screen.dart';
 
 import '../views/edit_prima_screen/prima_trip_1to4_screen.dart';
+import '../views/home/noPrimaUserProfile.dart';
+import '../views/humburger_flow/prima_profile/personal_info_screen.dart';
 import '../views/humburger_flow/prima_profile/prima_profile_screen.dart';
 import '../views/publish your trip/selecteTripFriendPage.dart';
 
@@ -322,11 +324,20 @@ class _MyDrawerState extends State<MyDrawer> {
                                     .then((value) => value.exists);
                                 print("--- --- --- --${isAlredyUpdated}");
                                 if (isAlredyUpdated) {
-                                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => PrimaProfileScreen()));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (ctx) => PrimaProfileScreen(
+                                                userType: 1,
+                                                userUid: FirebaseAuth.instance.currentUser!.uid,
+                                                isPrimaUser: USER_IS_PRIMA,
+                                              )));
                                 } else {
                                   Navigator.push(context, MaterialPageRoute(builder: (ctx) => CreatePrimaProfile()));
                                 }
-                              } else {}
+                              } else {
+                                Navigator.push(context, MaterialPageRoute(builder: (ctx) => PersonalInformationScreen()));
+                              }
                             } else {
                               Navigator.pop(context);
                               showSnackBar(context, "Please Login First!", Colors.red);

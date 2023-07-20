@@ -19,7 +19,13 @@ import '../../../utils/constant.dart';
 import '../my_account/my_trip_friends.dart';
 
 class PrimaProfileScreen extends StatefulWidget {
-  const PrimaProfileScreen({super.key});
+  /// userType   1 = 'self profile'  , 2 = 'friend open'  3 = 'not friend user'
+
+  final int userType;
+  final String userUid;
+  final bool isPrimaUser;
+
+  const PrimaProfileScreen({super.key, required this.userType, required this.userUid, required this.isPrimaUser});
 
   @override
   State<PrimaProfileScreen> createState() => _PrimaProfileScreenState();
@@ -28,18 +34,20 @@ class PrimaProfileScreen extends StatefulWidget {
 class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
   @override
   void initState() {
-    getDetails();
-    getphotoData();
-    getlocationDetails();
+    if (widget.isPrimaUser) {
+      getDetails();
+      getphotoData();
+      getlocationDetails();
+    }
     super.initState();
   }
 
-  List travelPhoto = [
-    'assets/images/Rectangle 111.png',
-    'assets/  images/Rectangle 111 (1).png',
-    'assets/images/Rectangle 111 (2).png',
-    'assets/images/Rectangle 111 (3).png',
-  ];
+  // List travelPhoto = [
+  //   'assets/images/Rectangle 111.png',
+  //   'assets/  images/Rectangle 111 (1).png',
+  //   'assets/images/Rectangle 111 (2).png',
+  //   'assets/images/Rectangle 111 (3).png',
+  // ];
 
   String Name = "";
   String image = "";
@@ -48,10 +56,10 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
   String _otherintrest = "";
   String _gender = "";
   String _merriedstatus = "";
+
   void getDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile =
-          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
+      var profile = await FirebaseFirestore.instance.collection('users').doc(widget.userUid).collection('primaAccount').doc('profile').get();
       image = profile.data()?['imageUrl'];
       Name = profile.data()?['fullName'];
       _profession = profile.data()?['profession'];
@@ -67,7 +75,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
 
   void getlocationDetails() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+      var profile = await FirebaseFirestore.instance.collection('users').doc(widget.userUid).get();
       _address = profile.data()?['locality'];
       setState(() {});
     }
@@ -135,13 +143,9 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
     ]));
   }
 
-  CollectionReference _collectionRef = FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
-      .collection("primaAccount")
-      .doc('profile')
-      .collection('travel_photo');
   Future<void> getphotoData() async {
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection('users').doc(widget.userUid).collection("primaAccount").doc('profile').collection('travel_photo');
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await _collectionRef.get();
     // Get data from docs and convert map to List
@@ -167,7 +171,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                   height: height(context) * 0.42,
                   width: width(context) * 1,
                   decoration: image == ""
-                      ? BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/images/prima3.png')))
+                      ? BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage('${NoUserNetworkImage}')))
                       : BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(image))),
                   child: SafeArea(
                     child: Row(
@@ -185,7 +189,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                         Padding(
                           padding: const EdgeInsets.only(top: 12.0),
                           child: Text(
-                            'Prima Profile',
+                            widget.userType == 1 ? 'Prima Profile' : "Profile",
                             style: bodyText20w700(color: white),
                           ),
                         ),
@@ -213,7 +217,12 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                             },
                             onSelected: (value) {
                               if (value == 0) {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => CreatePrimaProfile()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CreatePrimaProfile(
+                                              directUpdate: true,
+                                            )));
                               } else if (value == 1) {
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => GoPrimaSubscriptionScreen()));
                               } else if (value == 2) {
@@ -388,7 +397,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                         style: bodyText20w700(color: black),
                       ),
                       addVerticalSpace(15),
-                      TripometerCircleWidget(),
+                      TripometerCircleWidget(userUid: widget.userUid),
                       addVerticalSpace(8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -412,7 +421,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
                               ))
                         ],
                       ),
-                      TripFriendsAndMutualFriendsWidget(),
+                      TripFriendsAndMutualFriendsWidget(userUid: widget.userUid),
                       addVerticalSpace(5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -774,9 +783,8 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
 }
 
 class TripFriendsAndMutualFriendsWidget extends StatefulWidget {
-  const TripFriendsAndMutualFriendsWidget({
-    Key? key,
-  }) : super(key: key);
+  final String userUid;
+  const TripFriendsAndMutualFriendsWidget({Key? key, required this.userUid}) : super(key: key);
 
   @override
   State<TripFriendsAndMutualFriendsWidget> createState() => _TripFriendsAndMutualFriendsWidgetState();
@@ -816,7 +824,7 @@ class _TripFriendsAndMutualFriendsWidgetState extends State<TripFriendsAndMutual
       width: width(context) * 0.95,
       decoration: myFillBoxDecoration(0, black.withOpacity(0.08), 15),
       child: FutureBuilder(
-        future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('friends').doc('data').get(),
+        future: FirebaseFirestore.instance.collection('users').doc(widget.userUid).collection('friends').doc('data').get(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List _allUsers = snapshot.data!.data()!['data'];
@@ -890,14 +898,14 @@ class _TripFriendsAndMutualFriendsWidgetState extends State<TripFriendsAndMutual
                                 );
                               }),
                         ),
-                      addVerticalSpace(18),
-                      InkWell(
-                        onTap: () {},
-                        child: const Text(
-                          'You have trip friend request >',
-                          style: TextStyle(decoration: TextDecoration.underline, fontSize: 12, fontWeight: FontWeight.w600),
-                        ),
-                      )
+                      // addVerticalSpace(18),
+                      // InkWell(
+                      //   onTap: () {},
+                      //   child: const Text(
+                      //     'You have trip friend request >',
+                      //     style: TextStyle(decoration: TextDecoration.underline, fontSize: 12, fontWeight: FontWeight.w600),
+                      //   ),
+                      // )
                     ],
                   ),
                 )
@@ -917,9 +925,8 @@ class _TripFriendsAndMutualFriendsWidgetState extends State<TripFriendsAndMutual
 }
 
 class TripometerCircleWidget extends StatefulWidget {
-  TripometerCircleWidget({
-    Key? key,
-  }) : super(key: key);
+  final String userUid;
+  TripometerCircleWidget({Key? key, required this.userUid}) : super(key: key);
 
   @override
   State<TripometerCircleWidget> createState() => _TripometerCircleWidgetState();
@@ -935,9 +942,10 @@ class _TripometerCircleWidgetState extends State<TripometerCircleWidget> {
   // double religlous = 0.0;
 
   List tripoMeterList = [];
+
   @override
   void initState() {
-    getTripometerDetails();
+    //getTripometerDetails();
     super.initState();
   }
 
@@ -946,10 +954,11 @@ class _TripometerCircleWidgetState extends State<TripometerCircleWidget> {
       tripoMeterList.clear();
 
       CollectionReference users = FirebaseFirestore.instance.collection('users');
-      DocumentSnapshot<Map<String, dynamic>> alredyDefinDoc =
-          await users.doc(FirebaseAuth.instance.currentUser!.uid).collection("tripoMeter").doc('profile').get();
+      DocumentSnapshot<Map<String, dynamic>> alredyDefinDoc = await users.doc(widget.userUid).collection("tripoMeter").doc('profile').get();
+
       // var profile =
       //     await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("tripoMeter").doc("profile").get();
+
       if (alredyDefinDoc.exists) {
         Map<String, dynamic> oldDataMap = alredyDefinDoc.data()!;
         oldDataMap.forEach((key, value) {

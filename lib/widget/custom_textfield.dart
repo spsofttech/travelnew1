@@ -42,8 +42,8 @@ class CustomTextFieldWidget extends StatelessWidget {
             // labelStyle: bodyText14w600(color: primarhy),
 
             focusColor: primary,
-
             enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black26, width: 1.0), borderRadius: BorderRadius.circular(10)),
+            disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black26, width: 1.0), borderRadius: BorderRadius.circular(10)),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: primary, width: 1.5),
               borderRadius: BorderRadius.circular(10),

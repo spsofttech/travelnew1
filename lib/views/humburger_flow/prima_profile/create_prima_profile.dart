@@ -24,7 +24,8 @@ import '../../../widget/upload_image.dart';
 import '../../prima/go_prima_screen.dart';
 
 class CreatePrimaProfile extends StatefulWidget {
-  const CreatePrimaProfile({super.key});
+  final bool directUpdate;
+  const CreatePrimaProfile({super.key, this.directUpdate = false});
 
   @override
   State<CreatePrimaProfile> createState() => _CreatePrimaProfileState();
@@ -756,45 +757,49 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
               CustomButton(
                   name: 'Create my profile',
                   onPressed: () {
-                    updatetravelphoto();
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text(' Are You Ready to be a Prima Member!'),
-                        content: const Text(' You will be directed to payment Gateway fill free to click on Confirm '),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              updateprima();
-                              if (firstname != "") {
-                                yesprimprofile(context);
-                                updatePrimaAccountDetails();
+                    if (widget.directUpdate) {
+                      updatetravelphoto();
+                      updatePrimaAccountDetails();
+                    } else {
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text(' Are You Ready to be a Prima Member!'),
+                          content: const Text(' You will be directed to payment Gateway fill free to click on Confirm '),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                updateprima();
+                                if (firstname != "") {
+                                  yesprimprofile(context);
+                                  updatePrimaAccountDetails();
 
-                                //   Navigator.push(
-                                //       context,
-                                //       MaterialPageRoute(
-                                //           builder: (ctx) =>
-                                //               PrimaProfileScreen()));
-                              } else {
-                                notprimamember(context);
-                                addPrimaAccountDetails();
+                                  //   Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //           builder: (ctx) =>
+                                  //               PrimaProfileScreen()));
+                                } else {
+                                  notprimamember(context);
+                                  addPrimaAccountDetails();
 
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (ctx) =>
-                                //             PrimaProfileScreen()));
-                              }
-                            },
-                            child: const Text('Confirm'),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, 'CANCEL'),
-                            child: const Text('Cancel'),
-                          ),
-                        ],
-                      ),
-                    );
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (ctx) =>
+                                  //             PrimaProfileScreen()));
+                                }
+                              },
+                              child: const Text('Confirm'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'CANCEL'),
+                              child: const Text('Cancel'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   }),
               addVerticalSpace(15)
             ],
@@ -819,7 +824,14 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => PrimaProfileScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PrimaProfileScreen(
+                            userType: 1,
+                            userUid: FirebaseAuth.instance.currentUser!.uid,
+                            isPrimaUser: USER_IS_PRIMA,
+                          )));
             },
             child: const Text('Cancel'),
           ),
@@ -843,7 +855,14 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => PrimaProfileScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PrimaProfileScreen(
+                            userType: 1,
+                            userUid: FirebaseAuth.instance.currentUser!.uid,
+                            isPrimaUser: USER_IS_PRIMA,
+                          )));
             },
             child: const Text('Cancel'),
           ),
@@ -1104,6 +1123,7 @@ String _image4 = "";
 
 updatetravelphoto() async {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+  print("---$_image1 --- --- --- ---");
   users
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .collection("primaAccount")

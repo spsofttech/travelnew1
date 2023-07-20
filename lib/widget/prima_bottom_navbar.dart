@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:travelnew_app/utils/constant.dart';
@@ -24,7 +25,11 @@ class _PrimaMyBottomBarState extends State<PrimaMyBottomBar> with TickerProvider
   final PageStorageBucket bucket = PageStorageBucket();
   TabController? tabController;
   final List<Widget> mainScreens = [
-    PrimaProfileScreen(),
+    PrimaProfileScreen(
+      userType: 1,
+      userUid: FirebaseAuth.instance.currentUser!.uid,
+      isPrimaUser: USER_IS_PRIMA,
+    ),
     MyTripFriendsScreen(title: 'Friends in vicinity'),
     PublishYourTripScreen(),
     const InboxScreen(),
