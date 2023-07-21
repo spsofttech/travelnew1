@@ -232,22 +232,26 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                                       //         'assets/images/forward.png',
                                       //       )),
                                       // ),
-                                      upcomingTripData[index]['travelTrip'] == 2
-                                          ? SizedBox()
-                                          : Positioned(
-                                              top: -5,
-                                              right: -5,
-                                              child: IconButton(
-                                                  onPressed: () async {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) => TravelAgencyDetailsScreen(
-                                                                  MP: upcomingTripData[index],
-                                                                )));
-                                                  },
-                                                  icon: Icon(Icons.more_vert)),
-                                            ),
+
+                                      // upcomingTripData[index]['travelTrip'] == 2
+                                      //     ? SizedBox()
+                                      //     :
+                                      //
+                                      // Positioned(
+                                      //         top: -5,
+                                      //         right: -5,
+                                      //         child: IconButton(
+                                      //             onPressed: () async {
+                                      //               Navigator.push(
+                                      //                   context,
+                                      //                   MaterialPageRoute(
+                                      //                       builder: (context) => TravelAgencyDetailsScreen(
+                                      //                             MP: upcomingTripData[index],
+                                      //                           )));
+                                      //             },
+                                      //             icon: Icon(Icons.more_vert)),
+                                      //       ),
+
                                       Positioned(
                                           bottom: 0,
                                           left: 0,

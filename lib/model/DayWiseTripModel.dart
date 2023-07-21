@@ -1,8 +1,13 @@
 class DayTripModel {
   List<DayTripData> data;
-  DayTripModel({required this.data});
-  factory DayTripModel.fromJson(data) {
-    return DayTripModel(data: [DayTripData.fromJson(data)]);
+  List<DayTripData> bonus;
+
+  DayTripModel({
+    required this.data,
+    required this.bonus,
+  });
+  factory DayTripModel.fromJson(data, data2) {
+    return DayTripModel(data: [DayTripData.fromJson(data)], bonus: [DayTripData.fromJson(data2)]);
   }
 }
 

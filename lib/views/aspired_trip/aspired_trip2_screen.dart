@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:travelnew_app/views/aspired_trip/aspired_trip_details_screen.dart';
 import 'package:travelnew_app/widget/custom_appbar.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
@@ -29,10 +31,10 @@ class aspiredScreen extends StatefulWidget {
 class _aspiredScreen extends State<aspiredScreen> with TickerProviderStateMixin {
   TabController? _tabController;
   bool isShow = false;
-
+  List<RxBool> isBookmarked = [];
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
@@ -135,14 +137,34 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
 
   Future<void> getData() async {
     // Get docs from collection reference
-    QuerySnapshot querySnapshot = await _collectionRef.get();
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance.collection('Aspired_trips').get();
     // Get data from docs and convert map to List
     allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    QuerySnapshot<Map<String, dynamic>> userBookMark =
+        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('bookmarks').get();
+    isBookmarked.clear();
+    //List userMarked = userBookMark.docs.map((e) => e).toList();
+    //printc("===== ${userMarked}");
+    querySnapshot.docs.forEach((element) {
+      print(userBookMark.docs.where((el) => el.id == element.id).toList().isNotEmpty);
+      print(" --${element.id}");
+      if (userBookMark.docs.where((el) => el.id == element.id).toList().isNotEmpty) {
+        isBookmarked.add(true.obs);
+      } else {
+        isBookmarked.add(false.obs);
+      }
+    });
+
+    isBookmarked = List.generate(10, (index) => false.obs);
+    // allData.forEach((element) {
+    //   if(element['postId'] == )
+    // });
+
     setState(() {});
     print(allData);
   }
 
-  List allData = [];
+  List<Map<String, dynamic>> allData = [];
 
   // String _destination = "";
   // String _state ="";
@@ -172,39 +194,61 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
   String _subtitle = "";
   String _title = "";
   String _imagee = "";
-  bool isBookmarked = false;
+  List<RxBool> isBookmarked = [];
   List Bookmarklist = [];
-  void bookmark() {
-    if (isBookmarked) {
-      Bookmarklist.removeAt(Bookmarklist.indexOf(['postID']));
-      // CollectionReference users = FirebaseFirestore.instance
-      //     .collection('users');
-      // users
-      //     .doc(FirebaseAuth.instance.currentUser!.uid)
-      //     .collection("bookmarks")
-      //     .add({
-      //   'id': _id,
-      //   'image': _imagee,
-      //   'location':_location,
-      //   'subtitle':_subtitle,
-      //   'title':_title,
-      // });
-      // setState(() {
-      //   isBookmarked = !isBookmarked;
-      // });
-    } else {
-      Bookmarklist.add(context);
-      CollectionReference users = FirebaseFirestore.instance.collection('users');
-      users.doc(FirebaseAuth.instance.currentUser!.uid).collection("bookmarks").add({
-        'id': _id,
-        'image': _imagee,
-        'location': _location,
-        'subtitle': _subtitle,
-        'title': _title,
-      });
-      // setState(() {
-      // });
-    }
+
+  // void bookmark() {
+  //   if (isBookmarked) {
+  //     Bookmarklist.removeAt(Bookmarklist.indexOf(['postID']));
+  //     // CollectionReference users = FirebaseFirestore.instance
+  //     //     .collection('users');
+  //     // users
+  //     //     .doc(FirebaseAuth.instance.currentUser!.uid)
+  //     //     .collection("bookmarks")
+  //     //     .add({
+  //     //   'id': _id,
+  //     //   'image': _imagee,
+  //     //   'location':_location,
+  //     //   'subtitle':_subtitle,
+  //     //   'title':_title,
+  //     // });
+  //     // setState(() {
+  //     //   isBookmarked = !isBookmarked;
+  //     // });
+  //   } else {
+  //     Bookmarklist.add(context);
+  //     CollectionReference users = FirebaseFirestore.instance.collection('users');
+  //     users.doc(FirebaseAuth.instance.currentUser!.uid).collection("bookmarks").add({
+  //       'id': _id,
+  //       'image': _imagee,
+  //       'location': _location,
+  //       'subtitle': _subtitle,
+  //       'title': _title,
+  //     });
+  //     // setState(() {
+  //     // });
+  //   }
+  // }
+
+  addBookMark(
+      {required int type,
+      required String path_doc_id,
+      required String tripName,
+      required String imageUrl,
+      required String location,
+      required String discription}) async {
+    /// 1 =aspire trip
+    DocumentSnapshot<Map<String, dynamic>> trip =
+        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('bookmarks').doc().get();
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('bookmarks')
+        .doc()
+        .set({'type': type, 'image': imageUrl, 'tripname': tripName, 'dis': discription, 'location': location, 'postId': path_doc_id});
+
+    print("-------------");
   }
 
   @override
@@ -258,43 +302,53 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
                                   right: -5,
                                   child: IconButton(
                                       onPressed: () async {
+                                        isBookmarked[i].value = !isBookmarked[i].value;
+                                        if (isBookmarked[i].value) {
+                                          addBookMark(
+                                              tripName: allData[i]['tripname'],
+                                              type: 1,
+                                              path_doc_id: allData[i]['doc_id'],
+                                              discription: allData[i]['about'],
+                                              imageUrl: allData[i]['imageUrl'],
+                                              location: allData[i]['statename']);
+                                        } else {}
                                         //  Navigator.push(context, MaterialPageRoute(builder: (context)=>TripLibraryScreen()));
                                         // bookmark();
-                                        if (!isBookmarked) {
-                                          Bookmarklist.add(context);
-                                          DocumentReference users = FirebaseFirestore.instance
-                                              .collection('users')
-                                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                                              .collection("bookmarks")
-                                              .doc();
-                                          users.set({
-                                            'id': _id,
-                                            "postID": users.id,
-                                            'image': _imagee,
-                                            'location': _location,
-                                            'subtitle': _subtitle,
-                                            'title': _title,
-                                          });
-                                        } else {
-                                          var trip = await FirebaseFirestore.instance
-                                              .collection('users')
-                                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                                              .collection('bookmarks')
-                                              .doc()
-                                              .get();
-                                          var docID = trip.data()?['docID'];
-                                          FirebaseDB().removeBookmark(docID);
-                                        }
-                                        setState(() {
-                                          isBookmarked = !isBookmarked;
-                                        });
+                                        // if (!isBookmarked) {
+                                        //   Bookmarklist.add(context);
+                                        //   DocumentReference users = FirebaseFirestore.instance
+                                        //       .collection('users')
+                                        //       .doc(FirebaseAuth.instance.currentUser!.uid)
+                                        //       .collection("bookmarks")
+                                        //       .doc();
+                                        //   users.set({
+                                        //     'id': _id,
+                                        //     "postID": users.id,
+                                        //     'image': _imagee,
+                                        //     'location': _location,
+                                        //     'subtitle': _subtitle,
+                                        //     'title': _title,
+                                        //   });
+                                        // } else {
+                                        //   var trip = await FirebaseFirestore.instance
+                                        //       .collection('users')
+                                        //       .doc(FirebaseAuth.instance.currentUser!.uid)
+                                        //       .collection('bookmarks')
+                                        //       .doc()
+                                        //       .get();
+                                        //   var docID = trip.data()?['postID'];
+                                        //   FirebaseDB().removeBookmark(docID);
+                                        // }
+                                        // setState(() {
+                                        //   isBookmarked = !isBookmarked;
+                                        // });
                                       },
-                                      icon: !isBookmarked
+                                      icon: Obx(() => !isBookmarked[i].value
                                           ? Icon(
                                               Icons.bookmark_border,
                                               color: white,
                                             )
-                                          : const Icon(Icons.bookmark)),
+                                          : const Icon(Icons.bookmark))),
                                 ),
                                 Positioned(
                                     bottom: 0,

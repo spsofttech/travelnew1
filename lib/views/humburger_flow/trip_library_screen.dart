@@ -1384,6 +1384,7 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
     for (int ii = 0; ii < data.docs.length; ii++) {
       // tripdataForStore.add({'docId': docid, 'tripImage': image});
       List<DayTripData> data1 = [];
+
       List dayDataList = data.docs[ii].data()['data'];
 
       printc("--${dayDataList.length}---");
@@ -1397,11 +1398,20 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
 
         data1.add(DayTripData.fromJson(dayDataList[ii2]));
       }
+      List<DayTripData> data2 = [];
+      List dayDataBonusList = data.docs[ii].data()['bonus'];
+      for (int ii2 = 0; ii2 < dayDataBonusList.length; ii2++) {
+        //log("-- ---${value.docs[ii2].data()['day']}");
+        //printc(value.docs[0].data());
 
-      data11.add(DayTripModel(data: data1));
+        data2.add(DayTripData.fromJson(dayDataList[ii2]));
+      }
+
+      data11.add(DayTripModel(data: data1, bonus: data2));
       //finalData.add();
 
     }
+    // days = widget.totalDay - 1;
     //print(data11);
     // firstIndex++;
     // finalDataMain.add([]);
@@ -1432,18 +1442,18 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
   List turistSportallData = [];
 
   int days = 0;
-  void getTripData() async {
-    if (FirebaseAuth.instance.currentUser != null) {
-      var profile = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('Plan_trip')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get();
-      days = profile.data()?['totalDays'];
-    }
-    setState(() {});
-  }
+  // void getTripData() async {
+  //   if (FirebaseAuth.instance.currentUser != null) {
+  //     var profile = await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(FirebaseAuth.instance.currentUser!.uid)
+  //         .collection('Plan_trip')
+  //         .doc(FirebaseAuth.instance.currentUser!.uid)
+  //         .get();
+  //     days = profile.data()?['totalDays'];
+  //   }
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -1455,7 +1465,9 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 // printc(data11.length, 'g');
+
                 printc(int.parse(days.toString()), "g");
+
                 return ListView.builder(
                     padding: EdgeInsets.zero,
                     itemCount: widget.totalDay,

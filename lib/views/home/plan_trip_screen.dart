@@ -47,6 +47,7 @@ class _PlanATripState extends State<PlanATrip> {
   // final items = ['Mumbai', 'Pune', 'indore', 'Jaipur', 'Baroda'];
   // final items3 = ['Mumbai', 'Pune', 'indore', 'Jaipur', 'Baroda'];
   // final items2 = ['Trip to the Beach', 'Camping Trip', 'Road Trip', 'Group Tour', 'Trip to the city'];
+
   String? selectedValue;
 
   final TextEditingController enterdate = TextEditingController();

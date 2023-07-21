@@ -28,6 +28,7 @@ List<DayTripModel> smapleData = [];
 RxString trip_city_name = "".obs;
 double trip_citi_lat = 0;
 double trip_citi_long = 0;
+RxMap travel_by_data = {}.obs;
 
 class SaveYourTripsScreen extends StatefulWidget {
   final String type_Of_Trip;

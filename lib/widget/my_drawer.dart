@@ -323,6 +323,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                     .get()
                                     .then((value) => value.exists);
                                 print("--- --- --- --${isAlredyUpdated}");
+
                                 if (isAlredyUpdated) {
                                   Navigator.push(
                                       context,

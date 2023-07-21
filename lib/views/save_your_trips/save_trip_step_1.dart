@@ -13,6 +13,7 @@ import 'package:travelnew_app/widget/custom_button.dart';
 
 import '../../model/DayWiseTripModel.dart';
 import '../../model/StateCatGetModel.dart';
+import '../home/plan_trip_screen.dart';
 import '../humburger_flow/stroyView.dart';
 import '../humburger_flow/tourist_spot_screen.dart';
 
@@ -117,11 +118,14 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
       // print("-------data  -- ${e.data()}");
       return StateCatGetModel.fromJson(e.data());
     }).toList();
+
     print("-------data  --${subData} ");
     Set set1 = widget.interestList.map((e) {
       return e.toString();
     }).toSet();
+
     List<ColId> catWiseData = [];
+
     for (int i = 0; i < subData.length; i++) {
       for (int a = 0; a < subData[i].colId!.length; a++) {
         Set set2 = subData[i].colId![a].interest!.map((e) {
@@ -155,16 +159,31 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
       List<DayTripModel> dayvise = await getDataListModel(dataDay, subData[0].colId![0].id!, subData[0].colId![0].image!);
       finalDataMain.add(dayvise);
     }
-    days = widget.trip_days != -1 ? widget.trip_days : 0;
-    days = days + 1 < finalDataMain[0].length ? days + 1 : finalDataMain[0].length;
 
-    printc("--Lenth--- ${tripdataForStore}", "y");
+    days = widget.trip_days != -1 ? widget.trip_days : 0;
+    days = days <= finalDataMain[0].length ? days - 1 : finalDataMain[0].length - 1;
+
+    printc("--Lenth--- ${days}", "y");
 
     trip_city_name.value = '${finalDataMain[0][0].data[0].tripCity}';
     trip_citi_lat = double.parse(finalDataMain[0][0].data[0].latitude!);
     trip_citi_long = double.parse(finalDataMain[0][0].data[0].longitude!);
+
+    printc("${UserCity}  ${trip_city_name.value}", 'c');
+    travel_by_data.value = await FirebaseFirestore.instance
+        .collection('traveling_by')
+        .where('home', isEqualTo: '${UserCity}')
+        .where('trip_city', isEqualTo: trip_city_name.value)
+        .where('type', isEqualTo: trip_mode)
+        .get()
+        .then((value) {
+      printc("----${value.docs[0].data()}", 'c');
+      return value.docs[0].data();
+    });
+
     // }
     //
+
     // Future getTripData() async {
     //   bool checkArrytContain({required List list1, required List list2}) {
     //     int cnt1 = 0;
@@ -238,19 +257,25 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
       tripdataForStore.add({'docId': docid, 'tripImage': image});
       List<DayTripData> data1 = [];
       List dayDataList = data.docs[ii].data()['data'];
-
       printc("--${dayDataList.length}---");
 
       // print("---------");
       //printc("${value.docs[ii].id}-------" + dayDataList.length.toString());
       // printc(dayDataList[0]);
+
       for (int ii2 = 0; ii2 < dayDataList.length; ii2++) {
         //log("-- ---${value.docs[ii2].data()['day']}");
         //printc(value.docs[0].data());
-
         data1.add(DayTripData.fromJson(dayDataList[ii2]));
       }
-      data11.add(DayTripModel(data: data1));
+      List<DayTripData> data2 = [];
+      List dayDataBonusList = data.docs[ii].data()['bonus'];
+      for (int ii2 = 0; ii2 < dayDataBonusList.length; ii2++) {
+        //log("-- ---${value.docs[ii2].data()['day']}");
+        //printc(value.docs[0].data());
+        data2.add(DayTripData.fromJson(dayDataList[ii2]));
+      }
+      data11.add(DayTripModel(data: data1, bonus: data2));
       //finalData.add();
 
     }
@@ -309,6 +334,96 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
                       child: ListView(
                         physics: BouncingScrollPhysics(),
                         children: [
+                          SizedBox(
+                            height: height(context) * 0.17,
+                            child: Column(
+                              children: [
+                                // allData[i]['type'] == type ?
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => StoryPageView(
+                                                  data: finalDataMain[0][days],
+                                                )));
+                                  },
+                                  child: Row(
+                                    children: [
+                                      // allData[i]['type'] == type ?
+                                      SizedBox(
+                                        height: height(context) * 0.12,
+                                        width: width(context) * 0.24,
+                                        child: tripdataForStore.length == 0
+                                            ? Image.network(
+                                                // allData[i]['image']
+                                                "https://img.naidunia.com/naidunia/ndnimg/26052020/26_05_2020-tour_and_travel.jpg",
+                                                fit: BoxFit.fill,
+                                              )
+                                            : Image.network(
+                                                // allData[i]['image']
+                                                tripdataForStore[0]['tripImage'] != ""
+                                                    ? tripdataForStore[0]['tripImage']!
+                                                    : "https://img.naidunia.com/naidunia/ndnimg/26052020/26_05_2020-tour_and_travel.jpg",
+                                                fit: BoxFit.fill,
+                                              ),
+                                      ),
+                                      // : SizedBox(),
+                                      addHorizontalySpace(10),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          // allData[i]['type'] == type ?
+                                          Text(
+                                            "Bonus",
+                                            style: bodyText18w600(color: black),
+                                          ),
+                                          // : SizedBox(),
+                                          addVerticalSpace(6),
+                                          // allData[i]['type'] == type ?
+                                          SizedBox(
+                                            width: width(context) * 0.55,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: finalDataMain[0].isEmpty
+                                                  ? Text("data")
+                                                  : Wrap(
+                                                      children: [
+                                                        for (int k = 0; k < finalDataMain[0][days].bonus.length; k++)
+                                                          Text(
+                                                            "${finalDataMain[0][days].bonus[k].touristSpot},",
+                                                            // style:
+                                                            // bodyText18w600(color: black),
+                                                          )
+                                                      ],
+                                                    ),
+                                            ),
+                                          ),
+                                          // : SizedBox(),
+                                          addVerticalSpace(6),
+                                          // SizedBox(
+                                          //   width: width(context) * 0.5,
+                                          //   child: Text(
+                                          //     allData[i]['about'],
+                                          //     style: bodyText14normal(color: black),
+                                          //   ),
+                                          // ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                // : SizedBox(),
+                                // addVerticalSpace(15),
+                                // allData[i]['type'] == type ?
+                                const Divider(
+                                  height: 30,
+                                  thickness: 1,
+                                ),
+                                // :  SizedBox()
+                              ],
+                            ),
+                          ),
                           for (int i = 0; i < days; i++)
                             SizedBox(
                               height: height(context) * 0.17,
@@ -351,7 +466,7 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
                                           children: [
                                             // allData[i]['type'] == type ?
                                             Text(
-                                              "${i == 0 ? "Bonus" : "day $i"}",
+                                              "${"day ${i + 1}"}",
                                               style: bodyText18w600(color: black),
                                             ),
                                             // : SizedBox(),
