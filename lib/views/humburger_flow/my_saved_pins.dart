@@ -93,12 +93,17 @@ class MysavedPinsTabbarWidget extends StatelessWidget {
     return SizedBox(
         height: height(context) * 0.87,
         child: FutureBuilder(
-          future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('bookmarks').get(),
+          future: FirebaseFirestore.instance
+              .collection('users')
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .collection('bookmarks')
+              .where('type', isEqualTo: 1)
+              .get(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List tripData = snapshot.data!.docs.map((e) => e).toList();
               return ListView.builder(
-                  itemCount: 1,
+                  itemCount: tripData.length,
                   itemBuilder: (ctx, index) {
                     return Column(
                       children: [
@@ -196,9 +201,14 @@ class MysavedPinsTabbarWidget extends StatelessWidget {
                                         TextSpan(text: 'Category: ', style: bodyText14w600(color: black)),
                                         TextSpan(text: 'Aspied Trip', style: bodyText14normal(color: black)),
                                       ])),
-                                      Text(
-                                        '${tripData[index]['dis']}',
-                                        style: bodyText14normal(spacing: 1.5, color: black),
+                                      SizedBox(
+                                        height: height(context) * 0.045,
+                                        child: Text(
+                                          '${tripData[index]['dis']}',
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: bodyText14normal(spacing: 1.5, color: black),
+                                        ),
                                       ),
                                       addVerticalSpace(8),
                                       Row()

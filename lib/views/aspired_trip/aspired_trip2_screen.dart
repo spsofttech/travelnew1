@@ -132,7 +132,7 @@ class AspiredTrip2Screen extends StatefulWidget {
 
 class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
   bool isShow = false;
-
+  QuerySnapshot<Map<String, dynamic>>? userBookMark;
   CollectionReference _collectionRef = FirebaseFirestore.instance.collection('Aspired_trips');
 
   Future<void> getData() async {
@@ -140,22 +140,26 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance.collection('Aspired_trips').get();
     // Get data from docs and convert map to List
     allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    QuerySnapshot<Map<String, dynamic>> userBookMark =
-        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('bookmarks').get();
+
+    userBookMark = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('bookmarks').get();
     isBookmarked.clear();
     //List userMarked = userBookMark.docs.map((e) => e).toList();
     //printc("===== ${userMarked}");
+    //
+    // await FirebaseFirestore.instance.collection('Aspired_trips').doc().set(querySnapshot.docs[0].data());
+
     querySnapshot.docs.forEach((element) {
-      print(userBookMark.docs.where((el) => el.id == element.id).toList().isNotEmpty);
-      print(" --${element.id}");
-      if (userBookMark.docs.where((el) => el.id == element.id).toList().isNotEmpty) {
+      print(userBookMark!.docs.where((el) => el.data()['postId'] == element.id).toList().isNotEmpty);
+      // print(" --${element.id}  --${userBookMark.docs[0].data()['postId']}");
+
+      if (userBookMark!.docs.where((el) => el.data()['postId'] == element.id).toList().isNotEmpty) {
         isBookmarked.add(true.obs);
       } else {
         isBookmarked.add(false.obs);
       }
     });
 
-    isBookmarked = List.generate(10, (index) => false.obs);
+    //isBookmarked = List.generate(10, (index) => false.obs);
     // allData.forEach((element) {
     //   if(element['postId'] == )
     // });
@@ -248,7 +252,27 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
         .doc()
         .set({'type': type, 'image': imageUrl, 'tripname': tripName, 'dis': discription, 'location': location, 'postId': path_doc_id});
 
+    showSimpleTost(context, txt: "Bookmark Added");
     print("-------------");
+  }
+
+  removeFromBookMark({required String docId}) async {
+    QuerySnapshot<Map<String, dynamic>> removedataSnap = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('bookmarks')
+        .where('postId', isEqualTo: docId)
+        .get();
+
+    for (int a = 0; a < removedataSnap.docs.length; a++)
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('bookmarks')
+          .doc(removedataSnap.docs[a].id)
+          .delete();
+
+    showSimpleTost(context, txt: "Bookmark Removed");
   }
 
   @override
@@ -311,7 +335,9 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
                                               discription: allData[i]['about'],
                                               imageUrl: allData[i]['imageUrl'],
                                               location: allData[i]['statename']);
-                                        } else {}
+                                        } else {
+                                          removeFromBookMark(docId: allData[i]['doc_id']);
+                                        }
                                         //  Navigator.push(context, MaterialPageRoute(builder: (context)=>TripLibraryScreen()));
                                         // bookmark();
                                         // if (!isBookmarked) {

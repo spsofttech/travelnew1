@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travelnew_app/model/home_model.dart';
 import 'package:travelnew_app/utils/constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../model/StateCatGetModel.dart';
 import '../../services/db/firebaseDB.dart';
 import '../../widget/custom_appbar.dart';
 import '../../widget/custom_tab_indicator.dart';
@@ -48,6 +49,24 @@ class _QuickEscapeScreenState extends State<QuickEscapeScreen> with TickerProvid
   String _imagee = "";
   // bool isBookmarked = false;
   List Bookmarklist = [];
+
+  Future<List> getAndFilterData(QuerySnapshot<Map<String, dynamic>> value) async {
+    List allQuickEscapData = [];
+    String usercity = UserCity;
+
+    printc(usercity, 'r');
+    value.docs.forEach((element) {
+      StateCatGetModel cityData = StateCatGetModel.fromJson(element.data());
+      for (int a = 0; a < cityData.colId!.length; a++) {
+        if (cityData.colId![a].city!.toLowerCase() == usercity.toLowerCase() ||
+            cityData.colId![a].visibleTo!.where((visible_city) => visible_city.toString() == usercity).toList().isNotEmpty) {}
+      }
+      //printc(cityData.colId);
+    });
+
+    return allQuickEscapData;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,431 +106,447 @@ class _QuickEscapeScreenState extends State<QuickEscapeScreen> with TickerProvid
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: TabBarView(controller: _tabController, children: [
-                      SizedBox(
-                        height: height(context) * 0.87,
-                        child: ListView.builder(
-                            itemCount: allData.length,
-                            itemBuilder: (ctx, i) {
-                              return SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        // Navigator.push(context,MaterialPageRoute(builder: (context)=>));
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.only(top: 10, bottom: 5),
-                                        height: height(context) * 0.43,
-                                        width: width(context) * 0.93,
-                                        decoration: shadowDecoration(15, 2),
-                                        child: Column(
-                                          children: [
-                                            Stack(
-                                              children: [
-                                                ClipRRect(
-                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-                                                    child: Image.network(allData[i]['imageUrl'])),
-                                                Positioned(
-                                                  top: -5,
-                                                  right: -5,
-                                                  child: IconButton(
-                                                      onPressed: () async {
-                                                        SharedPreferences _prefs = await SharedPreferences.getInstance();
-                                                        if (!isBookmarked) {
-                                                          Bookmarklist.add(context);
-                                                          DocumentReference users = FirebaseFirestore.instance
-                                                              .collection('users')
-                                                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                                                              .collection("bookmarks")
-                                                              .doc();
-                                                          users.set({
-                                                            'id': _id,
-                                                            "postID": users.id,
-                                                            'image': _imagee,
-                                                            'location': _location,
-                                                            'subtitle': _subtitle,
-                                                            'title': _title,
-                                                          });
-                                                        } else {
-                                                          var trip = await FirebaseFirestore.instance
-                                                              .collection('users')
-                                                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                                                              .collection('bookmarks')
-                                                              .doc()
-                                                              .get();
-                                                          var docID = trip.data()?['docID'];
-                                                          FirebaseDB().removeBookmark(docID);
-                                                        }
-                                                        setState(() {
-                                                          isBookmarked = !isBookmarked;
-                                                        });
-                                                        // DocumentReference users = FirebaseFirestore.instance
-                                                        //     .collection('users')
-                                                        //
-                                                        //     .doc(FirebaseAuth.instance.currentUser!.uid)
-                                                        //     .collection("bookmarks")
-                                                        // .doc();
-                                                        //     users.set({
-                                                        //       "postID": users.id,
-                                                        // });
-                                                      },
-                                                      icon: !isBookmarked
-                                                          ? Icon(
-                                                              Icons.bookmark_border,
-                                                              color: white,
+                  FutureBuilder(
+                    future: FirebaseFirestore.instance.collection('Travel New').get().then((value) => getAndFilterData(value)),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Expanded(
+                          child: TabBarView(controller: _tabController, children: [
+                            SizedBox(
+                              height: height(context) * 0.87,
+                              child: ListView.builder(
+                                  itemCount: allData.length,
+                                  itemBuilder: (ctx, i) {
+                                    return SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              // Navigator.push(context,MaterialPageRoute(builder: (context)=>));
+                                            },
+                                            child: Container(
+                                              margin: EdgeInsets.only(top: 10, bottom: 5),
+                                              height: height(context) * 0.43,
+                                              width: width(context) * 0.93,
+                                              decoration: shadowDecoration(15, 2),
+                                              child: Column(
+                                                children: [
+                                                  Stack(
+                                                    children: [
+                                                      ClipRRect(
+                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                                                          child: Image.network(allData[i]['imageUrl'])),
+                                                      Positioned(
+                                                        top: -5,
+                                                        right: -5,
+                                                        child: IconButton(
+                                                            onPressed: () async {
+                                                              SharedPreferences _prefs = await SharedPreferences.getInstance();
+                                                              if (!isBookmarked) {
+                                                                Bookmarklist.add(context);
+                                                                DocumentReference users = FirebaseFirestore.instance
+                                                                    .collection('users')
+                                                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                                                    .collection("bookmarks")
+                                                                    .doc();
+                                                                users.set({
+                                                                  'id': _id,
+                                                                  "postID": users.id,
+                                                                  'image': _imagee,
+                                                                  'location': _location,
+                                                                  'subtitle': _subtitle,
+                                                                  'title': _title,
+                                                                });
+                                                              } else {
+                                                                var trip = await FirebaseFirestore.instance
+                                                                    .collection('users')
+                                                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                                                    .collection('bookmarks')
+                                                                    .doc()
+                                                                    .get();
+                                                                var docID = trip.data()?['docID'];
+                                                                FirebaseDB().removeBookmark(docID);
+                                                              }
+                                                              setState(() {
+                                                                isBookmarked = !isBookmarked;
+                                                              });
+                                                              // DocumentReference users = FirebaseFirestore.instance
+                                                              //     .collection('users')
+                                                              //
+                                                              //     .doc(FirebaseAuth.instance.currentUser!.uid)
+                                                              //     .collection("bookmarks")
+                                                              // .doc();
+                                                              //     users.set({
+                                                              //       "postID": users.id,
+                                                              // });
+                                                            },
+                                                            icon: !isBookmarked
+                                                                ? Icon(
+                                                                    Icons.bookmark_border,
+                                                                    color: white,
+                                                                  )
+                                                                : const Icon(Icons.bookmark)),
+                                                      ),
+                                                      Positioned(
+                                                          bottom: 0,
+                                                          left: 0,
+                                                          child: Container(
+                                                            padding: EdgeInsets.only(left: 8),
+                                                            height: height(context) * 0.064,
+                                                            width: width(context),
+                                                            color: black.withOpacity(0.4),
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons.calendar_month,
+                                                                      color: primary,
+                                                                      size: 20,
+                                                                    ),
+                                                                    addHorizontalySpace(5),
+                                                                    Text(
+                                                                      allData[i]['Date'],
+                                                                      style: TextStyle(fontWeight: FontWeight.w500, color: white),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons.location_on_rounded,
+                                                                      color: primary,
+                                                                      size: 20,
+                                                                    ),
+                                                                    addHorizontalySpace(5),
+                                                                    Text(
+                                                                      allData[i]['Chandigarh'],
+                                                                      style: TextStyle(fontWeight: FontWeight.w500, color: white),
+                                                                    ),
+                                                                    addHorizontalySpace(width(context) * 0.3),
+                                                                    Container(
+                                                                      height: 20,
+                                                                      width: width(context) * 0.2,
+                                                                      decoration: myFillBoxDecoration(0, primary, 4),
+                                                                      child: Center(
+                                                                        child: Row(
+                                                                          children: [
+                                                                            Text(
+                                                                              '         ',
+                                                                              style: bodytext12Bold(color: black),
+                                                                            ),
+                                                                            Text(
+                                                                              allData[i]['days'],
+                                                                              style: bodytext12Bold(color: black),
+                                                                            ),
+                                                                            Text(
+                                                                              ' Days',
+                                                                              style: bodytext12Bold(color: black),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ))
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(10.0),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          allData[i]['festivalname'],
+                                                          style: bodyText22w700(color: black),
+                                                        ),
+                                                        Text(
+                                                          'Animal Husbandry dept & Stare Tourism dept',
+                                                          style: bodyText14normal(color: black),
+                                                        ),
+                                                        addVerticalSpace(11),
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Image.asset(
+                                                              'assets/images/cardrive.png',
+                                                            ),
+                                                            addHorizontalySpace(5),
+                                                            SizedBox(
+                                                              width: width(context) * 0.15,
+                                                              child: Row(
+                                                                children: [
+                                                                  Text(
+                                                                    allData[i]['CarTime'],
+                                                                    style: bodytext12Bold(color: black),
+                                                                  ),
+                                                                  Text(
+                                                                    ' hours',
+                                                                    style: bodytext12Bold(color: black),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              '  |  ',
+                                                              style: bodyText16normal(color: black),
+                                                            ),
+                                                            Image.asset(
+                                                              'assets/images/train2.png',
+                                                            ),
+                                                            addHorizontalySpace(5),
+                                                            SizedBox(
+                                                              width: width(context) * 0.15,
+                                                              child: Row(
+                                                                children: [
+                                                                  Text(
+                                                                    allData[i]['TrainTime'],
+                                                                    style: bodytext12Bold(color: black),
+                                                                  ),
+                                                                  Text(
+                                                                    ' hours',
+                                                                    style: bodytext12Bold(color: black),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              '  |  ',
+                                                              style: bodyText16normal(color: black),
+                                                            ),
+                                                            Image.asset(
+                                                              'assets/images/flight.png',
+                                                            ),
+                                                            addHorizontalySpace(5),
+                                                            SizedBox(
+                                                              width: width(context) * 0.15,
+                                                              child: Text(
+                                                                'No direct flights',
+                                                                style: bodytext12Bold(color: black),
+                                                              ),
                                                             )
-                                                          : const Icon(Icons.bookmark)),
-                                                ),
-                                                Positioned(
-                                                    bottom: 0,
-                                                    left: 0,
-                                                    child: Container(
-                                                      padding: EdgeInsets.only(left: 8),
-                                                      height: height(context) * 0.064,
-                                                      width: width(context),
-                                                      color: black.withOpacity(0.4),
-                                                      child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Row(
-                                                            children: [
-                                                              Icon(
-                                                                Icons.calendar_month,
-                                                                color: primary,
-                                                                size: 20,
-                                                              ),
-                                                              addHorizontalySpace(5),
-                                                              Text(
-                                                                allData[i]['Date'],
-                                                                style: TextStyle(fontWeight: FontWeight.w500, color: white),
-                                                              )
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            children: [
-                                                              Icon(
-                                                                Icons.location_on_rounded,
-                                                                color: primary,
-                                                                size: 20,
-                                                              ),
-                                                              addHorizontalySpace(5),
-                                                              Text(
-                                                                allData[i]['Chandigarh'],
-                                                                style: TextStyle(fontWeight: FontWeight.w500, color: white),
-                                                              ),
-                                                              addHorizontalySpace(width(context) * 0.3),
-                                                              Container(
-                                                                height: 20,
-                                                                width: width(context) * 0.2,
-                                                                decoration: myFillBoxDecoration(0, primary, 4),
-                                                                child: Center(
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        '         ',
-                                                                        style: bodytext12Bold(color: black),
-                                                                      ),
-                                                                      Text(
-                                                                        allData[i]['days'],
-                                                                        style: bodytext12Bold(color: black),
-                                                                      ),
-                                                                      Text(
-                                                                        ' Days',
-                                                                        style: bodytext12Bold(color: black),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ))
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.all(10.0),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    allData[i]['festivalname'],
-                                                    style: bodyText22w700(color: black),
-                                                  ),
-                                                  Text(
-                                                    'Animal Husbandry dept & Stare Tourism dept',
-                                                    style: bodyText14normal(color: black),
-                                                  ),
-                                                  addVerticalSpace(11),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Image.asset(
-                                                        'assets/images/cardrive.png',
-                                                      ),
-                                                      addHorizontalySpace(5),
-                                                      SizedBox(
-                                                        width: width(context) * 0.15,
-                                                        child: Row(
-                                                          children: [
-                                                            Text(
-                                                              allData[i]['CarTime'],
-                                                              style: bodytext12Bold(color: black),
-                                                            ),
-                                                            Text(
-                                                              ' hours',
-                                                              style: bodytext12Bold(color: black),
-                                                            ),
                                                           ],
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '  |  ',
-                                                        style: bodyText16normal(color: black),
-                                                      ),
-                                                      Image.asset(
-                                                        'assets/images/train2.png',
-                                                      ),
-                                                      addHorizontalySpace(5),
-                                                      SizedBox(
-                                                        width: width(context) * 0.15,
-                                                        child: Row(
-                                                          children: [
-                                                            Text(
-                                                              allData[i]['TrainTime'],
-                                                              style: bodytext12Bold(color: black),
-                                                            ),
-                                                            Text(
-                                                              ' hours',
-                                                              style: bodytext12Bold(color: black),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '  |  ',
-                                                        style: bodyText16normal(color: black),
-                                                      ),
-                                                      Image.asset(
-                                                        'assets/images/flight.png',
-                                                      ),
-                                                      addHorizontalySpace(5),
-                                                      SizedBox(
-                                                        width: width(context) * 0.15,
-                                                        child: Text(
-                                                          'No direct flights',
-                                                          style: bodytext12Bold(color: black),
-                                                        ),
-                                                      )
-                                                    ],
+                                                        )
+                                                      ],
+                                                    ),
                                                   )
                                                 ],
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
-                      ),
-                      SizedBox(
-                        height: height(context) * 0.87,
-                        child: ListView.builder(
-                            itemCount: allData.length,
-                            itemBuilder: (ctx, i) {
-                              return SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        // Navigator.push(context,MaterialPageRoute(builder: (context)=>));
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.only(top: 10, bottom: 5),
-                                        height: height(context) * 0.43,
-                                        width: width(context) * 0.93,
-                                        decoration: shadowDecoration(15, 2),
-                                        child: Column(
-                                          children: [
-                                            Stack(
-                                              children: [
-                                                ClipRRect(
-                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-                                                    child: Image.network(allData[i]['imageUrl'])),
-                                                Positioned(
-                                                    top: -5,
-                                                    right: -5,
-                                                    child: IconButton(
-                                                        onPressed: () {},
-                                                        icon: Icon(
-                                                          Icons.bookmark_border,
-                                                          color: white,
-                                                        ))),
-                                                Positioned(
-                                                    bottom: 0,
-                                                    left: 0,
-                                                    child: Container(
-                                                      padding: EdgeInsets.only(left: 8),
-                                                      height: height(context) * 0.064,
-                                                      width: width(context),
-                                                      color: black.withOpacity(0.4),
-                                                      child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Row(
-                                                            children: [
-                                                              Icon(
-                                                                Icons.calendar_month,
-                                                                color: primary,
-                                                                size: 20,
-                                                              ),
-                                                              addHorizontalySpace(5),
-                                                              Text(
-                                                                allData[i]['Date'],
-                                                                style: TextStyle(fontWeight: FontWeight.w500, color: white),
-                                                              )
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            children: [
-                                                              Icon(
-                                                                Icons.location_on_rounded,
-                                                                color: primary,
-                                                                size: 20,
-                                                              ),
-                                                              addHorizontalySpace(5),
-                                                              Text(
-                                                                allData[i]['Chandigarh'],
-                                                                style: TextStyle(fontWeight: FontWeight.w500, color: white),
-                                                              ),
-                                                              addHorizontalySpace(width(context) * 0.3),
-                                                              Container(
-                                                                height: 20,
-                                                                width: width(context) * 0.2,
-                                                                decoration: myFillBoxDecoration(0, primary, 4),
-                                                                child: Center(
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        '        ',
-                                                                        style: bodytext12Bold(color: black),
-                                                                      ),
-                                                                      Text(
-                                                                        allData[i]['days'],
-                                                                        style: bodytext12Bold(color: black),
-                                                                      ),
-                                                                      Text(
-                                                                        ' Days',
-                                                                        style: bodytext12Bold(color: black),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ))
-                                              ],
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.all(10.0),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                            ),
+                            SizedBox(
+                              height: height(context) * 0.87,
+                              child: ListView.builder(
+                                  itemCount: allData.length,
+                                  itemBuilder: (ctx, i) {
+                                    return SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              // Navigator.push(context,MaterialPageRoute(builder: (context)=>));
+                                            },
+                                            child: Container(
+                                              margin: EdgeInsets.only(top: 10, bottom: 5),
+                                              height: height(context) * 0.43,
+                                              width: width(context) * 0.93,
+                                              decoration: shadowDecoration(15, 2),
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    allData[i]['festivalname'],
-                                                    style: bodyText22w700(color: black),
-                                                  ),
-                                                  Text(
-                                                    'Animal Husbandry dept & Stare Tourism dept',
-                                                    style: bodyText14normal(color: black),
-                                                  ),
-                                                  addVerticalSpace(11),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  Stack(
                                                     children: [
-                                                      Image.asset(
-                                                        'assets/images/cardrive.png',
-                                                      ),
-                                                      addHorizontalySpace(5),
-                                                      SizedBox(
-                                                        width: width(context) * 0.15,
-                                                        child: Row(
-                                                          children: [
-                                                            Text(
-                                                              allData[i]['CarTime'],
-                                                              style: bodytext12Bold(color: black),
+                                                      ClipRRect(
+                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                                                          child: Image.network(allData[i]['imageUrl'])),
+                                                      Positioned(
+                                                          top: -5,
+                                                          right: -5,
+                                                          child: IconButton(
+                                                              onPressed: () {},
+                                                              icon: Icon(
+                                                                Icons.bookmark_border,
+                                                                color: white,
+                                                              ))),
+                                                      Positioned(
+                                                          bottom: 0,
+                                                          left: 0,
+                                                          child: Container(
+                                                            padding: EdgeInsets.only(left: 8),
+                                                            height: height(context) * 0.064,
+                                                            width: width(context),
+                                                            color: black.withOpacity(0.4),
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons.calendar_month,
+                                                                      color: primary,
+                                                                      size: 20,
+                                                                    ),
+                                                                    addHorizontalySpace(5),
+                                                                    Text(
+                                                                      allData[i]['Date'],
+                                                                      style: TextStyle(fontWeight: FontWeight.w500, color: white),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons.location_on_rounded,
+                                                                      color: primary,
+                                                                      size: 20,
+                                                                    ),
+                                                                    addHorizontalySpace(5),
+                                                                    Text(
+                                                                      allData[i]['Chandigarh'],
+                                                                      style: TextStyle(fontWeight: FontWeight.w500, color: white),
+                                                                    ),
+                                                                    addHorizontalySpace(width(context) * 0.3),
+                                                                    Container(
+                                                                      height: 20,
+                                                                      width: width(context) * 0.2,
+                                                                      decoration: myFillBoxDecoration(0, primary, 4),
+                                                                      child: Center(
+                                                                        child: Row(
+                                                                          children: [
+                                                                            Text(
+                                                                              '        ',
+                                                                              style: bodytext12Bold(color: black),
+                                                                            ),
+                                                                            Text(
+                                                                              allData[i]['days'],
+                                                                              style: bodytext12Bold(color: black),
+                                                                            ),
+                                                                            Text(
+                                                                              ' Days',
+                                                                              style: bodytext12Bold(color: black),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                )
+                                                              ],
                                                             ),
-                                                            Text(
-                                                              ' hours',
-                                                              style: bodytext12Bold(color: black),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '  |  ',
-                                                        style: bodyText16normal(color: black),
-                                                      ),
-                                                      Image.asset(
-                                                        'assets/images/train2.png',
-                                                      ),
-                                                      addHorizontalySpace(5),
-                                                      SizedBox(
-                                                        width: width(context) * 0.15,
-                                                        child: Row(
-                                                          children: [
-                                                            Text(
-                                                              allData[i]['TrainTime'],
-                                                              style: bodytext12Bold(color: black),
-                                                            ),
-                                                            Text(
-                                                              ' hours',
-                                                              style: bodytext12Bold(color: black),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '  |  ',
-                                                        style: bodyText16normal(color: black),
-                                                      ),
-                                                      Image.asset(
-                                                        'assets/images/flight.png',
-                                                      ),
-                                                      addHorizontalySpace(5),
-                                                      SizedBox(
-                                                        width: width(context) * 0.15,
-                                                        child: Text(
-                                                          'No direct flights',
-                                                          style: bodytext12Bold(color: black),
-                                                        ),
-                                                      )
+                                                          ))
                                                     ],
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(10.0),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          allData[i]['festivalname'],
+                                                          style: bodyText22w700(color: black),
+                                                        ),
+                                                        Text(
+                                                          'Animal Husbandry dept & Stare Tourism dept',
+                                                          style: bodyText14normal(color: black),
+                                                        ),
+                                                        addVerticalSpace(11),
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Image.asset(
+                                                              'assets/images/cardrive.png',
+                                                            ),
+                                                            addHorizontalySpace(5),
+                                                            SizedBox(
+                                                              width: width(context) * 0.15,
+                                                              child: Row(
+                                                                children: [
+                                                                  Text(
+                                                                    allData[i]['CarTime'],
+                                                                    style: bodytext12Bold(color: black),
+                                                                  ),
+                                                                  Text(
+                                                                    ' hours',
+                                                                    style: bodytext12Bold(color: black),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              '  |  ',
+                                                              style: bodyText16normal(color: black),
+                                                            ),
+                                                            Image.asset(
+                                                              'assets/images/train2.png',
+                                                            ),
+                                                            addHorizontalySpace(5),
+                                                            SizedBox(
+                                                              width: width(context) * 0.15,
+                                                              child: Row(
+                                                                children: [
+                                                                  Text(
+                                                                    allData[i]['TrainTime'],
+                                                                    style: bodytext12Bold(color: black),
+                                                                  ),
+                                                                  Text(
+                                                                    ' hours',
+                                                                    style: bodytext12Bold(color: black),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              '  |  ',
+                                                              style: bodyText16normal(color: black),
+                                                            ),
+                                                            Image.asset(
+                                                              'assets/images/flight.png',
+                                                            ),
+                                                            addHorizontalySpace(5),
+                                                            SizedBox(
+                                                              width: width(context) * 0.15,
+                                                              child: Text(
+                                                                'No direct flights',
+                                                                style: bodytext12Bold(color: black),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
                                                   )
                                                 ],
                                               ),
-                                            )
-                                          ],
-                                        ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
-                      )
-                    ]),
+                                    );
+                                  }),
+                            )
+                          ]),
+                        );
+                      } else {
+                        return SizedBox(
+                          height: height(context) * 0.75,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: primary,
+                            ),
+                          ),
+                        );
+                      }
+                    },
                   )
                 ],
               ),

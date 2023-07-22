@@ -178,33 +178,34 @@ class _FestivalsDataListState extends State<FestivalsDataList> {
   String _imagee = "";
   bool isBookmarked = false;
   List Bookmarklist = [];
-  void bookmark() {
-    if (isBookmarked = false) {
-      Bookmarklist.removeAt(Bookmarklist.indexOf(['name']));
-      CollectionReference users = FirebaseFirestore.instance.collection('users');
-      users.doc(FirebaseAuth.instance.currentUser!.uid).collection("bookmarks").add({
-        'id': _id,
-        'image': _imagee,
-        'location': _location,
-        'subtitle': _subtitle,
-        'title': _title,
-      });
-      setState(() {
-        isBookmarked = !isBookmarked;
-      });
-    } else {
-      Bookmarklist.add(context);
-      CollectionReference users = FirebaseFirestore.instance.collection('users');
-      users.doc(FirebaseAuth.instance.currentUser!.uid).collection("bookmarks").add({
-        'id': _id,
-        'image': _imagee,
-        'location': _location,
-        'subtitle': _subtitle,
-        'title': _title,
-      });
-      setState(() {});
-    }
-  }
+
+  // void bookmark() {
+  //   if (isBookmarked = false) {
+  //     Bookmarklist.removeAt(Bookmarklist.indexOf(['name']));
+  //     CollectionReference users = FirebaseFirestore.instance.collection('users');
+  //     users.doc(FirebaseAuth.instance.currentUser!.uid).collection("bookmarks").add({
+  //       'id': _id,
+  //       'image': _imagee,
+  //       'location': _location,
+  //       'subtitle': _subtitle,
+  //       'title': _title,
+  //     });
+  //     setState(() {
+  //       isBookmarked = !isBookmarked;
+  //     });
+  //   } else {
+  //     Bookmarklist.add(context);
+  //     CollectionReference users = FirebaseFirestore.instance.collection('users');
+  //     users.doc(FirebaseAuth.instance.currentUser!.uid).collection("bookmarks").add({
+  //       'id': _id,
+  //       'image': _imagee,
+  //       'location': _location,
+  //       'subtitle': _subtitle,
+  //       'title': _title,
+  //     });
+  //     setState(() {});
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +245,14 @@ class _FestivalsDataListState extends State<FestivalsDataList> {
                         children: [
                           Stack(
                             children: [
-                              Container(height: 200, width: 700, child: Image.network(allData[index]['imageUrl'])),
+                              Container(
+                                  height: 200,
+                                  width: width(context) * 0.9,
+                                  child: Image.network(
+                                    allData[index]['imageUrl'],
+                                    fit: BoxFit.fill,
+                                  )),
+
                               // Positioned(
                               //   top: -5,
                               //   right: -5,

@@ -441,7 +441,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 SizedBox(
                                                   width: width(context) * 0.35,
                                                   child: Text(
-                                                    allHomeData[1]['Date'].toDate().toString(),
+                                                    allHomeData[1]['Date'].toString(),
                                                     overflow: TextOverflow.ellipsis,
                                                     style: bodyText12Small(color: black),
                                                   ),
