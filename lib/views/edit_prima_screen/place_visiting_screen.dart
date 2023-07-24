@@ -160,7 +160,7 @@ class _PlaceVisitingScreenState extends State<PlaceVisitingScreen> {
                                 SizedBox(
                                   width: width(context) * 0.50,
                                   child: Text(
-                                    allData[i]['TouristSportName'],
+                                    allData[i]['TouristSportName'] ?? "",
                                     style: bodyText18w600(color: black),
                                   ),
                                 ),
@@ -187,13 +187,22 @@ class _PlaceVisitingScreenState extends State<PlaceVisitingScreen> {
                               ],
                             ),
                             addHorizontalySpace(10),
-                            SizedBox(
-                                width: width(context) * 0.28,
-                                height: height(context) * 0.12,
-                                child: Image.network(
-                                  allData[i]['TouristSportImage'],
-                                  fit: BoxFit.fill,
-                                ))
+                            allData[i]['TouristSportImage'] != ""
+                                ? SizedBox(
+                                    width: width(context) * 0.28,
+                                    height: height(context) * 0.12,
+                                    child: Image.network(
+                                      allData[i]['TouristSportImage'],
+                                      fit: BoxFit.fill,
+                                    ))
+                                : Container(
+                                    width: width(context) * 0.28,
+                                    height: height(context) * 0.12,
+                                    decoration: BoxDecoration(border: Border.all(color: primary)),
+                                    child: Center(
+                                      child: Text('No Image'),
+                                    ),
+                                  )
                           ],
                         ),
                       ),

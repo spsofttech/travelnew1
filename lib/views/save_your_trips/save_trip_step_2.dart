@@ -354,7 +354,12 @@ class _SaveTripStep2State extends State<SaveTripStep2> {
           ),
 
         addVerticalSpace(15),
-        (changemode != 'Flight' || mode != "Flight") ? Obx(() => Text('It will take ${travel_by_data.value['max']} hours to reach')) : SizedBox(),
+        (changemode != 'Flight' || mode != "Flight")
+            ? (changemode != 'Bus' || mode != "Bus")
+                ? Obx(() => Text(
+                    'It will take ${travel_by_data.value['min']} to ${travel_by_data.value['max']} hours to reach Train Number :- ${travel_by_data.value['train_no']} Will Take You '))
+                : Obx(() => Text('It will take ${travel_by_data.value['min']} to ${travel_by_data.value['max']} hours to reach'))
+            : SizedBox(),
         // Text('It is on ${distant_in_km.round()} KM Far'),
       ],
     );

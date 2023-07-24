@@ -87,30 +87,19 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
 
   int firstIndex = 0;
 
-  Future getTripData() async {
-    bool checkArrytContain({required List list1, required List list2}) {
-      int cnt1 = 0;
-      int matchCnt = 0;
-      printc("-----------");
-      //List dataList1 = list1.where((element) => list2.where((element2) => element.toString() == element2.toString()).isNotEmpty).toList();
-      bool contains = list1.toSet().intersection(list2.toSet()).isNotEmpty;
-      // printc("-----------same -$dataList1");
-      return contains;
-      // if (list1.length == dataList1.length) {
-      //   return true;
-      // } else {
-      //   return false;
-      // }
-    }
+  Future<int> getTripData() async {
+    firstIndex = 0;
 
     //log("---------------------------------------------------");
+
     targetState = "${widget.plamTrip_at}";
     targetType = "${widget.type_Of_Trip}";
     //printc("-----Data ----- $targetType");
+
     finalDataMain.clear();
     smapleData.clear();
     tripdataForStore.clear();
-
+    printc("----- ### 1------", "c");
     QuerySnapshot<Map<String, dynamic>> dataDocRef =
         await FirebaseFirestore.instance.collection('Travel New').where('state', isEqualTo: '${targetState}').get();
     // print("-------data2 -- ${dataDocRef.docs[0].data()}");
@@ -119,7 +108,8 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
       return StateCatGetModel.fromJson(e.data());
     }).toList();
 
-    print("-------data  --${subData} ");
+    //print("-------data  --${subData} ");
+
     Set set1 = widget.interestList.map((e) {
       return e.toString();
     }).toSet();
@@ -133,7 +123,7 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
         }).toSet();
         // print("true -----------${subData[i].colId![a].category!} == ${targetType} ");
         if (subData[i].colId![a].category! == targetType && set1.intersection(set2).isNotEmpty && set1.length == set2.length) {
-          printc("true ----------- ", "c");
+          //printc("true ----------- ", "c");
 
           // log(colIdList[i2]['image']);
           QuerySnapshot<Map<String, dynamic>> dataDay = await FirebaseFirestore.instance
@@ -141,6 +131,8 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
               .doc('${subData[i].colId![a].city}')
               .collection("${subData[i].colId![a].id!}")
               .get();
+
+          printc("----- ### 2------ $firstIndex", "c");
           // printc(dataDay.docs[0].data());
           List<DayTripModel> dayvise = await getDataListModel(dataDay, subData[i].colId![a].id!, subData[i].colId![a].image!);
 
@@ -150,7 +142,7 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
         }
       }
     }
-
+    printc("----- ### 3------", "c");
     if (finalDataMain.length == 0) {
       // days = 0;
       QuerySnapshot<Map<String, dynamic>> dataDay =
@@ -160,16 +152,18 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
       finalDataMain.add(dayvise);
     }
 
+    printc("----- ### 4------", "c");
     days = widget.trip_days != -1 ? widget.trip_days : 0;
-    days = days <= finalDataMain[0].length ? days - 1 : finalDataMain[0].length - 1;
+    //printc("--Lenth1--- ${days}", "y");
+    days = days <= finalDataMain[0].length ? days - 1 : finalDataMain[0].length;
 
-    printc("--Lenth--- ${days}", "y");
-
+    // printc("--Lenth2--- ${days}", "y");
     trip_city_name.value = '${finalDataMain[0][0].data[0].tripCity}';
     trip_citi_lat = double.parse(finalDataMain[0][0].data[0].latitude!);
     trip_citi_long = double.parse(finalDataMain[0][0].data[0].longitude!);
+    printc("----- ### 5------", "c");
+    // printc("${UserCity}  ${trip_city_name.value}", 'c');
 
-    printc("${UserCity}  ${trip_city_name.value}", 'c');
     travel_by_data.value = await FirebaseFirestore.instance
         .collection('traveling_by')
         .where('home', isEqualTo: '${UserCity}')
@@ -177,13 +171,13 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
         .where('type', isEqualTo: trip_mode)
         .get()
         .then((value) {
-      printc("----${value.docs[0].data()}", 'c');
-      return value.docs[0].data();
+      //printc("----${value.docs[0].data()}", 'c');
+      return value.docs.isNotEmpty ? value.docs[0].data() : {};
     });
-
+    printc("----- ### 6------", "c");
+    return 0;
     // }
     //
-
     // Future getTripData() async {
     //   bool checkArrytContain({required List list1, required List list2}) {
     //     int cnt1 = 0;
@@ -252,13 +246,13 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
     List<DayTripModel> data11 = [];
 
     data11.clear();
-    printc("main List Lesnth -- ${data.docs.length}");
+    //printc("main List Lesnth -- ${data.docs.length}");
     for (int ii = 0; ii < data.docs.length; ii++) {
       tripdataForStore.add({'docId': docid, 'tripImage': image});
       List<DayTripData> data1 = [];
       List dayDataList = data.docs[ii].data()['data'];
-      printc("--${dayDataList.length}---");
 
+      // printc("--${dayDataList.length}---");
       // print("---------");
       //printc("${value.docs[ii].id}-------" + dayDataList.length.toString());
       // printc(dayDataList[0]);
@@ -317,7 +311,9 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
     return FutureBuilder(
       future: getTripData(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.hasData) {
+          printc("----- -----${snapshot.data}");
+          print('--- days -- ${days}');
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -389,9 +385,9 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
                                                   ? Text("data")
                                                   : Wrap(
                                                       children: [
-                                                        for (int k = 0; k < finalDataMain[0][days].bonus.length; k++)
+                                                        for (int k = 0; k < finalDataMain[0][days - 1].bonus.length; k++)
                                                           Text(
-                                                            "${finalDataMain[0][days].bonus[k].touristSpot},",
+                                                            "${finalDataMain[0][days - 1].bonus[k].touristSpot},",
                                                             // style:
                                                             // bodyText18w600(color: black),
                                                           )
@@ -424,6 +420,7 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
                               ],
                             ),
                           ),
+
                           for (int i = 0; i < days; i++)
                             SizedBox(
                               height: height(context) * 0.17,
@@ -668,11 +665,13 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
               )
             ],
           );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text(snapshot.error.toString()),
-          );
-        } else {
+        }
+        // else if (snapshot.hasError) {
+        //   return Center(
+        //     child: Text(snapshot.error.toString()),
+        //   );
+        // }
+        else {
           return Center(child: CircularProgressIndicator());
         }
       },

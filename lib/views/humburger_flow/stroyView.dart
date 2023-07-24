@@ -44,6 +44,7 @@ class _StoryPageViewState extends State<StoryPageView> {
     // Get data from docs and convert map to List
     //allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     //getTripData();
+
     storyItem = [
       if (widget.isBonus)
         for (int i = 0; i < widget.data.bonus.length; i++)

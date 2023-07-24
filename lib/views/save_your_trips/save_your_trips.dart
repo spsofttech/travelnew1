@@ -158,6 +158,7 @@ class _SaveYourTripsScreenState extends State<SaveYourTripsScreen> {
           //   }
           // },
           //
+
           // onStepCancel: () {
           //   if (_activeCurrentStep == 0) {
           //     return;
@@ -169,11 +170,11 @@ class _SaveYourTripsScreenState extends State<SaveYourTripsScreen> {
           // },
 
           // onStepTap allows to directly click on the particular step we want
-          // onStepTapped: (int index) {
-          //   setState(() {
-          //     _activeCurrentStep = index;
-          //   });
-          // },
+          onStepTapped: (int index) {
+            setState(() {
+              _activeCurrentStep = index;
+            });
+          },
         ),
       ),
     );

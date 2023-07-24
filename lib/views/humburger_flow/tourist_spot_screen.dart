@@ -344,7 +344,8 @@ class _TouristSpotsScreen2State extends State<TouristSpotsScreen2> {
               decoration: BoxDecoration(
                   image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: NetworkImage(/*widget.MP['image']*/ "https://img.naidunia.com/naidunia/ndnimg/26052020/26_05_2020-tour_and_travel.jpg"))),
+                      image: NetworkImage(
+                          widget.MP.image != "" ? widget.MP.image! : "https://img.naidunia.com/naidunia/ndnimg/26052020/26_05_2020-tour_and_travel.jpg"))),
               child: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -431,7 +432,7 @@ class _TouristSpotsScreen2State extends State<TouristSpotsScreen2> {
                       ),
                       Expanded(
                         child: Text(
-                          widget.MP.state!,
+                          "${widget.MP.tripCity!} , ${widget.MP.state!}",
                           style: bodyText16normal(spacing: 1.3, color: black),
                         ),
                       )
