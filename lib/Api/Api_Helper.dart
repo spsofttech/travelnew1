@@ -52,4 +52,87 @@ class ApiHelper {
       return create_trip_get_model(status: 0);
     }
   }
+
+  Future<TravelNew_Category_get_model> get_tn_category_api_call({ int type =0}) async {
+    // type  ==0  = travelnew category &  type ==1 = quick escap
+    Map _body= {
+    'type':type
+    };
+    http.Response res = await http.post(
+      Uri.parse(ApiUrl.get_tn_category),
+
+      headers: <String, String>{'authorization': ApiUrl.basicAuth},
+      body:jsonEncode(_body)
+    );
+    if (res.statusCode == 200) {
+      TravelNew_Category_get_model data = TravelNew_Category_get_model.fromJson( jsonDecode(res.body));
+
+      if (data.status == 1) {
+
+        return data;
+      } else {
+        return data;
+      }
+    } else {
+      return TravelNew_Category_get_model(status: 0);
+    }
+  }
+
+  Future<TravelNew_StateDropdown_get_model> get_tripSate_api_call({ String state =""}) async {
+    // type  ==0  = travelnew category &  type ==1 = quick escap
+    Map _body= {
+    'state':state
+    };
+    http.Response res = await http.post(
+      Uri.parse(ApiUrl.get_state_url),
+
+      headers: <String, String>{'authorization': ApiUrl.basicAuth},
+      body:jsonEncode(_body)
+    );
+
+    if (res.statusCode == 200) {
+      TravelNew_StateDropdown_get_model data = TravelNew_StateDropdown_get_model.fromJson( jsonDecode(res.body));
+
+      if (data.status == 1) {
+        return data;
+      }
+      else {
+        return data;
+      }
+
+    }
+    else {
+      return TravelNew_StateDropdown_get_model(status: 0);
+    }
+  }
+
+  Future<TripCity_get_model> get_tripCity_api_call({ String state =""}) async {
+    // type  ==0  = travelnew category &  type ==1 = quick escap
+    Map _body= {
+    'state':state
+    };
+    http.Response res = await http.post(
+      Uri.parse(ApiUrl.get_tripcity_url),
+
+      headers: <String, String>{'authorization': ApiUrl.basicAuth},
+      body:jsonEncode(_body)
+    );
+
+    if (res.statusCode == 200) {
+      TripCity_get_model data = TripCity_get_model.fromJson( jsonDecode(res.body));
+
+      if (data.status == 1) {
+        return data;
+      }
+      else {
+        return data;
+      }
+
+    }
+    else {
+      return TripCity_get_model(status: 0);
+    }
+  }
+
+
 }

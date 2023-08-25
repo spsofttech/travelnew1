@@ -172,12 +172,15 @@ class _SignInScreenState extends State<SignInScreen> {
                         // FirebaseAuth.instance.createUserWithEmailAndPassword(email: null, password: )
                       },
                     ),
+
                     addVerticalSpace(height(context) * 0.08),
                     Padding(
                       padding: const EdgeInsets.only(left: 15.0),
                       child: RichText(
-                          text: TextSpan(children: [
-                        TextSpan(text: '     By Proceeding further you agree to Travel New’s.\n               ', style: bodyText14normal(color: black)),
+                          text: TextSpan(
+                              children: [
+
+                        TextSpan( text: '     By Proceeding further you agree to Travel New’s.\n               ', style: bodyText14normal(color: black)),
                         TextSpan(
                           text: 'Terms of Services and Privacy Policy',
                           recognizer: TapGestureRecognizer()..onTap = () {},

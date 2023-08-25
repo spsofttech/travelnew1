@@ -224,32 +224,37 @@ class _PlanATripState extends State<PlanATrip> {
                                 right: BorderSide(color: Colors.black26),
                                 left: BorderSide(color: Colors.black26))),
                         child: FutureBuilder(
-                          future: getMainIntrest(),
+                          future: ApiHelper().get_tn_category_api_call(),
                           builder: (context, snapshot) {
                             print("--- ${snapshot.hasError}----" + '${trip_interest_catName}');
+
+
                             if (snapshot.hasData) {
+                              List<Data1> categoryList =snapshot.data!.data!;
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: DropdownButton<Map<String, dynamic>>(
+                                child: DropdownButton<Data1>(
                                   borderRadius: BorderRadius.circular(10),
                                   // value: null,
                                   hint: Text("${type_of_trip1}"),
                                   isExpanded: true,
                                   onChanged: (newValue) {
                                     setState(() {
-                                      type_of_trip1 = newValue!['val'];
+                                      type_of_trip1 = newValue!.category!;
                                     });
                                   },
-                                  items: trip_interest_catName.map<DropdownMenuItem<Map<String, dynamic>>>((Map<String, dynamic> value) {
-                                    printc(value['prima']);
-                                    return DropdownMenuItem<Map<String, dynamic>>(
+                                  items: categoryList.map<DropdownMenuItem<Data1>>((Data1 value) {
+                                //    printc(value['prima']);
+                                    return DropdownMenuItem<Data1>(
                                       value: value,
                                       child: Padding(
                                         padding: const EdgeInsets.only(left: 5),
                                         child: Text(
-                                          value['val'].toString(),
-                                          style: TextStyle(
-                                              fontSize: 15, color: (value['prima'] == USER_IS_PRIMA) || USER_IS_PRIMA ? Colors.black : Colors.grey),
+                                          value!.category!.toString(),
+                                          style:
+
+                                          TextStyle(
+                                              fontSize: 15, color: (value.category == USER_IS_PRIMA) || USER_IS_PRIMA ? Colors.black : Colors.grey),
                                         ),
                                       ),
                                     );
