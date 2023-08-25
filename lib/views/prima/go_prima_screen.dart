@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:travelnew_app/utils/constant.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
@@ -21,210 +23,218 @@ class GoPrimaSubscriptionScreen extends StatefulWidget {
 class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
   final _carouselController = CarouselController();
 
-  List listWidget = [
-    Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(text: 'Travel\n', style: bodyText20w700(color: primary)),
-              TextSpan(text: 'Comunity', style: bodyText20w700(color: black)),
-            ])),
-            Image.asset('assets/images/prima1.png'),
-          ],
-        ),
-        Row(
-          children: [
-            Container(
-              height: 50,
-              width: 8,
-              color: primary,
-            ),
-            addHorizontalySpace(10),
-            SizedBox(
-              width: 220,
-              child: Text(
-                'Get India’s most travel-specific profile page. Travel and build your trip friend community with ease.',
-                style: bodyText14w600(color: black),
-              ),
-            )
-          ],
-        )
-      ],
-    ),
-    Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(text: 'Unlock\n', style: bodyText20w700(color: primary)),
-              TextSpan(text: 'Profile', style: bodyText20w700(color: black)),
-            ])),
-            Image.asset('assets/images/2nd.png'),
-          ],
-        ),
-        Row(
-          children: [
-            Container(
-              height: 50,
-              width: 8,
-              color: primary,
-            ),
-            addHorizontalySpace(10),
-            SizedBox(
-              width: 220,
-              child: Text(
-                'Unlock profile views and make like-minded trip friends.Start an unlimited chat with new friends',
-                style: bodyText14w600(color: black),
-              ),
-            )
-          ],
-        )
-      ],
-    ),
-    Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(text: 'Prima\n', style: bodyText20w700(color: primary)),
-              TextSpan(text: 'Trips', style: bodyText20w700(color: black)),
-            ])),
-            Image.asset('assets/images/3rd.png'),
-          ],
-        ),
-        Row(
-          children: [
-            Container(
-              height: 50,
-              width: 8,
-              color: primary,
-            ),
-            addHorizontalySpace(10),
-            SizedBox(
-              width: 220,
-              child: Text(
-                'Search and join other trips and let others join your trip. Search friends and Invite them to your trip.',
-                style: bodyText14w600(color: black),
-              ),
-            )
-          ],
-        )
-      ],
-    ),
-    Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(text: 'Unexplored\n', style: bodyText20w700(color: primary)),
-              TextSpan(text: 'Places', style: bodyText20w700(color: black)),
-            ])),
-            Image.asset('assets/images/4rth.png'),
-          ],
-        ),
-        Row(
-          children: [
-            Container(
-              height: 55,
-              width: 8,
-              color: primary,
-            ),
-            addHorizontalySpace(10),
-            SizedBox(
-              width: 230,
-              child: Text(
-                'Visit tourist places which are unexplored and yet astonishing to make you and your trip friend surprised.',
-                style: bodyText14w600(color: black),
-              ),
-            )
-          ],
-        )
-      ],
-    ),
-    Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(text: 'Travel alone\n', style: bodyText20w700(color: primary)),
-              TextSpan(text: 'Trips', style: bodyText20w700(color: black)),
-            ])),
-            Image.asset('assets/images/5th.png'),
-          ],
-        ),
-        Row(
-          children: [
-            Container(
-              height: 50,
-              width: 8,
-              color: primary,
-            ),
-            addHorizontalySpace(10),
-            SizedBox(
-              width: 220,
-              child: Text(
-                'Travel alone if you need to find your inner peace.Unlock crafted trips that are safe to travel alone',
-                style: bodyText14w600(color: black),
-              ),
-            )
-          ],
-        )
-      ],
-    ),
-    Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(text: 'Plan trips\n', style: bodyText20w700(color: primary)),
-              TextSpan(text: 'from multiple cities', style: bodyText20w700(color: black)),
-            ])),
-            // Image.asset('assets/images/5th.png'),
-            Icon(
-              Icons.location_on,
-              color: primary,
-              size: 50,
-            )
-          ],
-        ),
-        Row(
-          children: [
-            Container(
-              height: 50,
-              width: 8,
-              color: primary,
-            ),
-            addHorizontalySpace(10),
-            SizedBox(
-              width: 220,
-              child: Text(
-                'Add a new hometown city to your profile and do planning and booking trips starting from multiple cities',
-                style: bodyText14w600(color: black),
-              ),
-            )
-          ],
-        )
-      ],
-    ),
-  ];
 
   // int inActive = 0;
   int _current = 0;
   @override
   Widget build(BuildContext context) {
+    List listWidget = [
+      Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                height: 50,
+                child: RichText(
+                    text: TextSpan(children: [
+                      TextSpan(text: 'Travel\n', style: bodyText20w700(color: primary)),
+                      TextSpan(text: 'Comunity', style: bodyText20w700(color: black)),
+                    ])),
+              ),
+              Image.asset('assets/images/prima1.png'),
+            ],
+          ),
+          Row(
+            children: [
+              Container(
+                height: 50,
+                width: 8,
+                color: primary,
+              ),
+              addHorizontalySpace(10),
+              SizedBox(
+                width: Get.width*0.6,
+                child: Text(
+                  'Get India’s most travel-specific profile page. Travel and build your trip friend community with ease.',
+                  style: bodyText14w600(color: black),
+               //   overflow: TextOverflow.ellipsis,
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+      Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RichText(
+                  text: TextSpan(children: [
+                    TextSpan(text: 'Unlock\n', style: bodyText20w700(color: primary)),
+                    TextSpan(text: 'Profile', style: bodyText20w700(color: black)),
+                  ])),
+              Image.asset('assets/images/2nd.png'),
+            ],
+          ),
+          Row(
+            children: [
+              Container(
+                height: 50,
+                width: 8,
+                color: primary,
+              ),
+              addHorizontalySpace(10),
+              SizedBox(
+                width:Get.width*0.6,
+                child: Text(
+                  'Unlock profile views and make like-minded trip friends.Start an unlimited chat with new friends',
+                  style: bodyText14w600(color: black),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+      Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RichText(
+                  text: TextSpan(children: [
+                    TextSpan(text: 'Prima\n', style: bodyText20w700(color: primary)),
+                    TextSpan(text: 'Trips', style: bodyText20w700(color: black)),
+                  ])),
+              Image.asset('assets/images/3rd.png'),
+            ],
+          ),
+          Row(
+            children: [
+              Container(
+                height: 50,
+                width: 8,
+                color: primary,
+              ),
+              addHorizontalySpace(10),
+              SizedBox(
+                width: Get.width*0.6,
+                child: Text(
+                  'Search and join other trips and let others join your trip. Search friends and Invite them to your trip.',
+                  style: bodyText14w600(color: black),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+      Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RichText(
+                  text: TextSpan(children: [
+                    TextSpan(text: 'Unexplored\n', style: bodyText20w700(color: primary)),
+                    TextSpan(text: 'Places', style: bodyText20w700(color: black)),
+                  ])),
+              Image.asset('assets/images/4rth.png'),
+            ],
+          ),
+          Row(
+            children: [
+              Container(
+                height: 55,
+                width: 8,
+                color: primary,
+              ),
+              addHorizontalySpace(10),
+              SizedBox(
+                width: Get.width*0.6,
+                child: Text(
+                  'Visit tourist places which are unexplored and yet astonishing to make you and your trip friend surprised.',
+                  style: bodyText14w600(color: black),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+      Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RichText(
+                  text: TextSpan(
+                      children: [
+                    TextSpan(text: 'Travel alone\n', style: bodyText20w700(color: primary)),
+                    TextSpan(text: 'Trips', style: bodyText20w700(color: black)),
+                     ]
+                  )),
+              Image.asset('assets/images/5th.png'),
+            ],
+          ),
+          Row(
+            children: [
+              Container(
+                height: 50,
+                width: 8,
+                color: primary,
+              ),
+              addHorizontalySpace(10),
+              SizedBox(
+                width: Get.width*0.6,
+                child: Text(
+                  'Travel alone if you need to find your inner peace.Unlock crafted trips that are safe to travel alone',
+                  style: bodyText14w600(color: black),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+      Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RichText(
+                  text: TextSpan(
+                      children: [
+                    TextSpan(text: 'Plan trips\n', style: bodyText20w700(color: primary)),
+                    TextSpan(text: 'from multiple cities', style: bodyText20w700(color: black)),
+                  ])),
+              // Image.asset('assets/images/5th.png'),
+              Icon(
+                Icons.location_on,
+                color: primary,
+                size: 50,
+              )
+            ],
+          ),
+          Row(
+            children: [
+              Container(
+                height: 50,
+                width: 8,
+                color: primary,
+              ),
+              addHorizontalySpace(10),
+              SizedBox(
+                width: Get.width*0.6,
+                child: Text(
+                  'Add a new hometown city to your profile and do planning and booking trips starting from multiple cities',
+                  style: bodyText14w600(color: black),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: white,
@@ -232,7 +242,8 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.arrow_back_ios)),
+            icon: const Icon(Icons.arrow_back_ios)
+        ),
         foregroundColor: black,
         elevation: 0,
       ),
@@ -247,7 +258,8 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RichText(
-                      text: TextSpan(children: [
+                      text: TextSpan(
+                          children: [
                     TextSpan(text: 'Go ', style: bodyText30W600(color: primary)),
                     TextSpan(text: 'Explore!\n', style: bodyText30W600(color: black)),
                     TextSpan(text: 'Go ', style: bodyText30W600(color: primary)),
@@ -261,7 +273,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
                         enlargeCenterPage: true,
                         autoPlay: true,
                         // enlargeCenterPage: true,
-                        height: MediaQuery.of(context).size.height * 0.18,
+                        height: MediaQuery.of(context).size.height * 0.22,
                         onPageChanged: (index, reason) {
                           setState(() {
                             _current = index;
@@ -335,7 +347,7 @@ class _GoPrimaSubscriptionScreenState extends State<GoPrimaSubscriptionScreen> {
         ),
       )),
       bottomNavigationBar: Container(
-        height: height(context) * 0.1,
+        height: height(context) * 0.12,
         padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         width: width(context),
         decoration: const BoxDecoration(

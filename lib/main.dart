@@ -10,11 +10,15 @@ import 'package:travelnew_app/views/start/on_boarding_screen.dart';
 import 'package:travelnew_app/views/start/sign_up_screen.dart';
 import 'package:travelnew_app/widget/my_bottom_navbar.dart';
 
+import 'Api/pref_halper.dart';
 import 'views/edit_prima_screen/edit_prima_trip_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  IS_USER_LOGIN=await Preferences.preferences.getBool(defValue:false, key: PrefKeys.isUaseLogin);
+//  bool isLoged=await Preferences.preferences.getBool(defValue:false, key: PrefKeys.isUaseLogin);
+//  print("${isLoged}");
   runApp(const MyApp());
 }
 
@@ -35,22 +39,24 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
           primarySwatch: Colors.blue,
           //scaffoldBackgroundColor: const Color.fromRGBO(50, 50, 50, 0.8),
-          fontFamily: GoogleFonts.roboto().fontFamily),
-      home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, AsyncSnapshot<User?> user) {
-            if (user.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.orange,
-                ),
-              );
-            } else if (user.hasData) {
-              return MyBottomBar();
-            } else {
-              return OnBoardingScreen();
-            }
-          }),
+          fontFamily: GoogleFonts.roboto().fontFamily
+      ),
+      home: IS_USER_LOGIN?MyBottomBar():OnBoardingScreen()
+      // StreamBuilder(
+      //     stream: FirebaseAuth.instance.authStateChanges(),
+      //     builder: (context, AsyncSnapshot<User?> user) {
+      //       if (user.connectionState == ConnectionState.waiting) {
+      //         return const Center(
+      //           child: CircularProgressIndicator(
+      //             color: Colors.orange,
+      //           ),
+      //         );
+      //       } else if (user.hasData) {
+      //         return MyBottomBar();
+      //       } else {
+      //         return OnBoardingScreen();
+      //       }
+      //     }),
     );
   }
 }

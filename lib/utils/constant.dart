@@ -363,6 +363,7 @@ String UserState = "";
 String USERNAME = "";
 String USERIMAGE = "";
 String USER_UID = "";
+int USER_ID =-1;
 double USER_lat = 0;
 double USER_long = 0;
 String NoUserNetworkImage = "https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png";

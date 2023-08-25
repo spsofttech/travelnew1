@@ -410,7 +410,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                 subtitle1: TextStyle(color: Colors.black),
                 button: TextStyle(color: Colors.black),
               ),
-              accentColor: Colors.black,
+              //accentColor: Colors.black,
               colorScheme: ColorScheme.light(
                   primary: Color(0xffffbc00),
                   primaryVariant: Colors.black,
@@ -452,7 +452,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                 subtitle1: TextStyle(color: Colors.black),
                 button: TextStyle(color: Colors.black),
               ),
-              accentColor: Colors.black,
+              //accentColor: Colors.black,
               colorScheme: ColorScheme.light(
                   primary: Color(0xffffbc00),
                   primaryVariant: Colors.black,

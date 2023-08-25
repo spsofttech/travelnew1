@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:travelnew_app/Api/ApiModel.dart';
 import 'package:travelnew_app/utils/constant.dart';
 import 'package:travelnew_app/views/humburger_flow/my_account/trip_intrest_screen.dart';
 import 'package:travelnew_app/views/humburger_flow/trip_library_screen.dart';
@@ -14,6 +15,7 @@ import 'package:travelnew_app/widget/custom_appbar.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
 import 'package:travelnew_app/widget/custom_textfield.dart';
 
+import '../../Api/Api_Helper.dart';
 import '../../widget/custom_dropdown_button.dart';
 import '../save_your_trips/save_your_trips.dart';
 import 'dart:math' as math;
@@ -75,6 +77,7 @@ class _PlanATripState extends State<PlanATrip> {
   }
 
   Future<bool> getMainIntrest() async {
+
     trip_interest_catName.clear();
     QuerySnapshot<Map<String, dynamic>> trip_intrest_snapshot = await FirebaseFirestore.instance.collection('Category Interest').get();
     // print("${trip_intrest_snapshot.docs[0].data()['data']}");
@@ -203,9 +206,8 @@ class _PlanATripState extends State<PlanATrip> {
                         )),
                   ),
                   addVerticalSpace(25),
-                  Container(padding: EdgeInsets.only(left: 10), child: const Text('Type of Trip you are planning*  ')),
+                  Container(padding: EdgeInsets.only(left: 10), child: const Text('Type of Trip you are planning* ')),
                   addVerticalSpace(10),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: SizedBox(
@@ -301,7 +303,9 @@ class _PlanATripState extends State<PlanATrip> {
                           future: FirebaseFirestore.instance.collection('State').doc("State_Name").get(),
                           builder: (context, snapshot) {
                             print("--------");
+
                             if (snapshot.hasData) {
+
                               // print("--------${snapshot.data!.data()!['states']}");
                               List<String> travelNewTripState = ["Select"];
                               List state_data = snapshot.data!.data()!['states'];
@@ -387,10 +391,13 @@ class _PlanATripState extends State<PlanATrip> {
                                               primary: primary,
                                             ),
                                           ),
-                                          child: child!);
+                                          child: child!
+                                      );
                                     },
                                   );
+
                                   if (pickedDate != null) {
+
                                     print(pickedDate);
                                     firstDate = pickedDate.day;
                                     String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
@@ -398,7 +405,9 @@ class _PlanATripState extends State<PlanATrip> {
                                     setState(() {
                                       startDate.text = formattedDate;
                                     });
-                                  } else {
+
+                                  }
+                                  else {
                                     print("Date is not selected");
                                   }
                                 },
@@ -609,6 +618,9 @@ class _PlanATripState extends State<PlanATrip> {
                         child: CustomButton(
                             name: 'Explore Trips',
                             onPressed: () async {
+
+
+
                               // printc("------${_string1}");
                               bool allCodition = true;
                               String msg = "";
@@ -641,67 +653,82 @@ class _PlanATripState extends State<PlanATrip> {
                               }
 
                               if (allCodition) {
+                                // showAPICallPendingDialog(context);
+                                // DocumentSnapshot<Map<String, dynamic>> unsavedPathDoc = await FirebaseFirestore.instance
+                                //     .collection('users')
+                                //     .doc(FirebaseAuth.instance.currentUser!.uid)
+                                //     .collection('trip library')
+                                //     .doc('unsaved')
+                                //     .get();
+                                //
+
+
                                 showAPICallPendingDialog(context);
-                                DocumentSnapshot<Map<String, dynamic>> unsavedPathDoc = await FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                                    .collection('trip library')
-                                    .doc('unsaved')
-                                    .get();
+                                create_trip_send_model model=create_trip_send_model(
+                                  category:type_of_trip1 ,
+                                  days: totalDays,
+                                  state:1 ,
+                                  travelMode: trip_mode,
+                                  userId: USER_ID,
+                                );
+                                create_trip_get_model resModel= await ApiHelper().createa_trip_Apicall(model: model);
+                                Navigator.pop(context);
 
-                                if (unsavedPathDoc.exists) {
-                                  await FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                                      .collection('trip library')
-                                      .doc('unsaved')
-                                      .update({
-                                    'data': FieldValue.arrayUnion([
-                                      {
-                                        'type': 1,
-                                        'type_Of_Trip': type_of_trip1,
-                                        'plamTrip_at': planTrip_at_,
-                                        'trip_days': totalDays,
-                                        'interestList': usereTripIntrest,
-                                        'date': startDate.text,
-                                        "StartTrip": UserCity,
-                                        "StartDate": startDate.text,
-                                        "EndDate": endDate.text,
-                                        "tripmode": trip_mode,
-                                        "totalDays": totalDays,
-                                        "Flexible": flexible,
-                                        "BookingId": '',
-                                      }
-                                    ])
-                                  });
-                                } else {
-                                  await FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                                      .collection('trip library')
-                                      .doc('unsaved')
-                                      .set({
-                                    'data': FieldValue.arrayUnion([
-                                      {
-                                        'type': 1,
-                                        'type_Of_Trip': type_of_trip1,
-                                        'plamTrip_at': planTrip_at_,
-                                        'trip_days': totalDays,
-                                        'interestList': usereTripIntrest,
-                                        'date': startDate.text,
-                                        "StartTrip": UserCity,
-                                        "StartDate": startDate.text,
-                                        "EndDate": endDate.text,
-                                        "tripmode": trip_mode,
-                                        "totalDays": totalDays,
-                                        "Flexible": flexible,
-                                        "BookingId": '',
-                                      }
-                                    ])
-                                  });
-                                }
+                                // if (unsavedPathDoc.exists) {
+                                //   await FirebaseFirestore.instance
+                                //       .collection('users')
+                                //       .doc(FirebaseAuth.instance.currentUser!.uid)
+                                //       .collection('trip library')
+                                //       .doc('unsaved')
+                                //       .update({
+                                //     'data': FieldValue.arrayUnion([
+                                //       {
+                                //         'type': 1,
+                                //         'type_Of_Trip': type_of_trip1,
+                                //         'plamTrip_at': planTrip_at_,
+                                //         'trip_days': totalDays,
+                                //         'interestList': usereTripIntrest,
+                                //         'date': startDate.text,
+                                //         "StartTrip": UserCity,
+                                //         "StartDate": startDate.text,
+                                //         "EndDate": endDate.text,
+                                //         "tripmode": trip_mode,
+                                //         "totalDays": totalDays,
+                                //         "Flexible": flexible,
+                                //         "BookingId": '',
+                                //       }
+                                //     ])
+                                //   });
+                                // }
+                                // else {
+                                //   await FirebaseFirestore.instance
+                                //       .collection('users')
+                                //       .doc(FirebaseAuth.instance.currentUser!.uid)
+                                //       .collection('trip library')
+                                //       .doc('unsaved')
+                                //       .set({
+                                //     'data': FieldValue.arrayUnion([
+                                //       {
+                                //         'type': 1,
+                                //         'type_Of_Trip': type_of_trip1,
+                                //         'plamTrip_at': planTrip_at_,
+                                //         'trip_days': totalDays,
+                                //         'interestList': usereTripIntrest,
+                                //         'date': startDate.text,
+                                //         "StartTrip": UserCity,
+                                //         "StartDate": startDate.text,
+                                //         "EndDate": endDate.text,
+                                //         "tripmode": trip_mode,
+                                //         "totalDays": totalDays,
+                                //         "Flexible": flexible,
+                                //         "BookingId": '',
+                                //       }
+                                //     ])
+                                //   });
+                                // }
+                                //
+                                // await setTripPlan();
 
-                                await setTripPlan();
                                 Navigator.pop(context);
                                 Navigator.push(
                                     context,

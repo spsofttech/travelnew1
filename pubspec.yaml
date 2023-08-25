@@ -35,46 +35,47 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  cloud_firestore: ^4.1.0
-  firebase_auth: ^4.1.5
-  firebase_core: ^2.3.0
-  firebase_messaging: ^14.1.3
-  google_sign_in: ^5.4.0
-  google_fonts: ^3.0.1
-  smooth_page_indicator: ^1.0.0+2
-  carousel_slider: ^4.1.1
-  intl: ^0.17.0
-  geolocator: ^9.0.2
-  geocoding: ^2.0.5
-  flutter_rating_bar: ^4.0.1
-  syncfusion_flutter_gauges: ^20.3.52
-  shared_preferences: ^2.0.15
-  flutter_facebook_auth: ^5.0.6
-  fluttertoast: ^8.1.2
-  google_places_flutter: ^2.0.5
-  image_cropper: ^3.0.1
-  image_picker: ^0.8.5+3
-  open_file: ^3.2.1
-  path_provider: ^2.0.11
-  pdf: ^3.8.3
-  flutter_image_compress: ^1.1.2
-  file_picker: ^5.0.1
-  syncfusion_flutter_pdfviewer: ^20.3.59
-  flutter_document_picker: ^5.1.0
-  firebase_storage: ^11.0.6
-  provider: ^6.0.3
-  email_auth: ^1.0.0
-  location: ^4.4.0
-  numberpicker: ^2.1.1
-  age_calculator: ^1.0.0
-  flutter_local_notifications: ^13.0.0
-  story_view: ^0.14.0
-  internet_connection_checker: ^1.0.0+1
-  connectivity_plus: ^3.0.3
-  share: ^2.0.4
-  social_share_plugin: ^0.4.1+2
+  cupertino_icons:
+  cloud_firestore:
+  firebase_auth:
+  firebase_core:
+  firebase_messaging:
+  google_sign_in:
+  google_fonts: ^4.0.4
+  smooth_page_indicator:
+  carousel_slider:
+  intl:
+  geolocator:
+  geocoding:
+  flutter_rating_bar:
+  syncfusion_flutter_gauges:
+  shared_preferences:
+  flutter_facebook_auth:
+  fluttertoast:
+  google_places_flutter:
+  image_cropper:
+  image_picker:
+  open_file:
+  path_provider:
+  pdf:
+  flutter_image_compress:
+  file_picker:
+  syncfusion_flutter_pdfviewer:
+  flutter_document_picker:
+  firebase_storage:
+  provider:
+  email_auth:
+  location:
+  numberpicker:
+  age_calculator:
+  flutter_local_notifications:
+  story_view:
+  internet_connection_checker:
+  connectivity_plus:
+  share:
+  social_share_plugin:
   get:
+  http:
 
 dev_dependencies:
   flutter_test:

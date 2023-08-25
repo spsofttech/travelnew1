@@ -10,6 +10,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:travelnew_app/Api/pref_halper.dart';
 import 'package:travelnew_app/model/home_model.dart';
 import 'package:travelnew_app/utils/constant.dart';
 import 'package:travelnew_app/views/home/festival_and_celebrations_screen.dart';
@@ -259,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 addVerticalSpace(5),
                 InkWell(
                   onTap: () async {
-                    if (FirebaseAuth.instance.currentUser != null) {
+                    if (IS_USER_LOGIN ){
                       // LocationProvider _locationProvider = LocationProvider();
                       // await _locationProvider.fetchCurrentPosition();
                       // registerUser();
@@ -637,17 +638,19 @@ class GoPrimaSubscriptionsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height(context) * 0.555,
+      height: height(context) * 0.43,
       width: width(context) * 1,
       decoration: myFillBoxDecoration(0, primary, 15),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
         Padding(
           padding: const EdgeInsets.only(left: 10.0, top: 10),
           child: Stack(
             children: [
               SizedBox(
                   width: width(context),
-                  height: height(context) * 0.35,
+                  height: height(context) * 0.22,
                   child: Image.asset(
                     'assets/images/primamain.png',
                     fit: BoxFit.fill,
@@ -669,7 +672,7 @@ class GoPrimaSubscriptionsWidget extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
           child: SizedBox(
             width: width(context) * 0.8,
             child: Text(
@@ -683,7 +686,7 @@ class GoPrimaSubscriptionsWidget extends StatelessWidget {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const GoPrimaSubscriptionScreen()));
           },
           child: Container(
-            height: 40,
+            height: height(context) * 0.05,
             width: width(context) * 0.4,
             margin: const EdgeInsets.only(left: 10, top: 10),
             decoration: myFillBoxDecoration(0, white, 50),
@@ -695,7 +698,7 @@ class GoPrimaSubscriptionsWidget extends StatelessWidget {
             ),
           ),
         ),
-        addVerticalSpace(23),
+        addVerticalSpace(height(context) * 0.01,),
         Row(
           children: [
             Spacer(),

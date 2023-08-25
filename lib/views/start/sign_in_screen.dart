@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:travelnew_app/Api/pref_halper.dart';
 import 'package:travelnew_app/utils/constant.dart';
 import 'package:travelnew_app/views/home/home_screen.dart';
 import 'package:travelnew_app/views/start/forgot_password.dart';
@@ -11,6 +12,7 @@ import 'package:travelnew_app/views/start/sign_up_screen.dart';
 import 'package:travelnew_app/views/start/signup_with_social_media_screen.dart';
 import 'package:travelnew_app/widget/my_bottom_navbar.dart';
 
+import '../../Api/Api_Helper.dart';
 import '../../widget/custom_button.dart';
 import '../../widget/custom_textfield.dart';
 
@@ -63,7 +65,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Welcome back, Alexandra',
+                      'Welcome back',
                       style: bodyText22w700(color: black),
                     ),
                     addVerticalSpace(15),
@@ -117,15 +119,15 @@ class _SignInScreenState extends State<SignInScreen> {
                       // ),
                     ),
                     addVerticalSpace(20),
-                    InkWell(
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: ((context) => ForgotPassword())));
-                        },
-                        child: Text(
-                          'Forgot password ?',
-                          style: bodyText14normal(color: black.withOpacity(0.5)),
-                        )),
-                    addVerticalSpace(6),
+                    // InkWell(
+                    //     onTap: () {
+                    //       Navigator.push(context, MaterialPageRoute(builder: ((context) => ForgotPassword())));
+                    //     },
+                    //     child: Text(
+                    //       'Forgot password ?',
+                    //       style: bodyText14normal(color: black.withOpacity(0.5)),
+                    //     )),
+                    // addVerticalSpace(6),
                     InkWell(
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: ((context) => SignUpScreen())));
@@ -138,20 +140,35 @@ class _SignInScreenState extends State<SignInScreen> {
                     CustomButton(
                       name: 'Sign in',
                       onPressed: () async {
-                        try {
-                          final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-                          final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                          sharedPreferences.setString('email', email.toString());
-                          Navigator.push(context, MaterialPageRoute(builder: ((context) => MyBottomBar())));
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == 'user-not-found') {
-                            showSnackBar(context, "Your email is not exist", Colors.red);
-                            print('No user found for that email.');
-                          } else if (e.code == 'wrong-password') {
-                            showSnackBar(context, "Your password is Wrong", Colors.red);
-                            print('Wrong password provided for that user.');
+
+                        // try {
+                        //   final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+                        //   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                        //   sharedPreferences.setString('email', email.toString());
+                        //   Navigator.push(context, MaterialPageRoute(builder: ((context) => MyBottomBar())));
+                        // } on FirebaseAuthException catch (e) {
+                        //   if (e.code == 'user-not-found') {
+                        //     showSnackBar(context, "Your email is not exist", Colors.red);
+                        //     print('No user found for that email.');
+                        //   } else if (e.code == 'wrong-password') {
+                        //     showSnackBar(context, "Your password is Wrong", Colors.red);
+                        //     print('Wrong password provided for that user.');
+                        //   }
+                        // }
+
+                        showAPICallPendingDialog(context);
+
+                         //  int resCode=await ApiHelper().loginWithEmailApiCall(email: email.toString(), ¢password: password.toString());
+                        int resCode=1;
+
+                        if(resCode ==0)
+                          {
+                              Preferences.preferences.saveString(key: PrefKeys.userEmailKey,value:  email.toString());
+                              Preferences.preferences.saveBool(key: PrefKeys.isUaseLogin,value:  true);
+                              IS_USER_LOGIN=true;
+                              Navigator.pop(context);
+                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MyBottomBar()),(route) => false,);
                           }
-                        }
                         // FirebaseAuth.instance.createUserWithEmailAndPassword(email: null, password: )
                       },
                     ),

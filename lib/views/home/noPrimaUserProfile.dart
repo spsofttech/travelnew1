@@ -421,7 +421,7 @@ class _noPrimaUserProfileState extends State<noPrimaUserProfile> {
                 subtitle1: TextStyle(color: Colors.black),
                 button: TextStyle(color: Colors.black),
               ),
-              accentColor: Colors.black,
+              //accentColor: Colors.black,
               colorScheme: const ColorScheme.light(
                   primary: Color(0xffffbc00),
                   primaryVariant: Colors.black,
@@ -463,7 +463,7 @@ class _noPrimaUserProfileState extends State<noPrimaUserProfile> {
                 subtitle1: TextStyle(color: Colors.black),
                 button: TextStyle(color: Colors.black),
               ),
-              accentColor: Colors.black,
+              //accentColor: Colors.black,
               colorScheme: ColorScheme.light(
                   primary: Color(0xffffbc00),
                   primaryVariant: Colors.black,

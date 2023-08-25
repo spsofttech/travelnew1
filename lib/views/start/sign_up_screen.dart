@@ -10,6 +10,8 @@ import 'package:travelnew_app/widget/custom_button.dart';
 import 'package:travelnew_app/widget/my_bottom_navbar.dart';
 import 'package:intl/intl.dart';
 
+import '../../Api/Api_Helper.dart';
+import '../../Api/pref_halper.dart';
 import '../../widget/custom_textfield.dart';
 import '../home/home_screen.dart';
 
@@ -21,25 +23,25 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+
   String email = "";
-
   String password = "";
-
   bool isButtonActive = true;
-  TextEditingController field0 = new TextEditingController();
+  TextEditingController name_controller = new TextEditingController();
   TextEditingController field1 = new TextEditingController();
-  TextEditingController field2 = new TextEditingController();
-  TextEditingController field3 = new TextEditingController();
+  TextEditingController date_of_birth_controler = new TextEditingController();
+  TextEditingController mobile_number_controller = new TextEditingController();
   TextEditingController field4 = new TextEditingController();
   bool _prima = false;
+
   registerUser() async {
     final _fireStore = FirebaseFirestore.instance;
     await _fireStore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).set({
-      'firstName': field0.text,
-      'fullName': field0.text,
+      'firstName': name_controller.text,
+      'fullName': name_controller.text,
       'email': field1.text,
-      'dob': field2.text,
-      'mobNum': field3.text,
+      'dob': date_of_birth_controler.text,
+      'mobNum': mobile_number_controller.text,
       'isPrima': _prima,
       'UID': FirebaseAuth.instance.currentUser!.uid,
       'image': ""
@@ -49,9 +51,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initstate() {
     super.initState();
-    field0 = TextEditingController();
-    field0.addListener(() {
-      final isButtonActive = field0.text.isNotEmpty;
+    name_controller = TextEditingController();
+    name_controller.addListener(() {
+      final isButtonActive = name_controller.text.isNotEmpty;
       setState(() => this.isButtonActive = isButtonActive);
     });
     field1 = TextEditingController();
@@ -59,14 +61,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
       final isButtonActive = field1.text.isNotEmpty;
       setState(() => this.isButtonActive = isButtonActive);
     });
-    field2 = TextEditingController();
-    field2.addListener(() {
-      final isButtonActive = field2.text.isNotEmpty;
+    date_of_birth_controler = TextEditingController();
+    date_of_birth_controler.addListener(() {
+      final isButtonActive = date_of_birth_controler.text.isNotEmpty;
       setState(() => this.isButtonActive = isButtonActive);
     });
-    field3 = TextEditingController();
-    field3.addListener(() {
-      final isButtonActive = field3.text.isNotEmpty;
+    mobile_number_controller = TextEditingController();
+    mobile_number_controller.addListener(() {
+      final isButtonActive = mobile_number_controller.text.isNotEmpty;
       setState(() => this.isButtonActive = isButtonActive);
     });
     field4 = TextEditingController();
@@ -78,10 +80,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void dispose() {
-    field0.dispose();
+    name_controller.dispose();
     field1.dispose();
-    field2.dispose();
-    field3.dispose();
+    date_of_birth_controler.dispose();
+    mobile_number_controller.dispose();
     field4.dispose();
     super.dispose();
   }
@@ -135,7 +137,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       addVerticalSpace(height(context) * 0.09),
                       CustomTextFieldWidget(
                         labelText: 'Full Name',
-                        controller: field0,
+                        controller: name_controller,
                       ),
                       addVerticalSpace(15),
                       SizedBox(
@@ -199,7 +201,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
 
                             setState(() {
-                              field2.text = formattedDate;
+                              date_of_birth_controler.text = formattedDate;
                             });
                           } else {
                             print("Date is not selected");
@@ -207,7 +209,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                         // icon: Icon(Icons.calendar_month_rounded),
                         // labelText: 'Date of birth',
-                        controller: field2,
+                        controller: date_of_birth_controler,
                       ),
                       addVerticalSpace(15),
                       SizedBox(
@@ -225,9 +227,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                               labelText: 'Mobile Number',
                               // labelStyle: bodyText14w600(color: primarhy),
-
                               focusColor: primary,
-
                               enabledBorder:
                                   OutlineInputBorder(borderSide: BorderSide(color: Colors.black26, width: 1.0), borderRadius: BorderRadius.circular(10)),
                               focusedBorder: OutlineInputBorder(
@@ -239,7 +239,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                             keyboardType: TextInputType.number,
-                            controller: field3,
+                            controller: mobile_number_controller,
                           ),
                         ),
                       ),
@@ -311,10 +311,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   shape: CircleBorder(),
                                 ),
                                 child: Visibility(
-                                  visible: (field0.text.isNotEmpty ||
+                                  visible: (name_controller.text.isNotEmpty ||
                                           field1.text.isNotEmpty ||
-                                          field2.text.isNotEmpty ||
-                                          field3.text.isNotEmpty ||
+                                          date_of_birth_controler.text.isNotEmpty ||
+                                          mobile_number_controller.text.isNotEmpty ||
                                           field4.text.isNotEmpty)
                                       ? true
                                       : false,
@@ -323,10 +323,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       icon: const Icon(Icons.refresh_sharp),
                                       color: primary,
                                       onPressed: () {
-                                        field0.clear();
+                                        name_controller.clear();
                                         field1.clear();
-                                        field2.clear();
-                                        field3.clear();
+                                        date_of_birth_controler.clear();
+                                        mobile_number_controller.clear();
                                         field4.clear();
                                         setState(() {});
                                       }),
@@ -336,27 +336,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           Center(
                             child: Container(
-                              width: 355,
+                             width: width(context)*0.5,
                               child: CustomButton(
                                 name: 'Sign up',
                                 onPressed: () async {
-                                  try {
-                                    final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                                      email: email,
-                                      password: password,
-                                    );
-                                    registerUser();
-                                    showSnackBar(context, "Signed Up", Colors.green);
-                                    Navigator.push(context, MaterialPageRoute(builder: ((context) => SignInScreen())));
-                                  } on FirebaseAuthException catch (e) {
-                                    if (e.code == 'weak-password') {
-                                      print('The password provided is too weak.');
-                                    } else if (e.code == 'email-already-in-use') {
-                                      print('The account already exists for that email.');
+
+                                  if(email.toString().isNotEmpty&&password.toString().isNotEmpty&&date_of_birth_controler.text.isNotEmpty&&mobile_number_controller.text.isNotEmpty&&name_controller.text.isNotEmpty){
+                                    showAboutDialog(context: context);
+                                    int resCode=await ApiHelper().loginWithEmailApiCall(email: email.toString(), password: password.toString(),birth_date: date_of_birth_controler.text,contactNum:mobile_number_controller.text,name: name_controller.text);
+
+                                    if(resCode==0)
+                                    {
+                                      showSnackBar(context, "Signed Up", Colors.green);
+                                      Preferences.preferences.saveString(key: PrefKeys.userEmailKey,value:  email.toString());
+                                      Preferences.preferences.saveBool(key: PrefKeys.isUaseLogin,value:  true);
+                                      IS_USER_LOGIN=true;
+                                      Navigator.pop(context);
+                                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MyBottomBar()),(route) => false,);
                                     }
-                                  } catch (e) {
-                                    print(e);
+
                                   }
+                                  else
+                                    {
+                                      showSnackBar(context, "Please Enter all Details ",Colors.redAccent);
+                                    }
+                       
+                                  // try {
+                                  //   final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                  //     email: email,
+                                  //     password: password,
+                                  //   );
+                                  //   registerUser();
+                                  //   showSnackBar(context, "Signed Up", Colors.green);
+                                  //   Navigator.push(context, MaterialPageRoute(builder: ((context) => SignInScreen())));
+                                  // } on FirebaseAuthException catch (e) {
+                                  //   if (e.code == 'weak-password') {
+                                  //     print('The password provided is too weak.');
+                                  //   } else if (e.code == 'email-already-in-use') {
+                                  //     print('The account already exists for that email.');
+                                  //   }
+                                  // } catch (e) {
+                                  //   print(e);
+                                  // }
                                 },
                               ),
                             ),

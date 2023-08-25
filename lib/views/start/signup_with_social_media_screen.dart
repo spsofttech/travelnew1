@@ -95,50 +95,50 @@ class _SignupWithSocialMediaScreenState extends State<SignupWithSocialMediaScree
               ),
             ),
             addVerticalSpace(15),
-            InkWell(
-              onTap: () async {
-                await FirebaseServices().signInWithFacebook();
-                Navigator.push(context, MaterialPageRoute(builder: ((context) => MyBottomBar())));
-                // signing with facebook
-              },
-              child: Container(
-                height: 50,
-                width: width(context) * 0.92,
-                decoration: myOutlineBoxDecoration(1.3, primary, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/fb2.png'),
-                    addHorizontalySpace(15),
-                    Text(
-                      'Continue with Facebook',
-                      style: bodyText16w600(color: black),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            addVerticalSpace(15),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 50,
-                width: width(context) * 0.92,
-                decoration: myOutlineBoxDecoration(1.3, primary, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/apple.png'),
-                    addHorizontalySpace(15),
-                    Text(
-                      'Continue with Apple',
-                      style: bodyText16w600(color: black),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            addVerticalSpace(15),
+            // InkWell(
+            //   onTap: () async {
+            //     await FirebaseServices().signInWithFacebook();
+            //     Navigator.push(context, MaterialPageRoute(builder: ((context) => MyBottomBar())));
+            //     // signing with facebook
+            //   },
+            //   child: Container(
+            //     height: 50,
+            //     width: width(context) * 0.92,
+            //     decoration: myOutlineBoxDecoration(1.3, primary, 10),
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         Image.asset('assets/images/fb2.png'),
+            //         addHorizontalySpace(15),
+            //         Text(
+            //           'Continue with Facebook',
+            //           style: bodyText16w600(color: black),
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            // addVerticalSpace(15),
+            // InkWell(
+            //   onTap: () {},
+            //   child: Container(
+            //     height: 50,
+            //     width: width(context) * 0.92,
+            //     decoration: myOutlineBoxDecoration(1.3, primary, 10),
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         Image.asset('assets/images/apple.png'),
+            //         addHorizontalySpace(15),
+            //         Text(
+            //           'Continue with Apple',
+            //           style: bodyText16w600(color: black),
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            // addVerticalSpace(15),
             InkWell(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: ((context) => SignInScreen())));
