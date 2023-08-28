@@ -235,15 +235,22 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
 
   @override
   void initState() {
-    super.initState();
 
+    super.initState();
     if (widget.text.length > 150) {
+
       firstHalf = widget.text.substring(0, 150);
       secondHalf = widget.text.substring(150, widget.text.length);
-    } else {
+
+    }
+    else
+    {
+
       firstHalf = widget.text;
       secondHalf = "";
+
     }
+
   }
 
   @override
@@ -254,10 +261,12 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
           ? Text(firstHalf)
           : Column(
               children: <Widget>[
+
                 Text(
                   flag ? ("$firstHalf...") : (firstHalf + secondHalf),
                   style: TextStyle(color: black),
                 ),
+
                 InkWell(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -274,6 +283,7 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
                     });
                   },
                 ),
+
               ],
             ),
     );
@@ -283,11 +293,13 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
 void showAPICallPendingDialog(context) {
   showDialog(
       context: context,
+
       barrierDismissible: false,
       builder: (BuildContext context) {
         return WillPopScope(
           onWillPop: () async => false,
           child: AlertDialog(
+
             elevation: 0,
             backgroundColor: Colors.transparent,
             content: Column(
@@ -295,6 +307,7 @@ void showAPICallPendingDialog(context) {
               children: const [
                 CircularProgressIndicator(
                   backgroundColor: Colors.yellow,
+                  color: Colors.white,
                 ),
               ],
             ),
@@ -308,7 +321,9 @@ showSimpleTost(
   Color txtColor = Colors.black,
   Color backGround = const Color.fromRGBO(255, 199, 44, 1),
   required String txt,
-}) {
+})
+{
+
   return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(
       "${txt}",
@@ -316,6 +331,7 @@ showSimpleTost(
     ),
     backgroundColor: backGround,
   ));
+
 }
 
 // box decoration with Boxshadow
@@ -338,7 +354,6 @@ Widget addHorizontalySpace(double width) {
 
 String UserCity = "";
 String UserState = "";
-
 // const kTextFieldDecoration = InputDecoration(
 //   prefix: Text(
 //     '    +91  ',
@@ -359,7 +374,6 @@ String UserState = "";
 // );
 
 // -------------------------------------------   User Info Const ---------------------------------
-
 String USERNAME = "";
 String USERIMAGE = "";
 String USER_UID = "";

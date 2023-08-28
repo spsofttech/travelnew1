@@ -5,6 +5,7 @@ import 'package:travelnew_app/Api/pref_halper.dart';
 
 import 'ApiModel.dart';
 import 'api_url.dart';
+import 'model/user_trip_interest_Model.dart';
 
 class ApiHelper {
   Preferences preferences = Preferences();
@@ -33,7 +34,7 @@ class ApiHelper {
     }
   }
 
-  Future<create_trip_get_model> createa_trip_Apicall({required create_trip_send_model model}) async {
+  Future<create_trip_get_model> explore_trip_Apicall({required create_trip_send_model model}) async {
     http.Response res = await http.post(
       Uri.parse(ApiUrl.userLogin),
       headers: <String, String>{'authorization': ApiUrl.basicAuth},
@@ -56,17 +57,18 @@ class ApiHelper {
   Future<TravelNew_Category_get_model> get_tn_category_api_call({ int type =0}) async {
     // type  ==0  = travelnew category &  type ==1 = quick escap
     Map _body= {
-    'type':type
+    "type":type
     };
     http.Response res = await http.post(
       Uri.parse(ApiUrl.get_tn_category),
 
-      headers: <String, String>{'authorization': ApiUrl.basicAuth},
+      headers: <String, String>{'authorization': ApiUrl.basicAuth,'Content-Type':'application/json'},
       body:jsonEncode(_body)
     );
     if (res.statusCode == 200) {
       TravelNew_Category_get_model data = TravelNew_Category_get_model.fromJson( jsonDecode(res.body));
 
+      print("-------   --${jsonDecode(res.body)}");
       if (data.status == 1) {
 
         return data;
@@ -131,6 +133,35 @@ class ApiHelper {
     }
     else {
       return TripCity_get_model(status: 0);
+    }
+  }
+
+  Future<User_Trip_Interest_Model> get_userIntrest_api_call() async {
+    // type  ==0  = travelnew category &  type ==1 = quick escap
+
+    // Map _body= {
+    // 'state':state
+    // };
+    http.Response res = await http.post(
+      Uri.parse(ApiUrl.get_tn_interest),
+
+      headers: <String, String>{'authorization': ApiUrl.basicAuth},
+    );
+
+    if (res.statusCode == 200) {
+      User_Trip_Interest_Model data = User_Trip_Interest_Model.fromJson( jsonDecode(res.body));
+
+      if (data.status == 1) {
+        return data;
+      }
+      else
+      {
+        return data;
+      }
+
+    }
+    else {
+      return User_Trip_Interest_Model(status: 0);
     }
   }
 

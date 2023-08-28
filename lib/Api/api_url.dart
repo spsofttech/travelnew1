@@ -11,5 +11,7 @@ class ApiUrl {
   static String get_state_url="${baseUrl}get_state";
   static String get_tripcity_url="${baseUrl}get_tripcity";
   static String get_tn_category="${baseUrl}get_tn_category";
+  static String get_tn_interest="${baseUrl}get_interest";
+
 
 }

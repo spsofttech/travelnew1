@@ -266,6 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       // registerUser();
                       // await _locationProvider.locationDeatials();
                       Navigator.push(context, MaterialPageRoute(builder: (ctx) => PlanATrip()));
+
                     } else {
                       showSnackBar(context, "Please Login First!", Colors.red);
                       Navigator.push(context, MaterialPageRoute(builder: (ctx) => SignupWithSocialMediaScreen()));

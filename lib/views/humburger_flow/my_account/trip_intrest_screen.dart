@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:travelnew_app/Api/Api_Helper.dart';
 import 'package:travelnew_app/utils/constant.dart';
 
+import '../../../Api/model/user_trip_interest_Model.dart';
 import '../../../widget/custom_appbar.dart';
 import '../../../widget/custom_button.dart';
 import '../../home/plan_trip_screen.dart';
@@ -55,19 +57,19 @@ class _YourTripInterestState extends State<YourTripInterest> {
   getIntrest() async {
     trip_interest_data_list.clear();
     trip_interest_catName.clear();
-    QuerySnapshot<Map<String, dynamic>> trip_intrest_snapshot = await FirebaseFirestore.instance.collection('Category Interest').get();
-    print("${trip_intrest_snapshot.docs[0].data()['data']}");
-    print("${trip_intrest_snapshot.docs[0].id}");
+    User_Trip_Interest_Model  trip_intrest_snapshot = await ApiHelper().get_userIntrest_api_call();
+    // print("${trip_intrest_snapshot.docs[0].data()['data']}");
+    // print("${trip_intrest_snapshot.docs[0].id}");
 
     int b = 0;
-    trip_intrest_snapshot.docs.forEach((element) {
+    trip_intrest_snapshot.data!.forEach((element) {
       trip_interest_data_list.add([]);
-      List c = element.data()['data'];
+      List<Interest> c = element.interest!;
       c.forEach((element2) {
-        trip_interest_data_list[b].add({'name': element2.toString(), 'isSelect': false});
+        trip_interest_data_list[b].add({'name': element2.category.toString(), 'isSelect': false});
       });
 
-      trip_interest_catName.add("${element.id}");
+      trip_interest_catName.add("${element.category}");
       b++;
     });
 
@@ -255,10 +257,10 @@ class _YourTripInterestState extends State<YourTripInterest> {
                     name: 'Save',
                     onPressed: () async {
                       showAPICallPendingDialog(context);
-                      if (widget.isPrima)
-                        await putIntrestPrima();
-                      else
-                        await putIntrest();
+                      // if (widget.isPrima)
+                      //   await putIntrestPrima();
+                      // else
+                      //   await putIntrest();
                       Navigator.pop(context);
                       Navigator.pop(context);
                     }),
@@ -833,36 +835,38 @@ class _AdventurefilterChipWidgetState extends State<AdventurefilterChipWidget> {
               if (!widget.isPrima) {
                 if (NatureList.contains(widget.chipName[i]['name'])) {
                   NatureList.removeAt(NatureList.indexOf(widget.chipName[i]['name']));
-                  CollectionReference users = FirebaseFirestore.instance.collection('users');
-                  users.doc(FirebaseAuth.instance.currentUser!.uid).update({
-                    '${widget.catName}': FieldValue.arrayRemove([widget.chipName[i]['name']])
-                  });
+                  // CollectionReference users = FirebaseFirestore.instance.collection('users');
+                  // users.doc(FirebaseAuth.instance.currentUser!.uid).update({
+                  //   '${widget.catName}': FieldValue.arrayRemove([widget.chipName[i]['name']])
+                  // });
                   setState(() {});
                   getDetails();
                 } else {
-                  NatureList.add(widget.chipName[i]['name']);
-                  CollectionReference users = FirebaseFirestore.instance.collection('users');
-                  users.doc(FirebaseAuth.instance.currentUser!.uid).update({
-                    '${widget.catName}': FieldValue.arrayUnion([widget.chipName[i]['name']])
-                  });
+                   NatureList.add(widget.chipName[i]['name']);
+                  // CollectionReference users = FirebaseFirestore.instance.collection('users');
+                  // users.doc(FirebaseAuth.instance.currentUser!.uid).update({
+                  //   '${widget.catName}': FieldValue.arrayUnion([widget.chipName[i]['name']])
+                  // });
                   setState(() {});
                   getDetails();
                 }
               } else {
                 if (NatureList.contains(widget.chipName[i]['name'])) {
+
                   NatureList.removeAt(NatureList.indexOf(widget.chipName[i]['name']));
-                  CollectionReference users = FirebaseFirestore.instance.collection('users');
-                  users.doc(FirebaseAuth.instance.currentUser!.uid).update({
-                    '${widget.catName} ': FieldValue.arrayRemove([widget.chipName[i]['name']])
-                  });
+                  // CollectionReference users = FirebaseFirestore.instance.collection('users');
+                  // users.doc(FirebaseAuth.instance.currentUser!.uid).update({
+                  //   '${widget.catName} ': FieldValue.arrayRemove([widget.chipName[i]['name']])
+                  // });
                   setState(() {});
                   getDetails();
-                } else {
+                }
+                else {
                   NatureList.add(widget.chipName[i]['name']);
-                  CollectionReference users = FirebaseFirestore.instance.collection('users');
-                  users.doc(FirebaseAuth.instance.currentUser!.uid).update({
-                    '${widget.catName} ': FieldValue.arrayUnion([widget.chipName[i]['name']])
-                  });
+                  // CollectionReference users = FirebaseFirestore.instance.collection('users');
+                  // users.doc(FirebaseAuth.instance.currentUser!.uid).update({
+                  //   '${widget.catName} ': FieldValue.arrayUnion([widget.chipName[i]['name']])
+                  // });
                   setState(() {});
                   getDetails();
                 }

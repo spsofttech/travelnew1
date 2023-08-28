@@ -111,6 +111,7 @@ class TravelNew_Category_get_model {
     message = json['message'];
   }
 
+
   Map<String, dynamic> toJson() {
 
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -274,3 +275,6 @@ class Data3 {
     return data;
   }
 }
+
+
+

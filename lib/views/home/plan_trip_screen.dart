@@ -31,17 +31,20 @@ List usereTripIntrest = [];
 
 String type_of_trip1 = "Select";
 String planTrip_at_ = "Select";
+int planTrip_at_id = 0;
 String trip_mode = "Select";
 var firstDate;
 var secondDate;
 int totalDays = 0;
 bool dateEnable = true;
 bool? flexible;
+
 final TextEditingController startDate = TextEditingController();
 final TextEditingController endDate = TextEditingController();
 
 class _PlanATripState extends State<PlanATrip> {
   var Trip_type_vise;
+
   List<Map<String, dynamic>> trip_interest_catName = [
     {'val': "Select", 'prima': false}
   ];
@@ -56,8 +59,7 @@ class _PlanATripState extends State<PlanATrip> {
 
   getIntrest() async {
     usereTripIntrest.clear();
-    DocumentSnapshot<Map<String, dynamic>> profile =
-        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+    DocumentSnapshot<Map<String, dynamic>> profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
 
     QuerySnapshot<Map<String, dynamic>> trip_intrest_snapshot = await FirebaseFirestore.instance.collection('Category Interest').get();
     print("${trip_intrest_snapshot.docs[0].data()['data']}");
@@ -77,7 +79,6 @@ class _PlanATripState extends State<PlanATrip> {
   }
 
   Future<bool> getMainIntrest() async {
-
     trip_interest_catName.clear();
     QuerySnapshot<Map<String, dynamic>> trip_intrest_snapshot = await FirebaseFirestore.instance.collection('Category Interest').get();
     // print("${trip_intrest_snapshot.docs[0].data()['data']}");
@@ -94,6 +95,7 @@ class _PlanATripState extends State<PlanATrip> {
   }
 
   //String startplace = "";
+
   void getData() async {
     if (FirebaseAuth.instance.currentUser != null) {
       //
@@ -226,11 +228,9 @@ class _PlanATripState extends State<PlanATrip> {
                         child: FutureBuilder(
                           future: ApiHelper().get_tn_category_api_call(),
                           builder: (context, snapshot) {
-                            print("--- ${snapshot.hasError}----" + '${trip_interest_catName}');
-
-
                             if (snapshot.hasData) {
-                              List<Data1> categoryList =snapshot.data!.data!;
+                              List<Data1> categoryList = snapshot.data!.data ?? [];
+                              print("--- ${snapshot.hasError}----" + '${snapshot.data!.data}');
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: DropdownButton<Data1>(
@@ -244,17 +244,14 @@ class _PlanATripState extends State<PlanATrip> {
                                     });
                                   },
                                   items: categoryList.map<DropdownMenuItem<Data1>>((Data1 value) {
-                                //    printc(value['prima']);
+                                    //    printc(value['prima']);
                                     return DropdownMenuItem<Data1>(
                                       value: value,
                                       child: Padding(
                                         padding: const EdgeInsets.only(left: 5),
                                         child: Text(
-                                          value!.category!.toString(),
-                                          style:
-
-                                          TextStyle(
-                                              fontSize: 15, color: (value.category == USER_IS_PRIMA) || USER_IS_PRIMA ? Colors.black : Colors.grey),
+                                          value.category!.toString(),
+                                          style: TextStyle(fontSize: 15, color: (value.category == USER_IS_PRIMA) || USER_IS_PRIMA ? Colors.black : Colors.grey),
                                         ),
                                       ),
                                     );
@@ -288,7 +285,6 @@ class _PlanATripState extends State<PlanATrip> {
                   addVerticalSpace(25),
                   Container(padding: EdgeInsets.only(left: 10), child: const Text('Plan trip at')),
                   addVerticalSpace(10),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: SizedBox(
@@ -305,45 +301,37 @@ class _PlanATripState extends State<PlanATrip> {
                                 right: BorderSide(color: Colors.black26),
                                 left: BorderSide(color: Colors.black26))),
                         child: FutureBuilder(
-                          future: FirebaseFirestore.instance.collection('State').doc("State_Name").get(),
+                          future: ApiHelper().get_tripSate_api_call(),
                           builder: (context, snapshot) {
-                            print("--------");
-
                             if (snapshot.hasData) {
-
-                              // print("--------${snapshot.data!.data()!['states']}");
-                              List<String> travelNewTripState = ["Select"];
-                              List state_data = snapshot.data!.data()!['states'];
-
-                              state_data.forEach((element) {
-                                travelNewTripState.add(element.toString());
-                              });
-
+                              List<Data2> categoryList = snapshot.data!.data ?? [];
+                              print("--- ${snapshot.hasError}----" + '${snapshot.data!.data}');
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: DropdownButton<String>(
+                                child: DropdownButton<Data2>(
                                   borderRadius: BorderRadius.circular(10),
-                                  // value: _string2,
-                                  isExpanded: true,
+                                  // value: null,
                                   hint: Text("${planTrip_at_}"),
+                                  isExpanded: true,
                                   onChanged: (newValue) {
                                     setState(() {
-                                      planTrip_at_ = newValue!;
+                                      planTrip_at_ = newValue!.state!;
+                                      planTrip_at_id = newValue.stateId!;
                                     });
                                   },
-                                  items: travelNewTripState
-                                      .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(left: 5),
-                                              child: Text(
-                                                value,
-                                                style: const TextStyle(fontSize: 15, color: Colors.black),
-                                              ),
-                                            ),
-                                          ))
-                                      .toList(),
-
+                                  items: categoryList.map<DropdownMenuItem<Data2>>((Data2 value) {
+                                    //    printc(value['prima']);
+                                    return DropdownMenuItem<Data2>(
+                                      value: value,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: Text(
+                                          value.state!.toString(),
+                                          style: TextStyle(fontSize: 15, color: (value.state == USER_IS_PRIMA) || USER_IS_PRIMA ? Colors.black : Colors.grey),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
                                   // add extra sugar..
                                   icon: const Padding(
                                     padding: EdgeInsets.only(bottom: 8.0),
@@ -358,6 +346,7 @@ class _PlanATripState extends State<PlanATrip> {
                                 ),
                               );
                             } else {
+                              print("--- ${snapshot.hasError}----");
                               return SizedBox();
                             }
                           },
@@ -365,6 +354,83 @@ class _PlanATripState extends State<PlanATrip> {
                       ),
                     ),
                   ),
+
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 10),
+                  //   child: SizedBox(
+                  //     height: 43,
+                  //     width: width(context) * 0.85,
+                  //     child: Container(
+                  //       decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(10),
+                  //           border: const Border(
+                  //               top: BorderSide(
+                  //                 color: Colors.black26,
+                  //               ),
+                  //               bottom: BorderSide(color: Colors.black26),
+                  //               right: BorderSide(color: Colors.black26),
+                  //               left: BorderSide(color: Colors.black26))),
+                  //       child: FutureBuilder(
+                  //         future: FirebaseFirestore.instance.collection('State').doc("State_Name").get(),
+                  //         builder: (context, snapshot) {
+                  //           print("--------");
+                  //
+                  //           if (snapshot.hasData) {
+                  //
+                  //             // print("--------${snapshot.data!.data()!['states']}");
+                  //             List<String> travelNewTripState = ["Select"];
+                  //             List state_data = snapshot.data!.data()!['states'];
+                  //
+                  //             state_data.forEach((element) {
+                  //               travelNewTripState.add(element.toString());
+                  //             });
+                  //
+                  //             return Padding(
+                  //               padding: const EdgeInsets.all(8.0),
+                  //               child: DropdownButton<String>(
+                  //                 borderRadius: BorderRadius.circular(10),
+                  //                 // value: _string2,
+                  //                 isExpanded: true,
+                  //                 hint: Text("${planTrip_at_}"),
+                  //                 onChanged: (newValue) {
+                  //                   setState(() {
+                  //                     planTrip_at_ = newValue!;
+                  //                   });
+                  //                 },
+                  //                 items: travelNewTripState
+                  //                     .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
+                  //                           value: value,
+                  //                           child: Padding(
+                  //                             padding: const EdgeInsets.only(left: 5),
+                  //                             child: Text(
+                  //                               value,
+                  //                               style: const TextStyle(fontSize: 15, color: Colors.black),
+                  //                             ),
+                  //                           ),
+                  //                         ))
+                  //                     .toList(),
+                  //
+                  //                 // add extra sugar..
+                  //                 icon: const Padding(
+                  //                   padding: EdgeInsets.only(bottom: 8.0),
+                  //                   child: Icon(
+                  //                     Icons.arrow_drop_down,
+                  //                   ),
+                  //                 ),
+                  //                 iconSize: 25,
+                  //                 iconEnabledColor: primary,
+                  //                 iconDisabledColor: black.withOpacity(0.7),
+                  //                 underline: const SizedBox(),
+                  //               ),
+                  //             );
+                  //           } else {
+                  //             return SizedBox();
+                  //           }
+                  //         },
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   // addVerticalSpace(25),
                   // CustomDropDownButton(
                   //   lableText: '  Plan Trip at  ',
@@ -396,13 +462,11 @@ class _PlanATripState extends State<PlanATrip> {
                                               primary: primary,
                                             ),
                                           ),
-                                          child: child!
-                                      );
+                                          child: child!);
                                     },
                                   );
 
                                   if (pickedDate != null) {
-
                                     print(pickedDate);
                                     firstDate = pickedDate.day;
                                     String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
@@ -410,9 +474,7 @@ class _PlanATripState extends State<PlanATrip> {
                                     setState(() {
                                       startDate.text = formattedDate;
                                     });
-
-                                  }
-                                  else {
+                                  } else {
                                     print("Date is not selected");
                                   }
                                 },
@@ -616,136 +678,6 @@ class _PlanATripState extends State<PlanATrip> {
                         style: TextStyle(color: primary, decoration: TextDecoration.underline, fontWeight: FontWeight.w600),
                       )),
                   addVerticalSpace(50),
-                  Center(
-                    child: SizedBox(
-                        height: 40,
-                        width: width(context) * 0.5,
-                        child: CustomButton(
-                            name: 'Explore Trips',
-                            onPressed: () async {
-
-
-
-                              // printc("------${_string1}");
-                              bool allCodition = true;
-                              String msg = "";
-
-                              if (type_of_trip1 == "Select") {
-                                msg = "${msg} Please Select Travel Type";
-                                showSimpleTost(context, txt: "${msg}");
-                                allCodition = false;
-                              }
-
-                              if (planTrip_at_ == "Select") {
-                                msg = "";
-                                msg = "${msg} Please Select Travel State";
-                                showSimpleTost(context, txt: "${msg}");
-                                allCodition = false;
-                              }
-
-                              if (trip_mode == "Select") {
-                                msg = "";
-                                msg = "${msg} Please Select Travel Mode";
-                                showSimpleTost(context, txt: "${msg}");
-                                allCodition = false;
-                              }
-
-                              if (totalDays == 0) {
-                                msg = "";
-                                msg = "${msg} Please Select Days";
-                                showSimpleTost(context, txt: "${msg}");
-                                allCodition = false;
-                              }
-
-                              if (allCodition) {
-                                // showAPICallPendingDialog(context);
-                                // DocumentSnapshot<Map<String, dynamic>> unsavedPathDoc = await FirebaseFirestore.instance
-                                //     .collection('users')
-                                //     .doc(FirebaseAuth.instance.currentUser!.uid)
-                                //     .collection('trip library')
-                                //     .doc('unsaved')
-                                //     .get();
-                                //
-
-
-                                showAPICallPendingDialog(context);
-                                create_trip_send_model model=create_trip_send_model(
-                                  category:type_of_trip1 ,
-                                  days: totalDays,
-                                  state:1 ,
-                                  travelMode: trip_mode,
-                                  userId: USER_ID,
-                                );
-                                create_trip_get_model resModel= await ApiHelper().createa_trip_Apicall(model: model);
-                                Navigator.pop(context);
-
-                                // if (unsavedPathDoc.exists) {
-                                //   await FirebaseFirestore.instance
-                                //       .collection('users')
-                                //       .doc(FirebaseAuth.instance.currentUser!.uid)
-                                //       .collection('trip library')
-                                //       .doc('unsaved')
-                                //       .update({
-                                //     'data': FieldValue.arrayUnion([
-                                //       {
-                                //         'type': 1,
-                                //         'type_Of_Trip': type_of_trip1,
-                                //         'plamTrip_at': planTrip_at_,
-                                //         'trip_days': totalDays,
-                                //         'interestList': usereTripIntrest,
-                                //         'date': startDate.text,
-                                //         "StartTrip": UserCity,
-                                //         "StartDate": startDate.text,
-                                //         "EndDate": endDate.text,
-                                //         "tripmode": trip_mode,
-                                //         "totalDays": totalDays,
-                                //         "Flexible": flexible,
-                                //         "BookingId": '',
-                                //       }
-                                //     ])
-                                //   });
-                                // }
-                                // else {
-                                //   await FirebaseFirestore.instance
-                                //       .collection('users')
-                                //       .doc(FirebaseAuth.instance.currentUser!.uid)
-                                //       .collection('trip library')
-                                //       .doc('unsaved')
-                                //       .set({
-                                //     'data': FieldValue.arrayUnion([
-                                //       {
-                                //         'type': 1,
-                                //         'type_Of_Trip': type_of_trip1,
-                                //         'plamTrip_at': planTrip_at_,
-                                //         'trip_days': totalDays,
-                                //         'interestList': usereTripIntrest,
-                                //         'date': startDate.text,
-                                //         "StartTrip": UserCity,
-                                //         "StartDate": startDate.text,
-                                //         "EndDate": endDate.text,
-                                //         "tripmode": trip_mode,
-                                //         "totalDays": totalDays,
-                                //         "Flexible": flexible,
-                                //         "BookingId": '',
-                                //       }
-                                //     ])
-                                //   });
-                                // }
-                                //
-                                // await setTripPlan();
-
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (ctx) => SaveYourTripsScreen(
-                                            type_Of_Trip: type_of_trip1,
-                                            plamTrip_at: planTrip_at_,
-                                            trip_days: totalDays,
-                                            interestList: usereTripIntrest)));
-                              }
-                            })),
-                  ),
 
                   // Center(
                   //   child: SizedBox(
@@ -773,6 +705,133 @@ class _PlanATripState extends State<PlanATrip> {
                 ],
               ),
             ),
+            Center(
+              child: SizedBox(
+                  height: 40,
+                  width: width(context) * 0.5,
+                  child: CustomButton(
+                      name: 'Explore Trips',
+                      onPressed: () async {
+                        // printc("------${_string1}");
+                        bool allCodition = true;
+                        String msg = "";
+
+                        if (type_of_trip1 == "Select") {
+                          msg = "${msg} Please Select Travel Type";
+                          showSimpleTost(context, txt: "${msg}");
+                          allCodition = false;
+                        }
+
+                        if (planTrip_at_ == "Select") {
+                          msg = "";
+                          msg = "${msg} Please Select Travel State";
+                          showSimpleTost(context, txt: "${msg}");
+                          allCodition = false;
+                        }
+
+                        if (trip_mode == "Select") {
+                          msg = "";
+                          msg = "${msg} Please Select Travel Mode";
+                          showSimpleTost(context, txt: "${msg}");
+                          allCodition = false;
+                        }
+
+                        if (totalDays == 0) {
+                          msg = "";
+                          msg = "${msg} Please Select Days";
+                          showSimpleTost(context, txt: "${msg}");
+                          allCodition = false;
+                        }
+
+                        if (allCodition) {
+                          // showAPICallPendingDialog(context);
+                          // DocumentSnapshot<Map<String, dynamic>> unsavedPathDoc = await FirebaseFirestore.instance
+                          //     .collection('users')
+                          //     .doc(FirebaseAuth.instance.currentUser!.uid)
+                          //     .collection('trip library')
+                          //     .doc('unsaved')
+                          //     .get();
+                          //
+
+                          showAPICallPendingDialog(context);
+                          create_trip_send_model model = create_trip_send_model(
+                            category: type_of_trip1,
+                            days: totalDays,
+                            state: planTrip_at_id,
+                            travelMode: trip_mode,
+                            userId: USER_ID,
+                          );
+
+                          create_trip_get_model resModel = await ApiHelper().explore_trip_Apicall(model: model);
+                          Navigator.pop(context);
+
+                          // if (unsavedPathDoc.exists) {
+                          //   await FirebaseFirestore.instance
+                          //       .collection('users')
+                          //       .doc(FirebaseAuth.instance.currentUser!.uid)
+                          //       .collection('trip library')
+                          //       .doc('unsaved')
+                          //       .update({
+                          //     'data': FieldValue.arrayUnion([
+                          //       {
+                          //         'type': 1,
+                          //         'type_Of_Trip': type_of_trip1,
+                          //         'plamTrip_at': planTrip_at_,
+                          //         'trip_days': totalDays,
+                          //         'interestList': usereTripIntrest,
+                          //         'date': startDate.text,
+                          //         "StartTrip": UserCity,
+                          //         "StartDate": startDate.text,
+                          //         "EndDate": endDate.text,
+                          //         "tripmode": trip_mode,
+                          //         "totalDays": totalDays,
+                          //         "Flexible": flexible,
+                          //         "BookingId": '',
+                          //       }
+                          //     ])
+                          //   });
+                          // }
+                          // else {
+                          //   await FirebaseFirestore.instance
+                          //       .collection('users')
+                          //       .doc(FirebaseAuth.instance.currentUser!.uid)
+                          //       .collection('trip library')
+                          //       .doc('unsaved')
+                          //       .set({
+                          //     'data': FieldValue.arrayUnion([
+                          //       {
+                          //         'type': 1,
+                          //         'type_Of_Trip': type_of_trip1,
+                          //         'plamTrip_at': planTrip_at_,
+                          //         'trip_days': totalDays,
+                          //         'interestList': usereTripIntrest,
+                          //         'date': startDate.text,
+                          //         "StartTrip": UserCity,
+                          //         "StartDate": startDate.text,
+                          //         "EndDate": endDate.text,
+                          //         "tripmode": trip_mode,
+                          //         "totalDays": totalDays,
+                          //         "Flexible": flexible,
+                          //         "BookingId": '',
+                          //       }
+                          //     ])
+                          //   });
+                          // }
+                          //
+                          // await setTripPlan();
+
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (ctx) =>
+                                      SaveYourTripsScreen(type_Of_Trip: type_of_trip1, plamTrip_at: planTrip_at_, trip_days: totalDays, interestList: usereTripIntrest)));
+                        }
+                      })),
+            ),
+            SizedBox(
+              height: height(context) * 0.03,
+            )
           ],
         ),
       ),
