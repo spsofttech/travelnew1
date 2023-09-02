@@ -5,6 +5,7 @@ import 'package:travelnew_app/Api/pref_halper.dart';
 
 import 'ApiModel.dart';
 import 'api_url.dart';
+import 'model/day_vise_data_model.dart';
 import 'model/user_trip_interest_Model.dart';
 
 class ApiHelper {
@@ -35,23 +36,37 @@ class ApiHelper {
   }
 
   Future<create_trip_get_model> explore_trip_Apicall({required create_trip_send_model model}) async {
+
+    print("Explore Trip  ${model.toJson()}-");
     http.Response res = await http.post(
-      Uri.parse(ApiUrl.userLogin),
-      headers: <String, String>{'authorization': ApiUrl.basicAuth},
-      body:model.toJson()
+      Uri.parse(ApiUrl.exploreTrip),
+      headers: <String, String>{'authorization': ApiUrl.basicAuth,'Content-Type':'application/json'},
+      body:jsonEncode(model.toJson())
     );
+    print("Explore Trip  ${jsonDecode(res.body)}-");
+
+
     if (res.statusCode == 200) {
+
       create_trip_get_model data = create_trip_get_model.fromJson( jsonDecode(res.body));
 
       if (data.status == 1) {
+
         IS_USER_LOGIN = await Preferences.preferences.saveBool(key: PrefKeys.isUaseLogin, value: true);
         return data;
-      } else {
+
+      }
+      else
+      {
         return data;
       }
-    } else {
+
+    }
+    else
+    {
       return create_trip_get_model(status: 0);
     }
+
   }
 
   Future<TravelNew_Category_get_model> get_tn_category_api_call({ int type =0}) async {
@@ -116,7 +131,7 @@ class ApiHelper {
     http.Response res = await http.post(
       Uri.parse(ApiUrl.get_tripcity_url),
 
-      headers: <String, String>{'authorization': ApiUrl.basicAuth},
+      headers: <String, String>{'authorization': ApiUrl.basicAuth,},
       body:jsonEncode(_body)
     );
 
@@ -166,4 +181,44 @@ class ApiHelper {
   }
 
 
+  Future<Day_vise_data_get_model> get_days_api_call({ required int trip_id,required int days}) async {
+    // type  ==0  = travelnew category &  type ==1 = quick escap
+    print("--------------  ");
+    Map _body ={
+      'trip_id':trip_id,
+      'days':days
+    };
+
+    http.Response res = await http.post(
+        Uri.parse(ApiUrl.get_tn_days),
+        headers: <String, String>{'authorization': ApiUrl.basicAuth,'Content-Type':'application/json'},
+        body:jsonEncode(_body)
+    );
+
+
+
+    if (res.statusCode == 200) {
+
+      Day_vise_data_get_model data = Day_vise_data_get_model.fromJson( jsonDecode(res.body));
+
+
+      if (data.status == 1)
+      {
+        return data;
+      }
+      else
+      {
+        return data;
+      }
+
+    }
+    else
+    {
+      return Day_vise_data_get_model(status: 0);
+    }
+
+  }
+
 }
+
+

@@ -29,6 +29,7 @@ RxString trip_city_name = "".obs;
 double trip_citi_lat = 0;
 double trip_citi_long = 0;
 RxMap travel_by_data = {}.obs;
+int TRIP_ID =0;
 
 class SaveYourTripsScreen extends StatefulWidget {
   final String type_Of_Trip;
@@ -48,6 +49,7 @@ class SaveYourTripsScreen extends StatefulWidget {
 
   @override
   _SaveYourTripsScreenState createState() => _SaveYourTripsScreenState();
+
 }
 
 class _SaveYourTripsScreenState extends State<SaveYourTripsScreen> {
@@ -60,14 +62,14 @@ class _SaveYourTripsScreenState extends State<SaveYourTripsScreen> {
   TextEditingController address = TextEditingController();
   TextEditingController pincode = TextEditingController();
 
+
   List<Step> stepList() => [
         Step(
             state: _activeCurrentStep <= 1 ? StepState.editing : StepState.complete,
             isActive: _activeCurrentStep >= 0,
             label: const Text('Sightseeing'),
             title: const SizedBox(),
-            content: SaveTripStep1(
-                trip_days: widget.trip_days, plamTrip_at: widget.plamTrip_at, type_Of_Trip: widget.type_Of_Trip, interestList: widget.interestList)),
+            content: SaveTripStep1(trip_days: widget.trip_days, plamTrip_at: widget.plamTrip_at, type_Of_Trip: widget.type_Of_Trip, interestList: widget.interestList)),
         Step(
             state: StepState.complete,
             isActive: _activeCurrentStep >= 1,
@@ -81,6 +83,7 @@ class _SaveYourTripsScreenState extends State<SaveYourTripsScreen> {
             title: const SizedBox(),
             content: SaveTripStep3())
       ];
+
 
   @override
   void initState() {
@@ -114,7 +117,6 @@ class _SaveYourTripsScreenState extends State<SaveYourTripsScreen> {
         child: Stepper(
           elevation: 0,
           margin: EdgeInsets.zero,
-
           controlsBuilder: (BuildContext context, ControlsDetails, {VoidCallback? onStepContinue, VoidCallback? onStepCancel}) {
             return Column(
               children: [

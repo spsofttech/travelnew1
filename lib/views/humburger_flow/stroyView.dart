@@ -7,11 +7,12 @@ import 'package:story_view/story_view.dart';
 import 'package:travelnew_app/views/humburger_flow/tourist_spot_screen.dart';
 import 'package:travelnew_app/views/humburger_flow/trip_library_screen.dart';
 
+import '../../Api/model/day_vise_data_model.dart';
 import '../../model/DayWiseTripModel.dart';
 import '../../utils/constant.dart';
 
 class StoryPageView extends StatefulWidget {
-  DayTripModel data;
+  List<TouristSpot> data;
 
   bool isBonus;
   StoryPageView({required this.data, this.isBonus = false});
@@ -46,18 +47,18 @@ class _StoryPageViewState extends State<StoryPageView> {
     //getTripData();
 
     storyItem = [
-      if (widget.isBonus)
-        for (int i = 0; i < widget.data.bonus.length; i++)
+      // if (widget.isBonus)
+      //   for (int i = 0; i < widget.data.bonus.length; i++)
+      //     StoryItem(
+      //         TouristSpotsScreen2(
+      //           MP: widget.data.bonus[i],
+      //         ),
+      //         duration: Duration(minutes: 30))
+      // else
+        for (int i = 0; i < widget.data.length; i++)
           StoryItem(
               TouristSpotsScreen2(
-                MP: widget.data.bonus[i],
-              ),
-              duration: Duration(minutes: 30))
-      else
-        for (int i = 0; i < widget.data.data.length; i++)
-          StoryItem(
-              TouristSpotsScreen2(
-                MP: widget.data.data[i],
+                MP: widget.data[i],
               ),
               duration: Duration(minutes: 30)),
     ];

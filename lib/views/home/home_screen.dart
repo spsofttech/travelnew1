@@ -62,21 +62,21 @@ class _HomeScreenState extends State<HomeScreen> {
   CollectionReference _collectionRef = FirebaseFirestore.instance.collection('festivals');
 
   getData() async {
-    DocumentSnapshot<Map<String, dynamic>> userDataMap =
-        await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
-    UserDataMap = userDataMap.data()!;
-    USERIMAGE = UserDataMap['image'] ?? "https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_640.png";
-    USERNAME = UserDataMap['fullName'] ?? "User";
-    USER_UID = FirebaseAuth.instance.currentUser!.uid;
-    USER_IS_PRIMA = UserDataMap['isPrima'] ?? false;
-
-    print("--- --- --- --${USER_IS_PRIMA}");
-    // Get docs from collection reference
-    QuerySnapshot querySnapshot = await _collectionRef.get();
+    // DocumentSnapshot<Map<String, dynamic>> userDataMap =
+    //     await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+    // UserDataMap = userDataMap.data()!;
+    // USERIMAGE = UserDataMap['image'] ?? "https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_640.png";
+    // USERNAME = UserDataMap['fullName'] ?? "User";
+    // USER_UID = FirebaseAuth.instance.currentUser!.uid;
+    // USER_IS_PRIMA = UserDataMap['isPrima'] ?? false;
+    //
+    // print("--- --- --- --${USER_IS_PRIMA}");
+    // // Get docs from collection reference
+    // QuerySnapshot querySnapshot = await _collectionRef.get();
+    // // allHomeData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    // //await FirebaseFirestore.instance.collection("festivals").doc('ger54gsdrr34fg124').set(allHomeData[0]);
+    // // Get data from docs and convert map to List
     // allHomeData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    //await FirebaseFirestore.instance.collection("festivals").doc('ger54gsdrr34fg124').set(allHomeData[0]);
-    // Get data from docs and convert map to List
-    allHomeData = querySnapshot.docs.map((doc) => doc.data()).toList();
     //print(allHomeData[0][]);
     setState(() {});
   }
@@ -93,12 +93,17 @@ class _HomeScreenState extends State<HomeScreen> {
   // String c6 = "";
 
   Future<void> getQuickEscData1() async {
+
     CollectionReference _collectionRef11 = FirebaseFirestore.instance.collection('QuickEscapeTrip');
 
     // Get docs from collection reference
+
     QuerySnapshot querySnapshot = await _collectionRef11.get();
+
     // Get data from docs and convert map to List
+
     allQuickData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
     setState(() {});
     //print(allData);
   }
@@ -140,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
 
   festivalslocation() async {
+
     festivalLocationProvider _locationProvider = festivalLocationProvider();
     final _fireStore = FirebaseFirestore.instance;
     print('test');
@@ -153,6 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "CarTime": _locationProvider.cartime,
       "TrainTime": _locationProvider.traintime
     });
+
   }
 
   registerUser() async {
@@ -209,7 +216,9 @@ class _HomeScreenState extends State<HomeScreen> {
   //     finalEmail = obtainEmail;
   //   });
   // }
+
   LocationPermission? permission;
+
   Future<bool> _handleLocationPermission(BuildContext context) async {
     // bool serviceEnabled;
     loco.Location location = loco.Location();

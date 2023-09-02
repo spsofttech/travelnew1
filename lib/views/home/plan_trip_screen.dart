@@ -744,6 +744,7 @@ class _PlanATripState extends State<PlanATrip> {
                         }
 
                         if (allCodition) {
+
                           // showAPICallPendingDialog(context);
                           // DocumentSnapshot<Map<String, dynamic>> unsavedPathDoc = await FirebaseFirestore.instance
                           //     .collection('users')
@@ -756,14 +757,27 @@ class _PlanATripState extends State<PlanATrip> {
                           showAPICallPendingDialog(context);
                           create_trip_send_model model = create_trip_send_model(
                             category: type_of_trip1,
-                            days: totalDays,
-                            state: planTrip_at_id,
+                            days: totalDays.toString(),
+                            state: planTrip_at_id.toString(),
                             travelMode: trip_mode,
-                            userId: USER_ID,
+                            userId: USER_ID.toString(),
                           );
 
                           create_trip_get_model resModel = await ApiHelper().explore_trip_Apicall(model: model);
-                          Navigator.pop(context);
+                     if(resModel.status! ==1)
+                       {
+                         TRIP_ID=int.parse(resModel.data!.tripId!);
+                         print("------- -------- ------ ${TRIP_ID}");
+                         Navigator.pop(context);
+                         Navigator.push(
+                             context,
+                             MaterialPageRoute(
+                                 builder: (ctx) =>
+                                     SaveYourTripsScreen(type_Of_Trip: type_of_trip1, plamTrip_at: planTrip_at_, trip_days: totalDays, interestList: usereTripIntrest)
+                             )
+                         );
+                       }
+
 
                           // if (unsavedPathDoc.exists) {
                           //   await FirebaseFirestore.instance
@@ -820,12 +834,8 @@ class _PlanATripState extends State<PlanATrip> {
                           //
                           // await setTripPlan();
 
-                          Navigator.pop(context);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (ctx) =>
-                                      SaveYourTripsScreen(type_Of_Trip: type_of_trip1, plamTrip_at: planTrip_at_, trip_days: totalDays, interestList: usereTripIntrest)));
+                        //  Navigator.pop(context);
+
                         }
                       })),
             ),

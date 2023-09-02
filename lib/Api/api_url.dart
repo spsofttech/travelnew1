@@ -7,11 +7,11 @@ class ApiUrl {
 
 
   static String userLogin="${baseUrl}user_login";
-  static String createPlanTrip="${baseUrl}create_trip";
+  static String exploreTrip="${baseUrl}explore_trip";
   static String get_state_url="${baseUrl}get_state";
   static String get_tripcity_url="${baseUrl}get_tripcity";
   static String get_tn_category="${baseUrl}get_tn_category";
   static String get_tn_interest="${baseUrl}get_interest";
-
+  static String get_tn_days="${baseUrl}tn_days_data";
 
 }

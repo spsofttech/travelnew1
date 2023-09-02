@@ -7,12 +7,13 @@ import 'package:travelnew_app/widget/custom_appbar.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
 import 'package:travelnew_app/widget/custom_textfield.dart';
 
+import '../../Api/model/day_vise_data_model.dart';
 import '../../model/DayWiseTripModel.dart';
 import '../../model/save_trip_model.dart';
 
 class ImproveListingScreen extends StatefulWidget {
   const ImproveListingScreen({super.key, required this.MP});
-  final DayTripData MP;
+  final TouristSpot MP;
 
   @override
   State<ImproveListingScreen> createState() => _ImproveListingScreenState();

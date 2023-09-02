@@ -7,12 +7,13 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:travelnew_app/views/humburger_flow/improve_listing_screen.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
 
+import '../../Api/model/day_vise_data_model.dart';
 import '../../model/DayWiseTripModel.dart';
 import '../../utils/constant.dart';
 
 class TouristSpotsScreen extends StatefulWidget {
   const TouristSpotsScreen({super.key, required this.MP});
-  final DayTripData MP;
+  final TouristSpot MP;
 
   @override
   State<TouristSpotsScreen> createState() => _TouristSpotsScreenState();
@@ -305,7 +306,7 @@ class _TouristSpotsScreenState extends State<TouristSpotsScreen> {
 
 class TouristSpotsScreen2 extends StatefulWidget {
   const TouristSpotsScreen2({super.key, required this.MP});
-  final DayTripData MP;
+  final TouristSpot MP;
 
   @override
   State<TouristSpotsScreen2> createState() => _TouristSpotsScreen2State();
@@ -344,8 +345,7 @@ class _TouristSpotsScreen2State extends State<TouristSpotsScreen2> {
               decoration: BoxDecoration(
                   image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: NetworkImage(
-                          widget.MP.image != "" ? widget.MP.image! : "https://img.naidunia.com/naidunia/ndnimg/26052020/26_05_2020-tour_and_travel.jpg"))),
+                      image: NetworkImage( widget.MP.image != "" && widget.MP.image != null  ? widget.MP.image! : "https://img.naidunia.com/naidunia/ndnimg/26052020/26_05_2020-tour_and_travel.jpg" ))),
               child: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -432,7 +432,7 @@ class _TouristSpotsScreen2State extends State<TouristSpotsScreen2> {
                       ),
                       Expanded(
                         child: Text(
-                          "${widget.MP.tripCity!} , ${widget.MP.state!}",
+                          "${widget.MP.city!} , ${widget.MP.state!}",
                           style: bodyText16normal(spacing: 1.3, color: black),
                         ),
                       )
