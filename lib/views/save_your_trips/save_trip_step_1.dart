@@ -66,7 +66,7 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
   // Future getTripData() async {
   //   var data1 = await FirebaseFirestore.instance.collection('tripstate').doc('karnataka').collection('tripcity').doc('Bengaluru').get();
   //   bonceDes = data1['BonusDes'];
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance
   //         .collection('users')
   //         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -315,10 +315,10 @@ class _SaveTripStep1State extends State<SaveTripStep1> {
       future: ApiHelper().get_days_api_call(trip_id: TRIP_ID, days: widget.trip_days),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          printc("----- -----${snapshot.data}");
+          printc("----- -----${snapshot.data!.data}");
 
           Day_vise_data_get_model AllDaysData= snapshot.data!;
-          days=AllDaysData.data!.length;
+         days=AllDaysData.data!.length ;
           print('--- days -- ${days}');
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -89,3 +89,4 @@ class PrefKeys{
 
 
 bool IS_USER_LOGIN=false;
+int USER_ID=-1;

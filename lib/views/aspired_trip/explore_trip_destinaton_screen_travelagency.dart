@@ -26,7 +26,7 @@ class _ExploreTripDestinationState extends State<ExploreTripDestination> {
   String _far = "";
 
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var ads = await FirebaseFirestore.instance.collection('Travalar').doc('Mahaveer_travalar').collection('Explore_ads').doc('Fatured').get();
       _name = ads.data()?['name'];
       _undrestand = ads.data()?['undrerstandname'];

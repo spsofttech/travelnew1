@@ -124,7 +124,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
   String firstname = "";
 
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("primaAccount").doc("profile").get();
       _image = profile.data()!['imageUrl'] ?? "";
@@ -874,7 +874,7 @@ class _CreatePrimaProfileState extends State<CreatePrimaProfile> {
   bool _primacheck = false;
 
   void gerprimacheck() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       _primacheck = profile.data()?['isPrima'];
     }
@@ -954,7 +954,7 @@ class _TripometerWidgetState extends State<TripometerWidget> {
   }
 
   Future<void> getTripometerDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       tripoMeterList.clear();
 
       CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -1225,7 +1225,7 @@ class _UploadTravelsPhotosState extends State<UploadTravelsPhotos> {
   }
 
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("primaAccount").doc("profile").get();
       _image1 = profile.data()?['TravelPhoto1'];

@@ -62,7 +62,7 @@ class _PlaceVisitingScreenState extends State<PlaceVisitingScreen> {
   String travelMode = "";
 
   void getdata() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(widget.hostUid).collection("Prima_Trip_Plan").doc(widget.hostUid).get();
       travelMode = profile.data()?['Mode_of_travel'];
     }

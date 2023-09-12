@@ -293,7 +293,7 @@ class _AspiredTrip2ScreenState extends State<AspiredTrip2Screen> {
                   itemBuilder: (ctx, i) {
                     return InkWell(
                       onTap: () {
-                        if (FirebaseAuth.instance.currentUser != null) {
+                        if (IS_USER_LOGIN) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(

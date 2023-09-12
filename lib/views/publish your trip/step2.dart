@@ -69,7 +69,7 @@ class _Step2State extends State<Step2> {
 
   // String place = "";
   // void getTripCityData() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance.collection('TripState').doc('karnataka').collection('TripCity').doc('Bengaluru').get();
   //     // touritSportDes = profile.data()?['TouristSportDesc'];
   //     place = profile.data()?['name'];
@@ -87,7 +87,7 @@ class _Step2State extends State<Step2> {
   }
   // final List<String> tripLocation = ['Pune', 'Mumbai', 'chennai'];
   // void getDetails() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance
   //         .collection('users')
   //         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -264,7 +264,7 @@ class Detail_touristspot_page extends StatefulWidget {
 class _Detail_touristspot_pageState extends State<Detail_touristspot_page> {
   // String hostname = "";
   // void getPrimaDeatials() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance
   //         .collection('users')
   //         .doc(FirebaseAuth.instance.currentUser!.uid)

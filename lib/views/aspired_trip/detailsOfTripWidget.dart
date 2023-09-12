@@ -670,7 +670,7 @@ class _DetailsOfTripWidgetState extends State<DetailsOfTripWidget> {
   String _email = "";
   String _mobnum = "";
   void getcontact() async{
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var details = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)

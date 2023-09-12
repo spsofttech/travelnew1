@@ -39,7 +39,7 @@ class LocationProvider with ChangeNotifier {
   String? local = "";
 
   void getLocation() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var location = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       locadd = location.data()?['address'];
       loclat = location.data()!['lat'] ?? "0.000000";
@@ -177,7 +177,7 @@ class festivalLocationProvider with ChangeNotifier {
   double cartime = 0.0;
   double traintime = 0.0;
   void getLocation() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var location = await FirebaseFirestore.instance.collection('festivals').doc(FirebaseAuth.instance.currentUser!.uid).get();
       locadd = location.data()?['address'];
       loclat = location.data()?['lat'];

@@ -43,7 +43,7 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
   //List tripFriends = [];
 
   void getdata() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -63,7 +63,7 @@ class _TripMembersTabPrimaProfileState extends State<TripMembersTabPrimaProfile>
   String image = "";
 
   void getPrimaDeatials() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       hostname = profile.data()?['fullName'] ?? "";

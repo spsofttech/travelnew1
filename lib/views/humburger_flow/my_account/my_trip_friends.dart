@@ -15,6 +15,7 @@ import 'package:travelnew_app/widget/custom_textfield.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:age_calculator/age_calculator.dart';
 
+import '../../../Api/Api_Helper.dart';
 import '../../../utils/constant.dart';
 import '../../../widget/custom_button.dart';
 
@@ -248,7 +249,7 @@ class _MyTripFriendsScreenState extends State<MyTripFriendsScreen> {
       ),
       body: SingleChildScrollView(
         child: FutureBuilder(
-          future: getTripFriend(),
+          future: ApiHelper().get_allUser_api_call(user_id: USER_ID, page: 1),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return Column(children: [

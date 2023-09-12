@@ -35,7 +35,7 @@ class _BookmarkedTripsState extends State<BookmarkedTrips> {
   String _location = "";
 
   void getDummyTrip01() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var dummy = await FirebaseFirestore.instance.collection('dummyTrips').doc('2Xhglp1fUkvx3AGV6aQA').get();
       _title = dummy.data()?['title'];
       _subtitle = dummy.data()?['subtitle'];

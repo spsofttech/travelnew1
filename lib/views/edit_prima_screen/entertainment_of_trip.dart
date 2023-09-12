@@ -214,7 +214,7 @@ class filterChipWidget extends StatefulWidget {
 class _filterChipWidgetState extends State<filterChipWidget> {
   //String name = "";
   // void getdata() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance.collection('users').doc(widget.host).collection("primaAccount").doc('profile').get();
   //     name = profile.data()?['firstName'];
   //   }
@@ -231,7 +231,7 @@ class _filterChipWidgetState extends State<filterChipWidget> {
   List EntertainmentList = [];
 
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(widget.host).collection("Prima_Trip_Plan").doc(widget.host).get();
       EntertainmentList = profile.data()!['Entertainment'];
       setState(() {});

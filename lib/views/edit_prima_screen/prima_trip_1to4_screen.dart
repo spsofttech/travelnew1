@@ -92,7 +92,7 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
 
   void getdata() async {
     // print("this page call --------");
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile;
       if (widget.isHost) {
         profile = await FirebaseFirestore.instance
@@ -122,7 +122,7 @@ class _PrimaTrip1To4ScreensState extends State<PrimaTrip1To4Screens> {
   }
 
   void deletetrip() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -562,7 +562,7 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
   // String image = "";
 
   // void getPrimaDeatials() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile =
   //         await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
   //     hostname = profile.data()?['fullName'];
@@ -713,7 +713,7 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
 
   // var i = 0;
   // void deleteIteam() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance
   //         .collection('users')
   //         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -911,7 +911,7 @@ class _WhatToBringTabState extends State<WhatToBringTab> {
     final TextEditingController disController = TextEditingController();
 
     addIteamDetails() async {
-      if (FirebaseAuth.instance.currentUser != null) {
+      if (IS_USER_LOGIN) {
         DocumentReference profile = FirebaseFirestore.instance.collection('users').doc(widget.hostUid).collection("Prima_Trip_Plan").doc(widget.hostUid);
         await profile.update({
           'items': FieldValue.arrayUnion([

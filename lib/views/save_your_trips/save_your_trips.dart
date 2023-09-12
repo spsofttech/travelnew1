@@ -16,8 +16,12 @@ import 'package:travelnew_app/widget/custom_button.dart';
 import 'package:travelnew_app/widget/custom_dropdown_button.dart';
 import 'package:travelnew_app/widget/custom_textfield.dart';
 
+import '../../Api/ApiModel.dart';
+import '../../Api/Api_Helper.dart';
+import '../../Api/model/cteate_new_trip_model.dart';
 import '../../model/DayWiseTripModel.dart';
 import '../../model/prima_profile_model.dart';
+import '../../widget/my_bottom_navbar.dart';
 import '../home/plan_trip_screen.dart';
 
 List<Map<String, String>> tripdataForStore = [];
@@ -30,6 +34,7 @@ double trip_citi_lat = 0;
 double trip_citi_long = 0;
 RxMap travel_by_data = {}.obs;
 int TRIP_ID =0;
+int TRIP_Search_ID =0;
 
 class SaveYourTripsScreen extends StatefulWidget {
   final String type_Of_Trip;
@@ -39,12 +44,14 @@ class SaveYourTripsScreen extends StatefulWidget {
   final Map storedDataMap;
 
   const SaveYourTripsScreen(
-      {Key? key,
+      {
+        Key? key,
       this.type_Of_Trip = 'Friends Trip',
       this.plamTrip_at = "Karnataka",
       this.trip_days = -1,
       this.interestList = const [""],
-      this.storedDataMap = const {}})
+      this.storedDataMap = const {}}
+      )
       : super(key: key);
 
   @override
@@ -126,11 +133,25 @@ class _SaveYourTripsScreenState extends State<SaveYourTripsScreen> {
                         width: width(context) * 0.55,
                         child: CustomButton(
                             name: 'Submit',
-                            onPressed: () {
-                              updatePlanTrip();
-                              addupcomingtrip();
+                            onPressed: () async {
+                              showAPICallPendingDialog(context);
+                              create_new_Trip_send_model model=create_new_Trip_send_model(
+                                  bookingId:bookingId1.toString() ,
+                                adult: int.parse(adults_cnt),
+                                children:  int.parse(children_cnt),
+                                date: startDate.text??"0",
+                                hotelType: hotaltype,
+                                includes: incl1??"0",
+                                searchedId: TRIP_Search_ID.toString(),
+                                days: widget.trip_days,
+                              );
+                              await ApiHelper().create_new_trip_Apicall(model: model);
+                              // updatePlanTrip();
+                              // addupcomingtrip();
                               Navigator.pop(context);
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpcomingTripsScreen()));
+
+                              Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => MyBottomBar(),), (route) => false);
+                           //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpcomingTripsScreen()));
                             }),
                       )
                     : SizedBox(

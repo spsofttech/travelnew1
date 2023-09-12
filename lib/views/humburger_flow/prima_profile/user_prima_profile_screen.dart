@@ -54,7 +54,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
   String _aboutme = "";
   String _otherintrest = "";
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       image = profile.data()?['imageUrl'];
@@ -69,7 +69,7 @@ class _UserPrimaProfileScreenState extends State<UserPrimaProfileScreen> {
 
   String _address = "";
   void getlocationDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       _address = profile.data()?['locality'];
       setState(() {});
@@ -935,7 +935,7 @@ class _TripometerCircleWidgetState extends State<TripometerCircleWidget> {
   }
 
   void getTripometerDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("tripoMeter").doc("profile").get();
       adventure = profile.data()?['Adventure'];

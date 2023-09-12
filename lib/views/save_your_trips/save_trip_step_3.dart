@@ -24,56 +24,58 @@ final TextEditingController DepatureDateController = TextEditingController();
 String adults_cnt = "Select";
 String children_cnt = "Select";
 String hotaltype = "";
-String incl1 = "";
-
-updatePlanTrip() async {
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
-  users.doc(FirebaseAuth.instance.currentUser!.uid).collection("Plan_trip").doc(FirebaseAuth.instance.currentUser!.uid).update({
-    "DepatureDate": DepatureDateController.text,
-    "Adults": adults_cnt,
-    "Children": children_cnt,
-    "HotelType": hotaltype,
-    "Includes": incl1,
-    "tripDocId": "${tripdataForStore[0]['id']}"
-  });
-}
+String incl1 = "Pickup and Drop";
+//
+//  updatePlanTrip() async {
+//
+//   CollectionReference users = FirebaseFirestore.instance.collection('users');
+//   users.doc(FirebaseAuth.instance.currentUser!.uid).collection("Plan_trip").doc(FirebaseAuth.instance.currentUser!.uid).update({
+//     "DepatureDate": DepatureDateController.text,
+//     "Adults": adults_cnt,
+//     "Children": children_cnt,
+//     "HotelType": hotaltype,
+//     "Includes": incl1,
+//     "tripDocId": "${tripdataForStore[0]['id']}"
+//   });
+//
+// }
 
 String place = "";
 int days1 = 0;
 String days2 = "";
-String _image = "";
-String _date = "";
-String _tripName = "";
-String _tripType = "";
-String _startDate = "";
+String image1 = "";
+String date1 = "";
+String tripName1 = "";
+String tripType1 = "";
+// String startDate1 = "";
 bool? flexibledate;
-int _bookingId = 0;
+int bookingId1 = 0;
 
-void getData() async {
-  if (FirebaseAuth.instance.currentUser != null) {
-    var profile = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('Plan_trip')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    place = profile.data()?['endtrip'] ?? "";
-    days1 = profile.data()?['totalDays'];
-    //days2 = profile.data()?['mainualyEnterDays'];
-    flexibledate = profile.data()?['Flexible'];
-    _date = profile.data()?['StartDate'];
-    _tripName = profile.data()?['endtrip'];
-    _tripType = profile.data()?['tripPlan'];
-    _totalday = profile.data()?['totalDays'];
-    _startDate = profile.data()?['StartDate'];
-  }
-
-  _bookingId = DateTime.now().microsecondsSinceEpoch;
-  DepatureDateController.text = _startDate;
-  // setState(() {
-  //
-  // });
-}
+// void getData() async {
+//   if (IS_USER_LOGIN) {
+//     var profile = await FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(FirebaseAuth.instance.currentUser!.uid)
+//         .collection('Plan_trip')
+//         .doc(FirebaseAuth.instance.currentUser!.uid)
+//         .get();
+//     place = profile.data()?['endtrip'] ?? "";
+//     days1 = profile.data()?['totalDays'];
+//     //days2 = profile.data()?['mainualyEnterDays'];
+//     flexibledate = profile.data()?['Flexible'];
+//     _date = profile.data()?['StartDate'];
+//     _tripName = profile.data()?['endtrip'];
+//     _tripType = profile.data()?['tripPlan'];
+//     _totalday = profile.data()?['totalDays'];
+//     _startDate = profile.data()?['StartDate'];
+//   }
+//
+//   _bookingId = DateTime.now().microsecondsSinceEpoch;
+//   DepatureDateController.text = _startDate;
+//   // setState(() {
+//   //
+//   // });
+// }
 
 int _totalday = 0;
 
@@ -98,55 +100,55 @@ int _totalday = 0;
 //   // });
 // }
 
-addupcomingtrip() async {
-  if (FirebaseAuth.instance.currentUser != null) {
-    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('trip library').doc('unsaved').update({
-      'data': FieldValue.arrayRemove([
-        {
-          'type': 1,
-          'type_Of_Trip': type_of_trip1,
-          'plamTrip_at': planTrip_at_,
-          'trip_days': totalDays,
-          'interestList': usereTripIntrest,
-          'date': startDate.text,
-          "StartTrip": UserCity,
-          "StartDate": startDate.text,
-          "EndDate": endDate.text,
-          "tripmode": trip_mode,
-          "totalDays": totalDays,
-          "Flexible": flexible,
-          "BookingId": '',
-        }
-      ])
-    });
-    // DocumentReference profile =
-    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("upcomingtrip").add({
-      'image': _image,
-      'date': _date,
-      "tripDocId": "${tripdataForStore[0]['docId']}",
-      "tripImg": "${tripdataForStore[0]['tripImage']}",
-      'address': place,
-      'tirpname': "${place} Trip",
-      'tripsport': trip_city_name.value,
-      "travelTrip": 1,
-      "state": "${targetState}",
-      'daysnumber': _totalday,
-      "I'm Flexible with date": flexibledate,
-      "tripType": _tripType,
-      'departuredate': DepatureDateController.text,
-      "Hoteltype": hotaltype,
-      "TripDays": _totalday,
-      "childer": adults_cnt,
-      "Adults": children_cnt,
-      "bookingId": _bookingId,
-      "Includes": _value.name,
-      "bookingeresponse": 'bookingres',
-      "AirIndia": 'airind',
-      "Seat": '_seats',
-      "Endtrip": _tripName,
-    });
-  }
-}
+// addupcomingtrip() async {
+//   if (IS_USER_LOGIN) {
+//     await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('trip library').doc('unsaved').update({
+//       'data': FieldValue.arrayRemove([
+//         {
+//           'type': 1,
+//           'type_Of_Trip': type_of_trip1,
+//           'plamTrip_at': planTrip_at_,
+//           'trip_days': totalDays,
+//           'interestList': usereTripIntrest,
+//           'date': startDate.text,
+//           "StartTrip": UserCity,
+//           "StartDate": startDate.text,
+//           "EndDate": endDate.text,
+//           "tripmode": trip_mode,
+//           "totalDays": totalDays,
+//           "Flexible": flexible,
+//           "BookingId": '',
+//         }
+//       ])
+//     });
+//     // DocumentReference profile =
+//     // await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("upcomingtrip").add({
+//     //   'image': _image,
+//     //   'date': _date,
+//     //   "tripDocId": "${tripdataForStore[0]['docId']}",
+//     //   "tripImg": "${tripdataForStore[0]['tripImage']}",
+//     //   'address': place,
+//     //   'tirpname': "${place} Trip",
+//     //   'tripsport': trip_city_name.value,
+//     //   "travelTrip": 1,
+//     //   "state": "${targetState}",
+//     //   'daysnumber': _totalday,
+//     //   "I'm Flexible with date": flexibledate,
+//     //   "tripType": _tripType,
+//     //   'departuredate': DepatureDateController.text,
+//     //   "Hoteltype": hotaltype,
+//     //   "TripDays": _totalday,
+//     //   "childer": adults_cnt,
+//     //   "Adults": children_cnt,
+//     //   "bookingId": _bookingId,
+//     //   "Includes": _value.name,
+//     //   "bookingeresponse": 'bookingres',
+//     //   "AirIndia": 'airind',
+//     //   "Seat": '_seats',
+//     //   "Endtrip": _tripName,
+//     // });
+//   }
+// }
 
 class SaveTripStep3 extends StatefulWidget {
   const SaveTripStep3({super.key});
@@ -159,7 +161,7 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
   String _email = "";
   String _mobnum = "";
   void getcontact() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var details =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       _email = details.data()?['emailId'] ?? "";
@@ -171,8 +173,10 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
 
   @override
   void initState() {
-    getData();
+    //getData();
+    bookingId1 = DateTime.now().microsecondsSinceEpoch;
     getcontact();
+    days2="${totalDays}";
     super.initState();
   }
 
@@ -199,7 +203,7 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
                 SizedBox(
                   width: width(context) * 0.40,
                   child: Text(
-                    'Booking id: ${_bookingId}',
+                    'Booking id: ${bookingId1}',
                     overflow: TextOverflow.ellipsis,
                     style: bodyText16w600(color: black),
                   ),
@@ -216,6 +220,7 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
             )
           ],
         ),
+
         addVerticalSpace(20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -241,14 +246,9 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
               decoration: myOutlineBoxDecoration(1, primary, 10),
               child: Column(
                 children: [
-                  if (days1 == 0)
+
                     Text(
                       '$days2',
-                      style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600),
-                    )
-                  else
-                    Text(
-                      '$days1',
                       style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600),
                     ),
                   Text(
@@ -269,7 +269,11 @@ class _SaveTripStep3State extends State<SaveTripStep3> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Row(
-            children: [Text('Adults'), Spacer(), Text('Children')],
+            children: [
+              Text('Adults'),
+              Spacer(),
+              Text('Children')
+            ],
           ),
         ),
         Row(

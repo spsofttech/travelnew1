@@ -32,7 +32,7 @@ class _ExploreTripSuggestionScreenState extends State<ExploreTripSuggestionScree
   String _address = "";
   String _date = "";
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var ads = await FirebaseFirestore.instance.collection('Travalar').doc('Mahaveer_travalar').collection('Explore_ads').doc('Fatured').get();
       _name = ads.data()?['name'];
       _address = ads.data()?['address'];

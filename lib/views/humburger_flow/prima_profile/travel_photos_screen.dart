@@ -21,7 +21,7 @@ class TravelPhotosScreen extends StatefulWidget {
 class _TravelPhotosScreenState extends State<TravelPhotosScreen> {
   String Name = "";
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       Name = profile.data()?['fullName'];
@@ -205,7 +205,7 @@ class _UploadTravelsPhotosScreenState extends State<UploadTravelsPhotosScreen> {
 
   String _image = "";
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -220,7 +220,7 @@ class _UploadTravelsPhotosScreenState extends State<UploadTravelsPhotosScreen> {
   }
 
   addupcomingtrip() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       DocumentReference profile = FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)

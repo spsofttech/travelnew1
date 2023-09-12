@@ -74,7 +74,7 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
 
   //
   getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -131,7 +131,7 @@ class _UpcomingTripsScreenState extends State<UpcomingTripsScreen> {
                 children: [
                   InkWell(
                     onTap: () {
-                      if (FirebaseAuth.instance.currentUser != null) {
+                      if (IS_USER_LOGIN) {
                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => TripLibraryScreen()));
                       } else {
                         showSnackBar(context, "Please Login First!", Colors.red);

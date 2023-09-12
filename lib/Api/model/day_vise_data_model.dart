@@ -8,14 +8,16 @@ class Day_vise_data_get_model {
   Day_vise_data_get_model.fromJson(Map<String, dynamic> json) {
 
     status = json['status'];
-
+    print("--data List-0-${json['data'] }");
     if (json['data'] != null) {
 
       data = <Data>[];
       json['data'].forEach((v) {
         data!.add(new Data.fromJson(v));
       });
+
     }
+
 
     message = json['message'];
 
@@ -43,14 +45,18 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     dayId = json['day_id'];
+    print("--data List-0-");
     tripId = json['trip_id'];
+    print("--data List-0-");
     day = json['day'];
+    print("--data List-0-");
     if (json['tourist_spot'] != null) {
       touristSpot = <TouristSpot>[];
       json['tourist_spot'].forEach((v) {
         touristSpot!.add(new TouristSpot.fromJson(v));
       });
     }
+    print("--data List-0-");
   }
 
   Map<String, dynamic> toJson() {

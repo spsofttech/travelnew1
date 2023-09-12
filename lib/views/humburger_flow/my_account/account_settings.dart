@@ -80,7 +80,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   String subTitle6 = "Everyone";
   String subTitle7 = "Everyone";
   accountprivacy() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       DocumentReference profile = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid);
       profile.update({
         "Who can see your age": subTitle1,
@@ -96,7 +96,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   }
 
   void getData() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var privacy = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       subTitle1 = privacy.data()?['Who can see your age'] ?? "Everyone";
       subTitle2 = privacy.data()?['Who can see your marital Status'] ?? "Everyone";
@@ -111,7 +111,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
 
   String _home = "";
   void getlocation() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var privacy = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       _home = privacy.data()?['locality'];
     }
@@ -126,7 +126,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   }
 
   locationupdate() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({"locality": _string});
       setState(() {});
     }

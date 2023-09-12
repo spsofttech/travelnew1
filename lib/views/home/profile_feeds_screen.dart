@@ -65,7 +65,7 @@ class _ProfileFeedScreenState extends State<ProfileFeedScreen> {
                         itemBuilder: (ctx, i) {
                           return InkWell(
                             onTap: () {
-                              if (FirebaseAuth.instance.currentUser != null) {
+                              if (IS_USER_LOGIN) {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -148,7 +148,7 @@ class _ProfileFeedScreenState extends State<ProfileFeedScreen> {
                         itemBuilder: (ctx, i) {
                           return InkWell(
                             onTap: () {
-                              if (FirebaseAuth.instance.currentUser != null) {
+                              if (IS_USER_LOGIN) {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

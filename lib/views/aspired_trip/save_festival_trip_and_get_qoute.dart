@@ -39,7 +39,7 @@ class _SaveFestivalTripAndGetQuoteState extends State<SaveFestivalTripAndGetQuot
   bool felexdate = false;
   String inclutes = "";
   // updatesavetrip() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance
   //         .collection('users')
   //         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -68,7 +68,7 @@ class _SaveFestivalTripAndGetQuoteState extends State<SaveFestivalTripAndGetQuot
   String _traintime = "";
 
   addupcomingtrip() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       DocumentReference profile =
           FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("upcomingtrip").doc();
       profile.set({
@@ -118,7 +118,7 @@ class _SaveFestivalTripAndGetQuoteState extends State<SaveFestivalTripAndGetQuot
 
   bool isChecked = false;
   void getfestivals() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var festival = await FirebaseFirestore.instance.collection('festivals').doc(FirebaseAuth.instance.currentUser!.uid).get();
       _date = festival.data()?['Date'];
       _image = festival.data()?['imageUrl'];
@@ -139,7 +139,7 @@ class _SaveFestivalTripAndGetQuoteState extends State<SaveFestivalTripAndGetQuot
   String _email = "";
   String _mobnum = "";
   void getcontact() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var details =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       _email = details.data()?['emailId'];
@@ -447,7 +447,7 @@ class _SaveFestivalTripAndGetQuoteState extends State<SaveFestivalTripAndGetQuot
 //
 // String triptype ="";
 //   updatetriptype() async {
-//     if (FirebaseAuth.instance.currentUser != null) {
+//     if (IS_USER_LOGIN) {
 //       var profile = await FirebaseFirestore.instance
 //           .collection('users')
 //           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -515,7 +515,7 @@ class _TravellersAdultAndChildenSelectWidgetState extends State<TravellersAdultA
   String selected1 = "";
   String selected2 = "";
   update() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -611,7 +611,7 @@ class Includes extends StatefulWidget {
 class _IncludesState extends State<Includes> {
   // String inclutes="";
   // updatesavetrip() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance
   //         .collection('users')
   //         .doc(FirebaseAuth.instance.currentUser!.uid)

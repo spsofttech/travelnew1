@@ -75,7 +75,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   String fullname = "";
 
   void getData() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       img = profile.data()?['image'];
       url = profile.data()?['document'] ?? "";

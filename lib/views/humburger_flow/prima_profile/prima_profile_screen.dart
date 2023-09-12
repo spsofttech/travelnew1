@@ -58,7 +58,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
   String _merriedstatus = "";
 
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(widget.userUid).collection('primaAccount').doc('profile').get();
       image = profile.data()?['imageUrl'];
       Name = profile.data()?['fullName'];
@@ -74,7 +74,7 @@ class _PrimaProfileScreenState extends State<PrimaProfileScreen> {
   String _address = "";
 
   void getlocationDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(widget.userUid).get();
       _address = profile.data()?['locality'];
       setState(() {});
@@ -950,7 +950,7 @@ class _TripometerCircleWidgetState extends State<TripometerCircleWidget> {
   }
 
   Future<void> getTripometerDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       tripoMeterList.clear();
 
       CollectionReference users = FirebaseFirestore.instance.collection('users');

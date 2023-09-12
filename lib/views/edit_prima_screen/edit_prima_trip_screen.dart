@@ -68,7 +68,7 @@ class _EditPrimaTripScreenState extends State<EditPrimaTripScreen> {
   var secondDate;
 
   void getdata() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -91,7 +91,7 @@ class _EditPrimaTripScreenState extends State<EditPrimaTripScreen> {
   List touristSportName = [];
 
   // void getImageData() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance.collection('tripstate').doc('karnataka').collection('tripcity').doc('Bengaluru').get();
   //     image = profile.data()?['TouristSportImage'];
   //     touristSportName = profile.data()?['TouristSport'];

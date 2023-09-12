@@ -343,7 +343,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                                   if(email.toString().isNotEmpty&&password.toString().isNotEmpty&&date_of_birth_controler.text.isNotEmpty&&mobile_number_controller.text.isNotEmpty&&name_controller.text.isNotEmpty){
                                     showAboutDialog(context: context);
-                                    int resCode=await ApiHelper().loginWithEmailApiCall(email: email.toString(), password: password.toString(),birth_date: date_of_birth_controler.text,contactNum:mobile_number_controller.text,name: name_controller.text);
+                                    int resCode=await ApiHelper().signupWithEmailApiCall(email: email.toString(), password: password.toString(),birth_date: date_of_birth_controler.text,contactNum:mobile_number_controller.text,name: name_controller.text);
 
                                     if(resCode==0)
                                     {

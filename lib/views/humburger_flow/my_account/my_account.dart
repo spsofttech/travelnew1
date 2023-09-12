@@ -44,7 +44,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
   String userName = "";
   String place = "";
   void getData() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       userName = profile.data()?['fullName'];
 
@@ -84,7 +84,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
 
   String Name = "";
   void getprimDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       Name = profile.data()?['firstName'];
@@ -94,7 +94,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
 
   bool _prima = false;
   void gerprimacheck() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       _prima = profile.data()?['isPrima'];
     }
@@ -122,7 +122,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
           actions: [
             InkWell(
               onTap: () async {
-                if (FirebaseAuth.instance.currentUser != null) {
+                if (IS_USER_LOGIN) {
                   log("---------- Is Prima  --- ${USER_IS_PRIMA}");
                   if (USER_IS_PRIMA == false) {
                     empatyprimaccout(context);
@@ -308,7 +308,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                 if (await InternetConnectionChecker().hasConnection == false) {
                   showDialogBox();
                 } else {
-                  if (FirebaseAuth.instance.currentUser != null) {
+                  if (IS_USER_LOGIN) {
                     final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                     sharedPreferences.remove('email');
                     await FirebaseAuth.instance.signOut();

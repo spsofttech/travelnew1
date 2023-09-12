@@ -595,7 +595,7 @@ class _YourTripInterestState extends State<YourTripInterest> {
 //   var _isSelected = false;
 //   List NatureList = [];
 //   void getDetails() async {
-//     if (FirebaseAuth.instance.currentUser != null) {
+//     if (IS_USER_LOGIN) {
 //       var profile =
 //           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("primaAccount").doc("profile").get();
 //       NatureList = profile['Nature'];
@@ -667,7 +667,7 @@ class _YourTripInterestState extends State<YourTripInterest> {
 //   var _isSelected = false;
 //   List NatureList = [];
 //   void getDetails() async {
-//     if (FirebaseAuth.instance.currentUser != null) {
+//     if (IS_USER_LOGIN) {
 //       var profile =
 //           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("primaAccount").doc("profile").get();
 //       NatureList = profile['Religlous'];
@@ -737,7 +737,7 @@ class _YourTripInterestState extends State<YourTripInterest> {
 //   var _isSelected = false;
 //   List NatureList = [];
 //   void getDetails() async {
-//     if (FirebaseAuth.instance.currentUser != null) {
+//     if (IS_USER_LOGIN) {
 //       var profile =
 //           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("primaAccount").doc("profile").get();
 //       NatureList = profile['City'];
@@ -813,7 +813,7 @@ class _AdventurefilterChipWidgetState extends State<AdventurefilterChipWidget> {
   List NatureList = [];
 
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       DocumentSnapshot<Map<String, dynamic>> profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       // print("---- ${profile.data()!['${widget.catName}'] == null}   -------------");

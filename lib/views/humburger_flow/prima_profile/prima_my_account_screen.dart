@@ -19,7 +19,7 @@ class PrimaMyAccount extends StatefulWidget {
 class _PrimaMyAccountState extends State<PrimaMyAccount> {
   String _name = "";
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       _name = profile.data()?['fullName'];

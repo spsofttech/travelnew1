@@ -22,7 +22,7 @@ class TouristSpotsScreen extends StatefulWidget {
 class _TouristSpotsScreenState extends State<TouristSpotsScreen> {
   String hostname = "";
   void getPrimaDeatials() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       hostname = profile.data()?['fullName'];
@@ -315,7 +315,7 @@ class TouristSpotsScreen2 extends StatefulWidget {
 class _TouristSpotsScreen2State extends State<TouristSpotsScreen2> {
   // String hostname = "";
   // void getPrimaDeatials() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance
   //         .collection('users')
   //         .doc(FirebaseAuth.instance.currentUser!.uid)

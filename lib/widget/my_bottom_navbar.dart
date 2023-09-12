@@ -26,7 +26,7 @@ registerUserSignupPage(String address, String lati, String lngi, String locality
   List abc = [];
   abc.add(locality + '/$lati/$lngi');
   final _fireStore = FirebaseFirestore.instance;
-  if (FirebaseAuth.instance.currentUser != null) {
+  if (IS_USER_LOGIN) {
     print('=========================================');
     var x = await _fireStore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
     List y = x.data()!['homeLocations'] ?? [];
@@ -116,7 +116,7 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
   String check = "";
 
   void checkupcoming() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("upcomcheck").doc('checktrip').get();
       check = profile.data()?['upcoming'] ?? "";
@@ -127,7 +127,7 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
   String Name = "";
 
   void getprimDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       Name = profile.data()?['firstName'] ?? "";
@@ -172,7 +172,7 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
                 InkWell(
                   onTap: () {
                     if (check == "") {
-                      if (FirebaseAuth.instance.currentUser != null) {
+                      if (IS_USER_LOGIN) {
                         empatycomingtrip(context);
                       } else {
                         empatycomingtrip(context);
@@ -202,7 +202,7 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
                       Navigator.push(context, MaterialPageRoute(builder: (ctx) => const GoPrimaSubscriptionScreen()));
                     } else {
                       if (Name == "") {
-                        if (FirebaseAuth.instance.currentUser != null) {
+                        if (IS_USER_LOGIN) {
                           empatyprimaccout(context);
                         } else {
                           empatyprimaccout(context);
@@ -213,7 +213,7 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
                         Navigator.push(context, MaterialPageRoute(builder: (ctx) => PrimaMyBottomBar()));
                       }
                     }
-                    //  if (FirebaseAuth.instance.currentUser != null) {
+                    //  if (IS_USER_LOGIN) {
                     //   if (Name == "") {
                     //     empatyprimaccout(context);
                     //   } else {
@@ -241,7 +241,7 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
                 ),
                 InkWell(
                   onTap: () {
-                    if (FirebaseAuth.instance.currentUser != null) {
+                    if (IS_USER_LOGIN) {
                       Navigator.push(context, MaterialPageRoute(builder: (ctx) => InboxScreen()));
                     } else {
                       showSnackBar(context, "Please Login First!", Colors.red);

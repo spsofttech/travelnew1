@@ -56,7 +56,7 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
   // List _sportimage = [];
   // List _daysnumber = [];
   // void getDetails() async{
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var trip = await FirebaseFirestore.instance
   //         .collection('Aspired_trips')
   //         .doc('Trip1')
@@ -80,7 +80,7 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
   String _mobileNum = "";
   String _email = "";
   void getpermission() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var per =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       _mobileNum = per.data()?['mobileNumber'];
@@ -120,7 +120,7 @@ class _AspiredTripDetailsScreenState extends State<AspiredTripDetailsScreen> {
   }
 
   updatesavetrip() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)

@@ -77,7 +77,7 @@ class _noPrimaUserProfileState extends State<noPrimaUserProfile> {
   String fullname = "";
 
   void getData() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(widget.userUid).get();
       img = profile.data()?['image'];
       url = profile.data()?['document'] ?? "";

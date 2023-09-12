@@ -41,6 +41,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   showSnackBar(BuildContext context, String str, [Color clr = Colors.black]) {
     return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(str),
@@ -48,18 +49,18 @@ class _HomeScreenState extends State<HomeScreen> {
     ));
   }
 
-  festivalsdetail() async {
-    final _fireStore = FirebaseFirestore.instance;
-    await _fireStore.collection("festivals").doc(FirebaseAuth.instance.currentUser!.uid).set({
-      'UID': FirebaseAuth.instance.currentUser!.uid,
-    });
-  }
+  // festivalsdetail() async {
+  //   final _fireStore = FirebaseFirestore.instance;
+  //   await _fireStore.collection("festivals").doc(FirebaseAuth.instance.currentUser!.uid).set({
+  //     'UID': FirebaseAuth.instance.currentUser!.uid,
+  //   });
+  // }
 
   DateTime _date = DateTime.now();
   String _image = "";
   String _festivalname = "";
   var date;
-  CollectionReference _collectionRef = FirebaseFirestore.instance.collection('festivals');
+ // CollectionReference _collectionRef = FirebaseFirestore.instance.collection('festivals');
 
   getData() async {
     // DocumentSnapshot<Map<String, dynamic>> userDataMap =
@@ -109,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // void getquicks() async {
-  // if (FirebaseAuth.instance.currentUser != null) {
+  // if (IS_USER_LOGIN) {
   //   var profile = await FirebaseFirestore.instance.collection('Quick_Escape').doc('citys').get();
   //   c1 = profile.data()?['Mumbai'];
   //   c2 = profile.data()?['Dehli'];
@@ -132,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String _1name = "";
   // void getQuickEscape() async{
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var festival = await FirebaseFirestore.instance
   //         .collection('festivals')
   //         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -303,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     InkWell(
                       onTap: () async {
-                        if (FirebaseAuth.instance.currentUser != null) {
+                        if (IS_USER_LOGIN) {
                           LocationProvider _locationProvider = LocationProvider();
                           await _locationProvider.fetchCurrentPosition();
                           registerUser();
@@ -770,7 +771,7 @@ class _ProfileFeedWidgetState extends State<ProfileFeedWidget> {
           ) {
             return InkWell(
               onTap: () {
-                if (FirebaseAuth.instance.currentUser != null) {
+                if (IS_USER_LOGIN) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(

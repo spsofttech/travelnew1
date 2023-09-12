@@ -135,7 +135,7 @@ class _Step1State extends State<Step1> {
   String coverPic = "";
   List<Map<String, dynamic>> cityDropDown = [];
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -151,7 +151,7 @@ class _Step1State extends State<Step1> {
   String startplace = "";
 
   void getstartlocation() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       startplace = profile.data()?['locality'];
 
@@ -166,7 +166,7 @@ class _Step1State extends State<Step1> {
     //         ? "Fairs"
     //         : "Road";
 
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var cityData = await FirebaseFirestore.instance.collection('Prima Tourist Spot').doc(cat).get();
 
       setState(() {

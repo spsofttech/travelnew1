@@ -20,7 +20,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
   final TextEditingController otherintrestcontroller = TextEditingController();
   String _name = "";
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)

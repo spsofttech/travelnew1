@@ -51,7 +51,7 @@ class _SaveTripStep2State extends State<SaveTripStep2> {
   String mode = "";
 
   void getData() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -69,7 +69,7 @@ class _SaveTripStep2State extends State<SaveTripStep2> {
   }
 
   void updateTripData() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -276,7 +276,7 @@ class _SaveTripStep2State extends State<SaveTripStep2> {
                       Container(
                         height: height(context) * 0.1,
                         width: width(context) * 0.23,
-                        padding: EdgeInsets.all(8),
+                       // padding: EdgeInsets.all(8),
                         margin: EdgeInsets.all(12),
                         decoration: currentIndex1 == i ? myFillBoxDecoration(0, primary, 10) : myFillBoxDecoration(0, white, 10),
                         child: Column(

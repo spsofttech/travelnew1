@@ -3,27 +3,58 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:travelnew_app/Api/pref_halper.dart';
 
+import '../model/getAllUserModel.dart';
 import 'ApiModel.dart';
 import 'api_url.dart';
+import 'model/cteate_new_trip_model.dart';
 import 'model/day_vise_data_model.dart';
 import 'model/user_trip_interest_Model.dart';
 
 class ApiHelper {
   Preferences preferences = Preferences();
-
-  Future<int> loginWithEmailApiCall({required String email, required String password,required String name,required String birth_date,required String contactNum }) async {
+  List all_user_list=[];
+  Future<int> signupWithEmailApiCall({required String email, required String password,required String name,required String birth_date,required String contactNum }) async {
     http.Response res = await http.post(
-      Uri.parse(ApiUrl.userLogin),
+      Uri.parse(ApiUrl.userSignUp),
       headers: <String, String>{'authorization': ApiUrl.basicAuth},
       body: {'email': email, 'password': password,'name':name,'birth_date':birth_date,'contact':contactNum},
     );
+    print("LOGIN Res -- ${res.body}");
     if (res.statusCode == 200) {
       Map<String, dynamic> data = await jsonDecode(res.body);
 
       if (data['status'] == 1) {
         IS_USER_LOGIN = await Preferences.preferences.saveBool(key: PrefKeys.isUaseLogin, value: true);
 
-       // Preferences.preferences.saveInt(key: PrefKeys.userId,value: data['status']['data'][''] );
+        USER_ID =data['status']['data']['user_id'];
+        await Preferences.preferences.saveInt(key: PrefKeys.userId,value: USER_ID);
+        return 0;
+      }
+      else {
+        return 1;
+      }
+    }
+    else {
+      return 1;
+    }
+  }
+
+  Future<int> loginWithEmailApiCall({required String email, required String password}) async {
+    http.Response res = await http.post(
+      Uri.parse(ApiUrl.user_login),
+      headers: <String, String>{'authorization': ApiUrl.basicAuth},
+      body: {'email': email, 'password': password,},
+    );
+
+    print("LOGIN Res -- ${res.body}");
+    if (res.statusCode == 200) {
+      Map<String, dynamic> data = await jsonDecode(res.body);
+
+      if (data['status'] == 1) {
+
+        IS_USER_LOGIN = await Preferences.preferences.saveBool(key: PrefKeys.isUaseLogin, value: true);
+        USER_ID =data['data']['user_id'];
+        await Preferences.preferences.saveInt(key: PrefKeys.userId,value: USER_ID);
         return 0;
       }
       else {
@@ -37,12 +68,13 @@ class ApiHelper {
 
   Future<create_trip_get_model> explore_trip_Apicall({required create_trip_send_model model}) async {
 
-    print("Explore Trip  ${model.toJson()}-");
+   // print("Explore Trip  ${model.toJson()}-");
     http.Response res = await http.post(
       Uri.parse(ApiUrl.exploreTrip),
       headers: <String, String>{'authorization': ApiUrl.basicAuth,'Content-Type':'application/json'},
       body:jsonEncode(model.toJson())
     );
+
     print("Explore Trip  ${jsonDecode(res.body)}-");
 
 
@@ -50,11 +82,11 @@ class ApiHelper {
 
       create_trip_get_model data = create_trip_get_model.fromJson( jsonDecode(res.body));
 
-      if (data.status == 1) {
-
-        IS_USER_LOGIN = await Preferences.preferences.saveBool(key: PrefKeys.isUaseLogin, value: true);
+      if (data.data == 1) {
+        // USER_ID =data['status']['data']['user_id'];
+        // await Preferences.preferences.saveInt(key: PrefKeys.userId,value: USER_ID);
+        // IS_USER_LOGIN = await Preferences.preferences.saveBool(key: PrefKeys.isUaseLogin, value: true);
         return data;
-
       }
       else
       {
@@ -64,7 +96,7 @@ class ApiHelper {
     }
     else
     {
-      return create_trip_get_model(status: 0);
+      return create_trip_get_model(status: 0,);
     }
 
   }
@@ -214,9 +246,62 @@ class ApiHelper {
     }
     else
     {
-      return Day_vise_data_get_model(status: 0);
+      return Day_vise_data_get_model(status: 0,data: []);
     }
 
+  }
+
+  Future<bool> get_allUser_api_call({ required int user_id,required int page}) async {
+    bool isLastPage=false;
+    // type  ==0  = travelnew category &  type ==1 = quick escap
+    print("--------------  ");
+    Map _body ={
+      'page':page,
+      'user_id':user_id
+    };
+
+    http.Response res = await http.post(
+        Uri.parse(ApiUrl.get_all_user),
+        headers: <String, String>{'authorization': ApiUrl.basicAuth,'Content-Type':'application/json'},
+        body:jsonEncode(_body)
+    );
+
+    if (res.statusCode == 200) {
+
+      UserFriend_details_Get_model data = UserFriend_details_Get_model.fromJson( jsonDecode(res.body));
+      isLastPage= data.offset=="0";
+    return  isLastPage;
+
+    }
+    else
+    {
+      return isLastPage;
+    }
+
+  }
+
+
+  Future<bool> create_new_trip_Apicall({required create_new_Trip_send_model model}) async {
+
+    bool success=false;
+     print("Explore Trip  ${model.toJson()}-");
+    http.Response res = await http.post(
+        Uri.parse(ApiUrl.create_tn_trip),
+        headers: <String, String>{'authorization': ApiUrl.basicAuth,'Content-Type':'application/json'},
+        body:jsonEncode(model.toJson())
+    );
+
+    print("create Trip Trip  ${res.body}-");
+
+    if (res.statusCode == 200) {
+      success=jsonDecode(res.body)['status']==1;
+    }
+    else
+    {
+      success=false;
+    }
+
+    return success;
   }
 
 }

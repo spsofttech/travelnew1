@@ -582,7 +582,7 @@ class _QuickEscapeScreenState extends State<QuickEscapeScreen> with TickerProvid
 //   // var cartime = 1245325.65/150;
 //   // var traintime = 1245325.65/300;
 //   // void getquickEscape() async{
-//   //   if (FirebaseAuth.instance.currentUser != null) {
+//   //   if (IS_USER_LOGIN) {
 //   //     var profile = await FirebaseFirestore.instance
 //   //         .collection('Quick_Escape')
 //   //         .doc('citys')

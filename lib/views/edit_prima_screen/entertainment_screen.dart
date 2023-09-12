@@ -36,7 +36,7 @@ class _EntertainmentTabState extends State<EntertainmentTab> {
   List entertainment = [];
 
   void getdata() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(widget.hostId).collection("Prima_Trip_Plan").doc(widget.hostId).get();
       tripName = profile.data()?['Specify_trip_name'];
       meetTime = profile.data()?['meetingTime'] ?? "Select Time";

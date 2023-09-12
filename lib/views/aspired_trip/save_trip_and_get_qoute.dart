@@ -39,7 +39,7 @@ class _SaveTripAndGetQuoteState extends State<SaveTripAndGetQuote> {
   bool felexdate = false;
   String inclutes = "";
   // updatesavetrip() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance
   //         .collection('users')
   //         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -67,7 +67,7 @@ class _SaveTripAndGetQuoteState extends State<SaveTripAndGetQuote> {
   List _daysnumber = [];
 
   getaspridtrip() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('Aspired_trips').doc('Trip1').get();
       _image = profile.data()?['imageUrl'];
       _date = profile.data()?['date'].toDate().toString().split(" ").first;
@@ -84,7 +84,7 @@ class _SaveTripAndGetQuoteState extends State<SaveTripAndGetQuote> {
   }
 
   checkupcomingtip() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       DocumentReference profile =
           FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("upcomcheck").doc('checktrip');
       profile.set({"upcoming": check});
@@ -95,7 +95,7 @@ class _SaveTripAndGetQuoteState extends State<SaveTripAndGetQuote> {
   String check = "yes";
 
   addupcomingtrip() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       DocumentReference profile =
           FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("upcomingtrip").doc();
       profile.set({
@@ -137,6 +137,8 @@ class _SaveTripAndGetQuoteState extends State<SaveTripAndGetQuote> {
     getfestivals();
     getaspridtrip();
     getcontact();
+    dateinput.text= "${_date}";
+
     super.initState();
   }
 
@@ -146,7 +148,8 @@ class _SaveTripAndGetQuoteState extends State<SaveTripAndGetQuote> {
   String _tripdestination = "";
 
   void getfestivals() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+
+    if (IS_USER_LOGIN) {
       var festival = await FirebaseFirestore.instance.collection('festivals').doc(FirebaseAuth.instance.currentUser!.uid).get();
       _festivalname = festival.data()?['festivalname'];
       _departurecity = festival.data()?['locality'];
@@ -159,7 +162,7 @@ class _SaveTripAndGetQuoteState extends State<SaveTripAndGetQuote> {
   String _email = "";
   String _mobnum = "";
   void getcontact() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var details =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       _email = details.data()?['emailId'];
@@ -262,9 +265,9 @@ class _SaveTripAndGetQuoteState extends State<SaveTripAndGetQuote> {
                             String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
                             log(formattedDate);
 
-                            setState(() {
+                            // setState(() {
                               dateinput.text = formattedDate;
-                            });
+                            // });
                           } else {
                             print("Date is not selected");
                           }
@@ -321,7 +324,7 @@ class _SaveTripAndGetQuoteState extends State<SaveTripAndGetQuote> {
                     children: [
                       Text(
                         '7',
-                        style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 50,color: primary, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Days',
@@ -517,7 +520,7 @@ class _SaveTripAndGetQuoteState extends State<SaveTripAndGetQuote> {
 //
 // String triptype ="";
 //   updatetriptype() async {
-//     if (FirebaseAuth.instance.currentUser != null) {
+//     if (IS_USER_LOGIN) {
 //       var profile = await FirebaseFirestore.instance
 //           .collection('users')
 //           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -585,7 +588,7 @@ class _TravellersAdultAndChildenSelectWidgetState extends State<TravellersAdultA
   String selected1 = "";
   String selected2 = "";
   update() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -681,7 +684,7 @@ class Includes extends StatefulWidget {
 class _IncludesState extends State<Includes> {
   // String inclutes="";
   // updatesavetrip() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance
   //         .collection('users')
   //         .doc(FirebaseAuth.instance.currentUser!.uid)

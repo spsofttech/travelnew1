@@ -25,7 +25,7 @@ class _CheckListAndBudgetScreenState extends State<CheckListAndBudgetScreen> {
   final TextEditingController amountcontroller = TextEditingController();
 
   updateitemacarry() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -41,7 +41,7 @@ class _CheckListAndBudgetScreenState extends State<CheckListAndBudgetScreen> {
   }
 
   deletiteam() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)

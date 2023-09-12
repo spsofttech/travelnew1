@@ -26,7 +26,7 @@ class _StoryPageViewState extends State<StoryPageView> {
   List<StoryItem>? storyItem;
   final controller = StoryController();
   // void getTripData() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance
   //         .collection('users')
   //         .doc(FirebaseAuth.instance.currentUser!.uid)

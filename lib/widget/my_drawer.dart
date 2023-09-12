@@ -22,6 +22,7 @@ import 'package:travelnew_app/views/publish%20your%20trip/publish_your_trip.dart
 import 'package:travelnew_app/views/start/on_boarding_screen.dart';
 import 'package:travelnew_app/views/start/signup_with_social_media_screen.dart';
 
+import '../Api/pref_halper.dart';
 import '../views/edit_prima_screen/prima_trip_1to4_screen.dart';
 import '../views/home/noPrimaUserProfile.dart';
 import '../views/humburger_flow/prima_profile/personal_info_screen.dart';
@@ -53,7 +54,7 @@ class _MyDrawerState extends State<MyDrawer> {
   String name = "";
 
   void getData() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
       name = profile.data()?['fullName'] ?? "";
       url = profile.data()?['image'] ?? "";
@@ -89,7 +90,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   String check = "";
   void checkupcoming() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection("upcomingtrip").get();
       //check = profile.docs.first['state'] ?? "";
     }
@@ -98,7 +99,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   String Name = "";
   void getprimDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       Name = profile.data()?['firstName'] ?? "";
@@ -110,7 +111,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   String uid = "";
   void getPrimaTrip() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -186,7 +187,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           padding: const EdgeInsets.only(left: 2.0),
                           child: InkWell(
                               onTap: () {
-                                if (FirebaseAuth.instance.currentUser != null) {
+                                if (IS_USER_LOGIN) {
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => MyAccountScreen()));
                                 } else {
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => SignupWithSocialMediaScreen()));
@@ -234,7 +235,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       child: InkWell(
                           onTap: () {
                             // if (check == "") {
-                            //   if (FirebaseAuth.instance.currentUser != null) {
+                            //   if (IS_USER_LOGIN) {
                             //     empatycomingtrip(context);
                             //   } else {
                             //     empatycomingtrip(context);
@@ -261,7 +262,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       padding: EdgeInsets.only(left: width(context) * 0.195, top: 8),
                       child: InkWell(
                         onTap: () {
-                          if (FirebaseAuth.instance.currentUser != null) {
+                          if (IS_USER_LOGIN) {
                             Navigator.push(context, MaterialPageRoute(builder: (ctx) => TripLibraryScreen()));
                           } else {
                             Navigator.pop(context);
@@ -313,7 +314,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       padding: EdgeInsets.only(left: width(context) * 0.195),
                       child: InkWell(
                           onTap: () async {
-                            if (FirebaseAuth.instance.currentUser != null) {
+                            if (IS_USER_LOGIN) {
                               if (USER_IS_PRIMA) {
                                 bool isAlredyUpdated = await FirebaseFirestore.instance
                                     .collection('users')
@@ -357,7 +358,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       child: InkWell(
                         onTap: () {
                           if (USER_IS_PRIMA == false) {
-                            if (FirebaseAuth.instance.currentUser != null) {
+                            if (IS_USER_LOGIN) {
                               empatyprimaccout(context);
                             } else {
                               empatyprimaccout(context);
@@ -392,14 +393,16 @@ class _MyDrawerState extends State<MyDrawer> {
                       padding: EdgeInsets.only(left: width(context) * 0.195, top: 8),
                       child: InkWell(
                         onTap: () {
-                          if (FirebaseAuth.instance.currentUser != null) {
+                          
+                          if (IS_USER_LOGIN) {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => selectTripFriendPage(
                                           title: 'Friends in vicinity',
                                         )));
-                          } else {
+                          }
+                          else {
                             Navigator.pop(context);
                             showSnackBar(context, "Please Login First!", Colors.red);
                           }
@@ -495,7 +498,7 @@ class _MyDrawerState extends State<MyDrawer> {
               style: bodyText14w600(color: black),
             ),
             onTap: () async {
-              if (FirebaseAuth.instance.currentUser != null) {
+              if (IS_USER_LOGIN) {
                 Navigator.push(context, MaterialPageRoute(builder: (ctx) => QuickEscapeScreen()));
               } else {
                 showSnackBar(context, "Please Login First!", Colors.red);
@@ -533,7 +536,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     //       left: width(context) * 0.03, bottom: 10),
                     //   child: InkWell(
                     //     onTap: () {
-                    //       if (FirebaseAuth.instance.currentUser != null) {
+                    //       if (IS_USER_LOGIN) {
                     //         Navigator.push(
                     //             context,
                     //             MaterialPageRoute(
@@ -551,7 +554,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       padding: EdgeInsets.only(left: width(context) * 0.03, bottom: 10),
                       child: InkWell(
                         onTap: () {
-                          if (FirebaseAuth.instance.currentUser != null) {
+                          if (IS_USER_LOGIN) {
                             Navigator.push(context, MaterialPageRoute(builder: (ctx) => MySavedPinsScreens()));
                           } else {
                             Navigator.pop(context);

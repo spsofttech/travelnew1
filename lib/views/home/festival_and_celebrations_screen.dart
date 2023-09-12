@@ -61,7 +61,7 @@ class _FestivalAndCelebrationsScreenState extends State<FestivalAndCelebrationsS
         actions: [
           InkWell(
             onTap: () {
-              if (FirebaseAuth.instance.currentUser != null) {
+              if (IS_USER_LOGIN) {
                 filterDialog(context);
               } else {
                 Navigator.push(context, MaterialPageRoute(builder: (ctx) => SignupWithSocialMediaScreen()));
@@ -218,7 +218,7 @@ class _FestivalsDataListState extends State<FestivalsDataList> {
                 children: [
                   InkWell(
                     onTap: () {
-                      if (FirebaseAuth.instance.currentUser != null) {
+                      if (IS_USER_LOGIN) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -470,7 +470,7 @@ class _ShowDetailsOfFestivalsState extends State<ShowDetailsOfFestivals> {
   // List _nearbyturistimage = [];
   // String _includes="";
   // void getfestivals() async{
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var festival = await FirebaseFirestore.instance
   //         .collection('festivals')
   //         .doc('K5WCDLS8g0fZPM9Bgg9FPfcyuiu2')
@@ -491,7 +491,7 @@ class _ShowDetailsOfFestivalsState extends State<ShowDetailsOfFestivals> {
   String _mobileNum = "";
   String _email = "";
   void getpermission() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var per =
           await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('primaAccount').doc('profile').get();
       _mobileNum = per.data()?['mobileNumber'];
@@ -548,7 +548,7 @@ class _ShowDetailsOfFestivalsState extends State<ShowDetailsOfFestivals> {
   // }
 
   addsavetrip() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -560,7 +560,7 @@ class _ShowDetailsOfFestivalsState extends State<ShowDetailsOfFestivals> {
   }
 
   updatesavetrip() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)

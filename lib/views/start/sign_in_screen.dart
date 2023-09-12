@@ -158,8 +158,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
                         showAPICallPendingDialog(context);
 
-                         //  int resCode=await ApiHelper().loginWithEmailApiCall(email: email.toString(), ¢password: password.toString());
-                        int resCode=1;
+                          int resCode=await ApiHelper().loginWithEmailApiCall(email: email.toString(), password: password.toString());
+
 
                         if(resCode ==0)
                           {

@@ -24,7 +24,7 @@ class _SliderWidgetState extends State<SliderWidget> {
   String _visitSeason = "";
   String _image = "";
   void getDetails() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var trip = await FirebaseFirestore.instance.collection('Aspired_trips').doc('Trip1').get();
       _picks = trip.data()?['tripnumber'] ?? "";
       _visitSeason = trip.data()?['visitcategory'] ?? "";

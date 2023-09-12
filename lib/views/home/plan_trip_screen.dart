@@ -97,7 +97,7 @@ class _PlanATripState extends State<PlanATrip> {
   //String startplace = "";
 
   void getData() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       //
       // usereTripIntrest.addAll(profile.data()!['Adventure'] ?? []);
       // usereTripIntrest.addAll(profile.data()!['City'] ?? []);
@@ -116,11 +116,11 @@ class _PlanATripState extends State<PlanATrip> {
   String _cityImage = "";
 
   // void getCityImageData() async {
-  //   // if (FirebaseAuth.instance.currentUser != null) {
+  //   // if (IS_USER_LOGIN) {
   //   //   var profile = await FirebaseFirestore.instance.collection('tripstate').doc('karnataka').collection('tripcity').doc('Bengaluru').get();
   //   //   _cityImage = profile.data()?['cityImage'];
   //   // }
-  //   // if (FirebaseAuth.instance.currentUser != null) {
+  //   // if (IS_USER_LOGIN) {
   //   //   var profile = await FirebaseFirestore.instance.collection('Trips_New').get();
   //   //   //  _cityImage = profile.data()?['cityImage'];
   //   // }
@@ -181,7 +181,7 @@ class _PlanATripState extends State<PlanATrip> {
             Container(
               margin: const EdgeInsets.all(10),
               padding: const EdgeInsets.all(12),
-              height: height(context) * 0.88,
+              height: height(context) * 0.8,
               width: width(context) * 0.95,
               decoration: shadowDecoration(15, 5),
               child: Column(
@@ -436,6 +436,7 @@ class _PlanATripState extends State<PlanATrip> {
                   //   lableText: '  Plan Trip at  ',
                   //   itemList: items3,
                   // ),
+
                   addVerticalSpace(25),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -602,7 +603,8 @@ class _PlanATripState extends State<PlanATrip> {
                           },
                           kebordType: TextInputType.number,
                           controller: enterdate,
-                          labelText: 'Please Enter Your Trip Days'),
+                          labelText: 'Please Enter Your Trip Days'
+                      ),
                     ),
                   Container(
                     padding: const EdgeInsets.only(left: 10),
@@ -712,6 +714,7 @@ class _PlanATripState extends State<PlanATrip> {
                   child: CustomButton(
                       name: 'Explore Trips',
                       onPressed: () async {
+
                         // printc("------${_string1}");
                         bool allCodition = true;
                         String msg = "";
@@ -764,11 +767,14 @@ class _PlanATripState extends State<PlanATrip> {
                           );
 
                           create_trip_get_model resModel = await ApiHelper().explore_trip_Apicall(model: model);
+
                      if(resModel.status! ==1)
                        {
-                         TRIP_ID=int.parse(resModel.data!.tripId!);
+                        TRIP_ID=int.parse(resModel.data!.tripId!);
                          print("------- -------- ------ ${TRIP_ID}");
+                         TRIP_Search_ID=int.parse(resModel.data!.searched_id!);
                          Navigator.pop(context);
+
                          Navigator.push(
                              context,
                              MaterialPageRoute(
@@ -776,6 +782,8 @@ class _PlanATripState extends State<PlanATrip> {
                                      SaveYourTripsScreen(type_Of_Trip: type_of_trip1, plamTrip_at: planTrip_at_, trip_days: totalDays, interestList: usereTripIntrest)
                              )
                          );
+
+
                        }
 
 
@@ -837,6 +845,7 @@ class _PlanATripState extends State<PlanATrip> {
                         //  Navigator.pop(context);
 
                         }
+
                       })),
             ),
             SizedBox(

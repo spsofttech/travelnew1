@@ -57,7 +57,7 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
   var dockID = '';
 
   void getDummyTrip01() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var dummy = await FirebaseFirestore.instance.collection('dummyTrips').doc('2Xhglp1fUkvx3AGV6aQA').get();
       _title = dummy.data()?['title'];
       _subtitle = dummy.data()?['subtitle'];
@@ -68,7 +68,7 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
   }
 
   void getDummyTrip02() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var dummy = await FirebaseFirestore.instance.collection('dummyTrips').doc('AkwzekaiFE2orxmnBfoF').get();
       _title = dummy.data()?['title'];
       _subtitle = dummy.data()?['subtitle'];
@@ -79,7 +79,7 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
   }
 
   void getDummyTrip03() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var dummy = await FirebaseFirestore.instance.collection('dummyTrips').doc('fLNR63XQmrUNW9ng5yQ2').get();
       _title = dummy.data()?['title'];
       _subtitle = dummy.data()?['subtitle'];
@@ -102,7 +102,7 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
   List UserFriendPrimaTrips = [];
   List ReuestTripData = [];
   void getdata1() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var tirp1 = await FirebaseFirestore.instance.collection('dummyTrips').doc('2Xhglp1fUkvx3AGV6aQA').get();
       _image1 = tirp1.data()?['image'];
       _location1 = tirp1.data()?['location'];
@@ -122,7 +122,7 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
   String _traintime2 = "";
 
   // void getdata2() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var tirp1 = await FirebaseFirestore.instance.collection('dummyTrips').doc('AkwzekaiFE2orxmnBfoF').get();
   //     _image2 = tirp1.data()?['image'];
   //     _location2 = tirp1.data()?['location'];
@@ -142,7 +142,7 @@ class _TripLibraryScreenState extends State<TripLibraryScreen> with TickerProvid
   String _traintime3 = "";
 
   // void getdata3() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var tirp1 = await FirebaseFirestore.instance.collection('dummyTrips').doc('fLNR63XQmrUNW9ng5yQ2').get();
   //     _image3 = tirp1.data()?['image'];
   //     _location3 = tirp1.data()?['location'];
@@ -1443,7 +1443,7 @@ class _TripLibraryDetailsScreenState extends State<TripLibraryDetailsScreen> {
 
   int days = 0;
   // void getTripData() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
+  //   if (IS_USER_LOGIN) {
   //     var profile = await FirebaseFirestore.instance
   //         .collection('users')
   //         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -1803,7 +1803,7 @@ class _TripLibraryDetailsScreenState2 extends State<TripLibraryDetailsScreen2> {
   String date = "";
   int days = 0;
   void getTripData() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -1822,7 +1822,7 @@ class _TripLibraryDetailsScreenState2 extends State<TripLibraryDetailsScreen2> {
   List touristSportimage = [];
   String cityimage = "";
   void getsportdata() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (IS_USER_LOGIN) {
       var profile = await FirebaseFirestore.instance.collection('tripstate').doc('karnataka').collection('tripcity').doc('Bengaluru').get();
       des = profile.data()?['TouristSportDesc'];
       touristSport = profile.data()?['TouristSport'];

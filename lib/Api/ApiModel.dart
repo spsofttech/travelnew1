@@ -63,6 +63,7 @@ class Data {
   String? tripId;
   String? days;
   String? travelMode;
+  String? searched_id;
 
   Data(
       {this.userId,
@@ -70,7 +71,7 @@ class Data {
         this.category,
         this.tripId,
         this.days,
-        this.travelMode});
+        this.travelMode,this.searched_id});
 
   Data.fromJson(Map<String, dynamic> json) {
    // print("\n${json['trip_id']}");
@@ -85,6 +86,7 @@ class Data {
     days = json['days'].toString();
     //print("\n${json['days']}");
     travelMode = json['travel_mode'].toString();
+    searched_id = json['searched_id'].toString();
     // print("\n${json['travel_mode']}");
   }
 
@@ -133,6 +135,7 @@ class TravelNew_Category_get_model {
 }
 
 class Data1 {
+
   String? type;
   String? category;
 
@@ -282,6 +285,7 @@ class Data3 {
     return data;
   }
 }
+
 
 
 
