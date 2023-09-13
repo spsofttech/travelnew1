@@ -22,7 +22,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 import '../../../widget/upload_image.dart';
 import '../../prima/go_prima_screen.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 class CreatePrimaProfile extends StatefulWidget {
   final bool directUpdate;
   const CreatePrimaProfile({super.key, this.directUpdate = false});

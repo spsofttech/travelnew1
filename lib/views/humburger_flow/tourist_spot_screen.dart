@@ -10,7 +10,7 @@ import 'package:travelnew_app/widget/custom_button.dart';
 import '../../Api/model/day_vise_data_model.dart';
 import '../../model/DayWiseTripModel.dart';
 import '../../utils/constant.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 class TouristSpotsScreen extends StatefulWidget {
   const TouristSpotsScreen({super.key, required this.MP});
   final TouristSpot MP;

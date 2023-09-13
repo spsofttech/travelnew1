@@ -1,11 +1,11 @@
 class UserFriend_details_Get_model {
   int? status;
   List<Data>? data;
-  String? offset;
+  String? nextPage;
   String? message;
 
   UserFriend_details_Get_model(
-      {this.status, this.data, this.offset, this.message});
+      {this.status, this.data, this.nextPage, this.message});
 
   UserFriend_details_Get_model.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -15,7 +15,7 @@ class UserFriend_details_Get_model {
         data!.add(new Data.fromJson(v));
       });
     }
-    offset = json['offset'];
+    nextPage = json['next_page'];
     message = json['message'];
   }
 
@@ -25,7 +25,7 @@ class UserFriend_details_Get_model {
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    data['offset'] = this.offset;
+    data['next_page'] = this.nextPage;
     data['message'] = this.message;
     return data;
   }
@@ -36,7 +36,7 @@ class Data {
   String? name;
   String? birthDate;
   String? email;
-  Null? password;
+  String? password;
   String? friends;
   String? travelInvites;
 

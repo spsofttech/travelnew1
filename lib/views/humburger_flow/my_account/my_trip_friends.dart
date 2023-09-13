@@ -249,7 +249,7 @@ class _MyTripFriendsScreenState extends State<MyTripFriendsScreen> {
       ),
       body: SingleChildScrollView(
         child: FutureBuilder(
-          future: ApiHelper().get_allUser_api_call(user_id: USER_ID, page: 1),
+          future: ApiHelper.get_allUser_api_call(user_id: USER_ID, page: 1),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return Column(children: [

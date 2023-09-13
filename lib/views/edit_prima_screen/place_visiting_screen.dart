@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:travelnew_app/views/edit_prima_screen/trip_members_screen.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 import '../../model/DayWiseTripModel.dart';
 import '../../utils/constant.dart';
 import '../humburger_flow/tourist_spot_screen.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 import '../../utils/constant.dart';
 
 class ExploreTripSuggestionScreen extends StatefulWidget {

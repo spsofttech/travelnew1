@@ -14,7 +14,7 @@ import 'package:travelnew_app/views/humburger_flow/prima_profile/user_prima_prof
 import 'package:travelnew_app/views/prima/go_prima_screen.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
 import 'package:travelnew_app/widget/custom_dropdown_button.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 import '../../../utils/constant.dart';
 import '../my_account/my_trip_friends.dart';
 

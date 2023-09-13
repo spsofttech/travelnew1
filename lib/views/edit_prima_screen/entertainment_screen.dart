@@ -9,7 +9,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:travelnew_app/views/edit_prima_screen/prima_trip_1to4_screen.dart';
 import 'package:travelnew_app/views/edit_prima_screen/trip_members_screen.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 import '../../utils/constant.dart';
 import 'entertainment_of_trip.dart';
 

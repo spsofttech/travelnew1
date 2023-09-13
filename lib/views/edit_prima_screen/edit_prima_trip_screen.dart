@@ -10,7 +10,7 @@ import 'package:travelnew_app/views/publish%20your%20trip/step1.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
 import 'package:travelnew_app/widget/custom_dropdown_button.dart';
 import 'package:travelnew_app/widget/custom_textfield.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 class EditPrimaTripScreen extends StatefulWidget {
   const EditPrimaTripScreen({super.key});
 

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travelnew_app/utils/constant.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 import '../../../widget/custom_appbar.dart';
 
 class EntertainmentOfTripScreen extends StatefulWidget {

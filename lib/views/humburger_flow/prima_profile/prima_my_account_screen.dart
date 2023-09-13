@@ -6,7 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:travelnew_app/views/humburger_flow/prima_profile/about_me_screen.dart';
 import 'package:travelnew_app/views/humburger_flow/prima_profile/personal_info_screen.dart';
 import 'package:travelnew_app/views/humburger_flow/prima_profile/tripometer_manage_screen.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 import '../../../utils/constant.dart';
 
 class PrimaMyAccount extends StatefulWidget {

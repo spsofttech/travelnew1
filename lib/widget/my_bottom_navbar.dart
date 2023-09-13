@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travelnew_app/providers/locProvider.dart';
 import 'package:travelnew_app/providers/location_provider.dart';
 import 'package:location/location.dart' as loco;
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 import 'package:travelnew_app/utils/constant.dart';
 import 'package:travelnew_app/views/home/inbox_screen.dart';
 import 'package:travelnew_app/views/humburger_flow/prima_profile/prima_profile_screen.dart';

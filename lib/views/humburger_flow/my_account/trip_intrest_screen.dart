@@ -10,7 +10,7 @@ import '../../../Api/model/user_trip_interest_Model.dart';
 import '../../../widget/custom_appbar.dart';
 import '../../../widget/custom_button.dart';
 import '../../home/plan_trip_screen.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 class YourTripInterest extends StatefulWidget {
   bool isPrima;
   YourTripInterest({this.isPrima = false});

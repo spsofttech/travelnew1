@@ -12,7 +12,7 @@ import '../../utils/constant.dart';
 import '../../widget/custom_button.dart';
 import '../home/festival_and_celebrations_screen.dart';
 import '../humburger_flow/trip_library_screen.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 class AspiredTripDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> MP;
   const AspiredTripDetailsScreen({super.key, required this.MP});

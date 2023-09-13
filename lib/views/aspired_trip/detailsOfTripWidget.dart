@@ -5,7 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../utils/constant.dart';
 import '../../widget/custom_button.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 class DetailsOfTripWidget extends StatefulWidget {
   DetailsOfTripWidget({required this.isShow, required this.MP});
   bool isShow;

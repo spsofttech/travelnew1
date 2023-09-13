@@ -10,7 +10,7 @@ import 'package:travelnew_app/views/publish%20your%20trip/step1.dart';
 import 'package:travelnew_app/views/publish%20your%20trip/step2.dart';
 import 'package:travelnew_app/widget/custom_appbar.dart';
 import 'package:travelnew_app/widget/custom_button.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 String selectedTypeOfPrimaTrip = "Select";
 String selectedCityOfPrimaTrip = "Select";
 String selectedModeOfPrimaTrip = "Bus";

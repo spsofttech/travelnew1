@@ -15,5 +15,6 @@ class ApiUrl {
   static String get_tn_days="${baseUrl}tn_days_data";
   static String create_tn_trip="${baseUrl}create_tn_trip";
   static String get_all_user="${baseUrl}get_user";
+  static String get_all_search_user="${baseUrl}search_user";
 
 }

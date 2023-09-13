@@ -7,7 +7,7 @@ import 'package:travelnew_app/views/home/festival_and_celebrations_screen.dart';
 import 'package:travelnew_app/views/humburger_flow/trip_library_screen.dart';
 import 'package:travelnew_app/views/start/sign_in_screen.dart';
 import 'package:travelnew_app/views/start/signup_with_social_media_screen.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 import '../../utils/constant.dart';
 import '../../widget/custom_appbar.dart';
 import '../aspired_trip/travel_agency_details.dart';

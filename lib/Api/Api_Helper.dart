@@ -3,16 +3,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:travelnew_app/Api/pref_halper.dart';
 
-import '../model/getAllUserModel.dart';
+import '../model/getAllUserModel.dart'as allUserModel;
 import 'ApiModel.dart';
 import 'api_url.dart';
 import 'model/cteate_new_trip_model.dart';
 import 'model/day_vise_data_model.dart';
 import 'model/user_trip_interest_Model.dart';
-
+List<allUserModel.Data> all_user_list=[];
+List<allUserModel.Data> all_user_Search_list=[];
 class ApiHelper {
   Preferences preferences = Preferences();
-  List all_user_list=[];
+
   Future<int> signupWithEmailApiCall({required String email, required String password,required String name,required String birth_date,required String contactNum }) async {
     http.Response res = await http.post(
       Uri.parse(ApiUrl.userSignUp),
@@ -26,8 +27,8 @@ class ApiHelper {
       if (data['status'] == 1) {
         IS_USER_LOGIN = await Preferences.preferences.saveBool(key: PrefKeys.isUaseLogin, value: true);
 
-        USER_ID =data['status']['data']['user_id'];
-        await Preferences.preferences.saveInt(key: PrefKeys.userId,value: USER_ID);
+        USER_ID_pref =data['status']['data']['user_id'];
+        await Preferences.preferences.saveInt(key: PrefKeys.userId,value: USER_ID_pref);
         return 0;
       }
       else {
@@ -53,8 +54,8 @@ class ApiHelper {
       if (data['status'] == 1) {
 
         IS_USER_LOGIN = await Preferences.preferences.saveBool(key: PrefKeys.isUaseLogin, value: true);
-        USER_ID =data['data']['user_id'];
-        await Preferences.preferences.saveInt(key: PrefKeys.userId,value: USER_ID);
+        USER_ID_pref =data['data']['user_id'];
+        await Preferences.preferences.saveInt(key: PrefKeys.userId,value: USER_ID_pref);
         return 0;
       }
       else {
@@ -168,6 +169,7 @@ class ApiHelper {
     );
 
     if (res.statusCode == 200) {
+
       TripCity_get_model data = TripCity_get_model.fromJson( jsonDecode(res.body));
 
       if (data.status == 1) {
@@ -251,10 +253,10 @@ class ApiHelper {
 
   }
 
-  Future<bool> get_allUser_api_call({ required int user_id,required int page}) async {
+  static Future<bool> get_allUser_api_call({ required int user_id,required int page}) async {
     bool isLastPage=false;
     // type  ==0  = travelnew category &  type ==1 = quick escap
-    print("--------------  ");
+
     Map _body ={
       'page':page,
       'user_id':user_id
@@ -266,12 +268,47 @@ class ApiHelper {
         body:jsonEncode(_body)
     );
 
+
     if (res.statusCode == 200) {
 
-      UserFriend_details_Get_model data = UserFriend_details_Get_model.fromJson( jsonDecode(res.body));
-      isLastPage= data.offset=="0";
+      //all_user_list.clear();
+      allUserModel.UserFriend_details_Get_model data = allUserModel.UserFriend_details_Get_model.fromJson( jsonDecode(res.body));
+      all_user_list.addAll(data.data!);
+      isLastPage= data.nextPage=="0";
+      print("--------------  ${data.nextPage!}");
     return  isLastPage;
 
+    }
+    else
+    {
+      return isLastPage;
+    }
+
+  }
+
+  static Future<bool> get_allUser_search_api_call({ required String name,required int page}) async {
+    bool isLastPage=false;
+    // type  ==0  = travelnew category &  type ==1 = quick escap
+
+    Map _body ={
+      'page':page,
+      'name':name
+    };
+
+    http.Response res = await http.post(
+        Uri.parse(ApiUrl.get_all_search_user),
+        headers: <String, String>{'authorization': ApiUrl.basicAuth,'Content-Type':'application/json'},
+        body:jsonEncode(_body)
+    );
+
+
+    if (res.statusCode == 200) {
+      //all_user_list.clear();
+      allUserModel.UserFriend_details_Get_model data = allUserModel.UserFriend_details_Get_model.fromJson( jsonDecode(res.body));
+      all_user_Search_list.addAll(data.data!);
+      isLastPage= data.nextPage=="0";
+      print("--------------  ${data.nextPage!}");
+    return  isLastPage;
     }
     else
     {

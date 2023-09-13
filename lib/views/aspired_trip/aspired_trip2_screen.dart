@@ -14,7 +14,7 @@ import '../../services/db/firebaseDB.dart';
 import '../../utils/constant.dart';
 import 'package:travelnew_app/views/start/signup_with_social_media_screen.dart';
 import 'package:travelnew_app/views/humburger_flow/trip_library_screen.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 var _count = 0;
 void getCount(_count) async {
   SharedPreferences counter = await SharedPreferences.getInstance();

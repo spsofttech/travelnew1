@@ -10,7 +10,7 @@ import 'package:travelnew_app/views/edit_prima_screen/entertainment_of_trip.dart
 import 'package:travelnew_app/views/edit_prima_screen/entertainment_screen.dart';
 import 'package:travelnew_app/views/edit_prima_screen/prima_trip_1to4_screen.dart';
 import 'package:travelnew_app/views/humburger_flow/my_account/report_incorrect_trip_screen.dart';
-
+import 'package:travelnew_app/Api/pref_halper.dart';
 import '../../widget/custom_button.dart';
 import '../humburger_flow/my_account/my_trip_friends.dart';
 import '../humburger_flow/my_account/report_incorrect_user_screen.dart';

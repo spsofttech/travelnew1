@@ -402,7 +402,8 @@ class _MyDrawerState extends State<MyDrawer> {
                                           title: 'Friends in vicinity',
                                         )));
                           }
-                          else {
+                          else
+                          {
                             Navigator.pop(context);
                             showSnackBar(context, "Please Login First!", Colors.red);
                           }
